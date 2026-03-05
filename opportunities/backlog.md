@@ -1,8 +1,9 @@
 # Backlog
 
-## Top Opportunities (待处理)
+## Top Opportunities
 
-1. **MCP Server Quick-Start** - 状态: Experiment ✅ 本轮完成
+1. **MCP Quick-Start** - 状态: Experiment ✅
+2. **SEO Content CLI** - 状态: Experiment ✅ 本轮新增
 
 ---
 
