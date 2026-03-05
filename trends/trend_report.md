@@ -1,32 +1,29 @@
-# Trend Report — 2026-03-05
+# Trend Report — 2026-03-05 (Round 2)
 
 ## Observed Signals
 
-### GitHub Trending (This Week)
-1. **AI Companions/Waifu** - airi (26k stars) shows strong interest in self-hosted AI companions
-2. **Agent Orchestration** - ruflo (19k stars), deer-flow (24k stars), superset (4.9k stars) - multi-agent systems trending
-3. **Claude Code Ecosystem** - learn-claude-code (21k stars), Agent-Skills-for-Context-Engineering (13k stars)
-4. **Knowledge Graph + RAG** - GitNexus (9.8k stars) - client-side knowledge graph for code exploration
-5. **AI Sandboxing** - Alibaba OpenSandbox (6.3k stars) - multi-language SDK for AI app sandboxes
-6. **Edge ASR** - moonshine (7k stars) - fast speech recognition for edge devices
-7. **superpowers** (71k stars!) - agentic skills framework & methodology
+### GitHub Trending (Today)
+1. **shannon** (31.5k stars) - AI Pentester, 96.15% benchmark score
+2. **mcp-for-beginners** (14.7k stars) - Microsoft MCP 课程，证明 MCP 教育需求
+3. **AReaL** (4k stars) - Lightning-Fast RL for LLM Reasoning
+4. **codebuff** (3.7k stars) - 从终端生成代码
+5. **seomachine** (1.3k stars) - Claude Code SEO 内容工具
+6. **trivy** (32k stars) - 安全扫描持续热门
+7. **hve-core** - Microsoft Hypervelocity Engineering components
 
-### Repeated Complaints (Inferred from Patterns)
-1. **Claude Code context limits** - Context engineering skills high demand
-2. **Multi-agent coordination complexity** - Need for orchestration platforms
-3. **Knowledge management** - Developers struggle with codebase exploration
-4. **Sandbox/security** - Safe AI code execution is a pain point
-5. **Self-hosted AI** - Privacy/ownership concerns with cloud AI
+### Repeated Patterns
+1. **AI 安全/渗透测试** - shannon 爆发式增长
+2. **MCP 生态** - 微软官方介入教育资源
+3. **垂直 AI** - SEO、代码生成等细分场景
+4. **终端 AI** - CLI 工具需求持续
 
-## Candidate Opportunity Themes (3-8)
+## Candidate Opportunity Themes
 
-1. **Claude Code Skill Library** - Curated, reusable skills for common tasks
-2. **Local-first RAG for Code** - Lightweight knowledge graph without cloud dependency
-3. **AI Agent Testing/Evaluation** - Benchmarking framework for agent performance
-4. **MCP Server Templates** - Quick-start MCP integrations
-5. **Dev Workflow Automation** - CLI tools for common development tasks
-6. **Prompt/Context Management** - Tools for optimizing AI interactions
+1. **MCP 教程/模板** - mcp-for-beginners 证明需求
+2. **AI 安全工具** - shannon 验证市场
+3. **垂直 CLI 工具** - seomachine 模式可复制
+4. **Code RAG** - 本地代码知识库
+5. **AI Agent 评估** - 基准测试框架
 
 ---
-*Scout: 2026-03-05 21:30 GMT+8*
-*Next: Scanner Phase → 机会识别*
+*Scout Round 2: 2026-03-05 22:18 GMT+8*
