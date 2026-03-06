@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+"""
+AI Tool Security Scanner
+Lightweight security scanner for AI development tools.
+"""
+import os
+import re
+import json
+import yaml
+import sys
+from pathlib import Path
+from typing import List, Dict, Optional
+
+
+class SecurityScanner:
+    """Scan AI tools for security issues."""
+    
+    def __init__(self):
+        self.issues: List[Dict] = []
+        
+    def add_issue(self, file: str, line: int, severity: str, message: str):
+        """Add a security issue."""
+        self.issues.append({
+            "file": file,
+            "line": line,
+            "severity": severity,
+            "message": message
+        })
+    
+    def scan_file(self, path: str) -> List[Dict]:
+        """Scan a single file."""
+        self.issues = []
+        
+        if not os.path.exists(path):
+            print(f"Error: {path} does not exist")
+            return []
+        
+        # Detect file type and scan
+        if path.endswith('.yml') or path.endswith('.yaml'):
+            self._scan_github_actions(path)
+        elif path.endswith('package.json'):
+            self._scan_package_json(path)
+        elif path.endswith('.py'):
+            self._scan_python(path)
+        
+        return self.issues
+    
+    def _scan_github_actions(self, path: str):
+        """Scan GitHub Actions workflow."""
+        try:
+            with open(path, 'r') as f:
+                workflow = yaml.safe_load(f)
+            
+            if not workflow:
+                return
+            
+            # Check for external actions
+            if 'jobs' in workflow:
+                for job_name, job in workflow['jobs'].items():
+                    if 'steps' in job:
+                        for i, step in enumerate(job['steps']):
+                            if 'uses' in step:
+                                action = step['uses']
+                                # Check for external/untrusted actions
+                                if action.startswith('github/') or action.startswith('actions/'):
+                                    pass  # Known trusted sources
+                                elif '@' in action:
+                                    self.add_issue(
+                                        path, i + 1, 'WARNING',
+                                        f"External action: {action}"
+                                    )
+                            
+                            # Check for secrets in logs
+                            if 'run' in step:
+                                if 'secrets.' in step['run'] or '${{ secrets.' in str(step):
+                                    self.add_issue(
+                                        path, i + 1, 'WARNING',
+                                        "Potential secret exposure in logs"
+                                    )
+            
+            # Check trigger sources
+            if 'on' in workflow:
+                triggers = workflow['on']
+                if isinstance(triggers, dict):
+                    for trigger in triggers:
+                        if trigger in ['issues', 'issue_comment', 'pull_request']:
+                            self.add_issue(
+                                path, 0, 'INFO',
+                                f"External trigger: {trigger} (ensure input validation)"
+                            )
+                            
+        except Exception as e:
+            print(f"Error scanning {path}: {e}")
+    
+    def _scan_package_json(self, path: str):
+        """Scan npm package.json."""
+        try:
+            with open(path, 'r') as f:
+                pkg = json.load(f)
+            
+            # Check for postinstall scripts
+            if 'scripts' in pkg:
+                scripts = pkg['scripts']
+                if 'postinstall' in scripts:
+                    self.add_issue(
+                        path, 0, 'WARNING',
+                        f"postinstall script detected: {scripts['postinstall']}"
+                    )
+                if 'preinstall' in scripts:
+                    self.add_issue(
+                        path, 0, 'WARNING',
+                        f"preinstall script detected: {scripts['preinstall']}"
+                    )
+            
+            # Check dependencies
+            if 'dependencies' in pkg:
+                for dep in pkg['dependencies']:
+                    # Check for typosquatting patterns
+                    if dep in ['req', 'npmm', 'node_modules']:
+                        self.add_issue(
+                            path, 0, 'WARNING',
+                            f"Suspicious dependency: {dep}"
+                        )
+                            
+        except Exception as e:
+            print(f"Error scanning {path}: {e}")
+    
+    def _scan_python(self, path: str):
+        """Scan Python files for prompt injection."""
+        try:
+            with open(path, 'r') as f:
+                lines = f.readlines()
+            
+            for i, line in enumerate(lines, 1):
+                # Check for f-string with external input
+                if 'f"' in line or "f'" in line:
+                    if 'github.' in line or 'issue' in line or 'request' in line:
+                        self.add_issue(
+                            path, i, 'WARNING',
+                            "Possible prompt injection: f-string with external input"
+                        )
+                
+                # Check for exec/eval with external input
+                if 'exec(' in line or 'eval(' in line:
+                    if 'request' in line or 'input' in line or 'issue' in line:
+                        self.add_issue(
+                            path, i, 'HIGH',
+                            "Potential code injection: exec/eval with external input"
+                        )
+                            
+        except Exception as e:
+            print(f"Error scanning {path}: {e}")
+    
+    def scan_directory(self, path: str) -> List[Dict]:
+        """Scan a directory recursively."""
+        self.issues = []
+        path_obj = Path(path)
+        
+        # Scan GitHub workflows
+        workflow_dir = path_obj / '.github' / 'workflows'
+        if workflow_dir.exists():
+            for f in workflow_dir.glob('*.yml'):
+                self.scan_file(str(f))
+        
+        # Scan package.json
+        if (path_obj / 'package.json').exists():
+            self.scan_file(str(path_obj / 'package.json'))
+        
+        # Scan Python files
+        for f in path_obj.rglob('*.py'):
+            # Skip common non-source directories
+            if any(x in f.parts for x in ['venv', '.venv', 'env', 'node_modules', '.git']):
+                continue
+            self.scan_file(str(f))
+        
+        return self.issues
+
+
+def main():
+    """CLI entry point."""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='AI Tool Security Scanner')
+    parser.add_argument('path', help='Path to scan (file or directory)')
+    parser.add_argument('--json', action='store_true', help='Output as JSON')
+    
+    args = parser.parse_args()
+    
+    scanner = SecurityScanner()
+    
+    if os.path.isfile(args.path):
+        issues = scanner.scan_file(args.path)
+    elif os.path.isdir(args.path):
+        issues = scanner.scan_directory(args.path)
+    else:
+        print(f"Error: {args.path} does not exist")
+        sys.exit(1)
+    
+    # Output
+    if args.json:
+        print(json.dumps(issues, indent=2))
+    else:
+        if not issues:
+            print("No issues found.")
+            return
+        
+        # Group by file
+        by_file = {}
+        for issue in issues:
+            f = issue['file']
+            if f not in by_file:
+                by_file[f] = []
+            by_file[f].append(issue)
+        
+        for file_path, file_issues in by_file.items():
+            print(f"\n[{file_path}]")
+            for issue in file_issues:
+                line_info = f"Line {issue['line']}" if issue['line'] else ""
+                print(f"  [{issue['severity']}] {line_info} {issue['message']}")
+        
+        print(f"\n{len(issues)} issue(s) found.")
+
+
+if __name__ == '__main__':
+    main()

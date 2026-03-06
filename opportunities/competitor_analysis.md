@@ -1,43 +1,43 @@
 # Competitor Analysis — 2026-03-06
 
-## Opportunity: Agent Memory Manager
+## Opportunity: AI Tool Security Scanner
 
 ### Existing Solutions
 
-1. **ReMe (agentscope-ai)**
-   - 定位: Memory Management Kit for Agents
-   - Stars: 1,832 total, 194 today
-   - 优点: 功能全面
-   - 问题: 可能过于复杂
+1. **trivy**
+   - 定位: 传统安全扫描
+   - 优点: 功能全面，成熟
+   - 问题: 不检测 prompt injection，不针对 AI 工具
 
-2. **langchain.memory**
-   - 定位: LangChain 内置记忆
-   - 优点: 与 LangChain 集成
-   - 问题: 耦合高，依赖重
+2. **snyk**
+   - 定位: 企业安全
+   - 优点: 全面
+   - 问题: 昂贵，不针对 AI 特有攻击
 
-3. **自定义实现**
-   - 优点: 完全控制
-   - 问题: 重复工作，每个项目都要写
+3. **GitHub Advanced Security**
+   - 定位: GitHub 原生安全
+   - 优点: 深度集成
+   - 问题: 付费，不检测 AI prompt injection
 
 ### Competitor Problems
 
-- 学习曲线高
-- 框架耦合
-- 缺乏轻量级方案
+- 缺乏针对 AI 工具的安全检测
+- 缺乏 prompt injection 检测
+- 缺乏轻量级开源方案
 
 ### Improvement Opportunity
 
-做一个简单的、独立的记忆管理库：
-- 支持多种向量存储（FAISS, chroma, 简单文件）
-- 自动摘要
-- 最少代码，最少依赖
+做一个轻量级 AI 工具安全扫描器：
+- GitHub Actions workflow 安全检测
+- npm package.json postinstall 检测
+- prompt injection 模式检测
 
 ### Differentiation
 
-- **更少步骤**: 安装即用，不需要学习完整框架
-- **更快**: 轻量实现，启动快
-- **更稳**: 独立库，不依赖大框架版本
-- **更易集成**: 任何 Python 项目都能用
+- **专注 AI**: 针对 AI 工具特有攻击
+- **轻量**: CLI 工具，快速安装
+- **开源**: 免费，社区驱动
+- **简单**: 不需要复杂配置
 
 ---
-*Competitor Analysis: 2026-03-06 10:20 GMT+8*
+*Competitor Analysis: 2026-03-06 10:25 GMT+8*
