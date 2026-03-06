@@ -1,23 +1,17 @@
-# Opportunity Report — 2026-03-06 (Round 10)
+# Opportunity Report — 2026-03-06 (Round 11)
 
-## 迭代机会: MCP Server Templates
+## 迭代机会: Agent Memory Manager
 
-**问题:** 需要更多模板建立护城河
+**问题:** 需要更多存储后端
 
 **证据:**
-1. mcp-for-beginners 14.9k stars 证明 MCP 需求
-2. 当前只有 3 种模板
+1. ReMe 1.8k stars 证明需求
+2. 当前只有 JSON 存储
 
 **迭代方向:**
-- 添加 GitHub API 模板
-- 添加 Slack 模板
-- 添加 Notion 模板
-
-**Opportunity Score:**
-- Pain: 7/10
-- Frequency: 8/10
-- Ease: 9/10
-- Market: 7/10
+- 添加 FAISS 向量存储
+- 添加简单语义搜索
+- 添加记忆摘要功能
 
 ---
-*Scanner Round 10: 2026-03-06*
+*Scanner Round 11: 2026-03-06*
