@@ -14,7 +14,7 @@
 7. performance-optimize - 性能优化
 8. write-git-commit - Git 提交信息
 
-**现在共有 15 种模板。**
+**现在共有 16 种模板。**
 
 ---
 *Status: Experiment*
