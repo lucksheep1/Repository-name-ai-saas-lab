@@ -210,6 +210,78 @@ class CodeRAG:
             "languages": list(set(f.get('language', '') for f in self.files)),
             "files": len(set(f.get('path', '') for f in self.files))
         }
+    
+    def export_markdown(self, output_path: str = "code-rag-export.md"):
+        """Export index to Markdown file."""
+        with open(output_path, 'w') as f:
+            f.write("# Code RAG Export\n\n")
+            
+            # Group by file
+            by_file = {}
+            for block in self.files:
+                path = block.get('path', 'unknown')
+                if path not in by_file:
+                    by_file[path] = []
+                by_file[path].append(block)
+            
+            for path, blocks in by_file.items():
+                f.write(f"## {path}\n\n")
+                for block in blocks:
+                    funcs = block.get('functions', [])
+                    classes = block.get('classes', [])
+                    
+                    if funcs:
+                        f.write(f"**Functions:** {', '.join(funcs)}\n\n")
+                    if classes:
+                        f.write(f"**Classes:** {', '.join(classes)}\n\n")
+                    
+                    f.write("```" + block.get('language', '') + "\n")
+                    f.write(block.get('content', '')[:500])
+                    f.write("\n```\n\n")
+                    f.write("---\n\n")
+        
+        return output_path
+    
+    def find_related(self, query: str, max_results: int = 10) -> List[Dict]:
+        """Find related code blocks across the codebase."""
+        results = self.search(query, top_k=max_results)
+        
+        # Also find by function/class names
+        func_results = self.search_function(query)
+        class_results = self.search_class(query)
+        
+        # Combine and dedupe
+        seen = set()
+        combined = []
+        
+        for r in results + func_results + class_results:
+            key = (r.get('path'), r.get('block_id'))
+            if key not in seen:
+                seen.add(key)
+                combined.append(r)
+        
+        return combined[:max_results]
+    
+    def find_imports(self, path: str) -> List[str]:
+        """Find imports in a file."""
+        try:
+            content = Path(path).read_text()
+        except Exception:
+            return []
+        
+        imports = []
+        
+        # Python
+        if path.endswith('.py'):
+            imports.extend(re.findall(r'^import\s+(\S+)', content, re.MULTILINE))
+            imports.extend(re.findall(r'^from\s+(\S+)\s+import', content, re.MULTILINE))
+        
+        # JavaScript/TypeScript
+        elif path.endswith(('.js', '.ts', '.jsx', '.tsx')):
+            imports.extend(re.findall(r"import\s+.*\s+from\s+['\"]([^'\"]+)['\"]", content))
+            imports.extend(re.findall(r"require\s*\(\s*['\"]([^'\"]+)['\"]\s*\)", content))
+        
+        return list(set(imports))
 
 
 def main():
