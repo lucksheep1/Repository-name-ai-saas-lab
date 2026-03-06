@@ -25,7 +25,6 @@
 
 **下一步:**
 - 测试生成的代码
-- 添加 pyproject.toml 入口
 - 考虑升级为 Promising
 
 ---

@@ -4,21 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-templates"
-version = "0.1.0"
+version = "0.2.0"
 description = "Quick-start templates for MCP servers"
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
     {name = "AI SaaS Lab", email = "lab@example.com"}
 ]
-keywords = "mcp, model context protocol, templates, ai"
+keywords = ["mcp", "model context protocol", "templates", "ai"]
 license = {text = "MIT"}
 
 [project.optional-dependencies]
 dev = ["pytest"]
 
 [project.scripts]
-mcp-templates = "mcp_templates.generator:main"
+mcp-templates = "generator:main"
 
 [tool.setuptools]
-packages = ["mcp_templates"]
+py-modules = ["generator"]
