@@ -125,6 +125,11 @@ class SecurityScanner:
                             path, 0, 'INFO',
                             f"External trigger: {trigger} (ensure input validation - vulnerable to prompt injection)"
                         )
+                    if trigger in ['workflow_dispatch', 'repository_dispatch', 'workflow_dispatch']:
+                        self.add_issue(
+                            path, 0, 'INFO',
+                            f"Manual trigger: {trigger} (can be triggered externally)"
+                        )
                             
         except Exception as e:
             print(f"Error scanning {path}: {e}")
