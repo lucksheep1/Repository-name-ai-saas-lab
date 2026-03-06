@@ -19,11 +19,11 @@
 - 继续推动剩余 3 个 Experiment 项目
 
 ### Backlog (5 个 Active)
-1. ~~AI Tool Security Scanner~~ - Promising ✅
-2. ~~MCP Server Templates~~ - Promising ✅
-3. Agent Memory Manager - 继续验证
-4. Local Code RAG CLI - 继续验证
-5. Agent Context Manager - 继续验证
+1. ~~AI Tool Security Scanner~~ - Promising ✅ (45/50)
+2. ~~MCP Server Templates~~ - Promising ✅ (44/50)
+3. ~~Local Code RAG CLI~~ - Promising ✅ (43/50)
+4. Agent Memory Manager - 继续验证 (42/50)
+5. Agent Context Manager - 继续验证 (32/50)
 
 ---
 

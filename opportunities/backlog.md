@@ -4,8 +4,8 @@
 
 1. **AI Tool Security Scanner** - ⭐ 45/50 (Promising ✅)
 2. **MCP Server Templates** - ⭐ 44/50 (Promising ✅)
-3. **Agent Memory Manager** - 42/50
-4. **Local Code RAG CLI** - 39/50
+3. **Local Code RAG CLI** - ⭐ 43/50 (Promising ✅)
+4. **Agent Memory Manager** - 42/50
 5. **Agent Context Manager** - 36/50
 
 ## Archived
