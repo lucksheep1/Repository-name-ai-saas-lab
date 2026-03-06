@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Prompt Templates Library
+Prompt Templates Library v2
 Reusable prompts for AI development.
 """
 from typing import Dict, Any, Optional
@@ -8,6 +8,7 @@ import os
 
 
 TEMPLATES = {
+    # ORIGINAL TEMPLATES
     "code-generation": {
         "description": "Generate code from description",
         "template": """You are an expert {language} developer. Write code that accomplishes the following:
@@ -135,6 +136,144 @@ Code:
 
 Provide refactored code with explanation of changes.""",
         "variables": ["language", "code"]
+    },
+    
+    # NEW TEMPLATES v2
+    "write-documentation": {
+        "description": "Generate documentation for code",
+        "template": """Generate documentation for the following {language} code:
+
+Code:
+```{language}
+{code}
+```
+
+Include:
+- Overview
+- Function/method descriptions
+- Parameters
+- Return values
+- Examples""",
+        "variables": ["language", "code"]
+    },
+    
+    "create-readme": {
+        "description": "Create README for a project",
+        "template": """Create a README for a project:
+
+Project name: {project_name}
+Description: {description}
+Language: {language}
+Features:
+{features}
+
+Include:
+- Badges
+- Installation
+- Usage
+- Contributing
+- License""",
+        "variables": ["project_name", "description", "language", "features"]
+    },
+    
+    "write-sql": {
+        "description": "Generate SQL queries",
+        "template": """Write a SQL query for:
+
+Task: {task}
+Database type: {db_type}
+Table structure: {table_schema}
+
+Requirements:
+{requirements}
+
+Provide the SQL query with explanation.""",
+        "variables": ["task", "db_type", "table_schema", "requirements"]
+    },
+    
+    "create-api-spec": {
+        "description": "Create API specification",
+        "template": """Create an API specification for:
+
+API name: {api_name}
+Description: {description}
+Language: {language}
+
+Include:
+- Endpoints
+- Request/response formats
+- Error handling
+- Authentication""",
+        "variables": ["api_name", "description", "language"]
+    },
+    
+    "write-unit-test-prompt": {
+        "description": "Create a prompt for writing tests",
+        "template": """Create a comprehensive test prompt for:
+
+Language: {language}
+Framework: {framework}
+Code to test:
+```{language}
+{code}
+```
+
+Include:
+- Test cases
+- Edge cases
+- Mock objects
+- Assertions""",
+        "variables": ["language", "framework", "code"]
+    },
+    
+    "security-audit": {
+        "description": "Security audit for code",
+        "template": """Perform a security audit on:
+
+Language: {language}
+Code:
+```{language}
+{code}
+```
+
+Check for:
+- SQL injection
+- XSS vulnerabilities
+- Authentication issues
+- Data exposure
+- Common OWASP top 10 issues""",
+        "variables": ["language", "code"]
+    },
+    
+    "performance-optimize": {
+        "description": "Performance optimization suggestions",
+        "template": """Analyze and optimize the following {language} code for performance:
+
+Code:
+```{language}
+{code}
+```
+
+Identify:
+- Bottlenecks
+- Memory issues
+- Algorithmic improvements
+- Caching opportunities""",
+        "variables": ["language", "code"]
+    },
+    
+    "write-git-commit": {
+        "description": "Generate git commit message",
+        "template": """Generate a git commit message for:
+
+Changed files:
+{files}
+
+Diff summary:
+{summary}
+
+Use conventional commits format.""",
+        "variables": ["files", "summary"]
     }
 }
 
@@ -161,11 +300,9 @@ class Template:
     
     def render(self, **kwargs) -> str:
         """Render template with variables."""
-        # Check required variables
         missing = set(self.variables) - set(kwargs.keys())
         if missing:
             raise ValueError(f"Missing required variables: {missing}")
-        
         return self.template.format(**kwargs)
     
     def validate(self, **kwargs) -> bool:
@@ -177,13 +314,11 @@ def main():
     """CLI entry point."""
     import argparse
     
-    parser = argparse.ArgumentParser(description='Prompt Templates')
+    parser = argparse.ArgumentParser(description='Prompt Templates v2')
     subparsers = parser.add_subparsers()
     
-    # list command
     list_parser = subparsers.add_parser('list', help='List templates')
     
-    # generate command
     gen_parser = subparsers.add_parser('generate', help='Generate a prompt')
     gen_parser.add_argument('name', help='Template name')
     gen_parser.add_argument('--var', action='append', help='Variables (key=value)')
@@ -191,29 +326,20 @@ def main():
     args = parser.parse_args()
     
     if hasattr(args, 'name'):
-        # Generate
         template = Template.get(args.name)
-        
-        # Parse variables
         kwargs = {}
         if args.var:
             for v in args.var:
                 if '=' in v:
                     key, value = v.split('=', 1)
                     kwargs[key] = value
-        
-        # Check if all variables provided
         if not template.validate(**kwargs):
             print(f"Missing variables. Required: {template.variables}")
-            print("Usage: --var key=value")
             return
-        
         print(template.render(**kwargs))
-    
     else:
-        # List
         templates = Template.list_templates()
-        print("Available templates:\n")
+        print(f"Available templates ({len(templates)}):\n")
         for name, desc in templates.items():
             print(f"  {name}: {desc}")
 

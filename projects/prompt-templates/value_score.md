@@ -1,13 +1,13 @@
 # Value Score
 
-## Project: Prompt Templates Library
+## Project: Prompt Templates Library v2
 
 | Criteria | Score (1-10) | Notes |
 |----------|--------------|-------|
-| Utility | 8 | Common need |
-| Innovation | 6 | Template approach |
+| Utility | 9 | Common need |
+| Innovation | 7 | Template approach |
 | Simplicity | 9 | Easy to use |
-| Reusability | 8 | Many use cases |
-| Market | 7 | AI dev market |
+| Reusability | 9 | 15 templates |
+| Market | 8 | AI dev market |
 
-**Total: 38/50**
+**Total: 42/50** (+4 from v1)

@@ -1,4 +1,4 @@
-# Trend Report — 2026-03-06 (Round 12)
+# Trend Report — 2026-03-06 (Round 14)
 
 ## 迭代进展
 
@@ -6,10 +6,11 @@
 - AI Tool Security Scanner v2 (42/50)
 - MCP Server Templates v2 (42/50)
 - Agent Memory Manager v2 (41/50)
+- Local Code RAG CLI v2 (39/50)
 
-### 状态
-- 6 个 Experiment 项目
-- 3 个已迭代到 v2
+### 待迭代
+- Prompt Templates
+- MCP Quick-Start
 
 ---
-*Scout Round 12: 2026-03-06*
+*Scout Round 14: 2026-03-06*

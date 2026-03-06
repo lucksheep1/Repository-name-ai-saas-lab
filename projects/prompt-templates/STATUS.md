@@ -2,15 +2,19 @@
 
 ## 状态: Experiment
 
-**创建时间:** 2026-03-06
+**版本:** v2.0 (2026-03-06 迭代)
 
-**理由:**
-- prompt-eng 32k stars 证明需求
-- 模板库是开发者刚需
+**v2.0 新增模板 (8 个):**
+1. write-documentation - 代码文档
+2. create-readme - 项目 README
+3. write-sql - SQL 查询
+4. create-api-spec - API 规格
+5. write-unit-test-prompt - 测试提示词
+6. security-audit - 安全审计
+7. performance-optimize - 性能优化
+8. write-git-commit - Git 提交信息
 
-**下一步:**
-- 添加更多模板
-- 添加社区贡献
+**现在共有 15 种模板。**
 
 ---
 *Status: Experiment*
