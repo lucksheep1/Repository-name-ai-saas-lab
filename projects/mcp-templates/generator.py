@@ -567,9 +567,7 @@ def create_project(name: str, template: str):
 
 def list_templates():
     """List available templates."""
-    print("Available templates:")
-    for name, info in TEMPLATES.items():
-        print(f"  {name}: {info['description']}")
+    return list(TEMPLATES.keys())
 
 
 def main():

@@ -24,8 +24,9 @@
 6. notion - Notion API (新增)
 
 **下一步:**
-- 添加 CLI 入口
 - 测试生成的代码
+- 添加 pyproject.toml 入口
+- 考虑升级为 Promising
 
 ---
 *Status: Experiment*
