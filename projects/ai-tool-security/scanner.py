@@ -108,6 +108,21 @@ class SecurityScanner:
                                     "Cache usage detected - ensure cache keys are versioned and secure"
                                 )
             
+            # Check for permissions
+            if 'permissions' in workflow:
+                perms = workflow['permissions']
+                # Check for overly broad permissions
+                if perms.get('contents') == 'write':
+                    self.add_issue(
+                        path, 0, 'WARNING',
+                        "Workflow has write access to contents - ensure only trusted actions use this"
+                    )
+                if perms.get('packages') == 'write' or perms.get('id-token') == 'write':
+                    self.add_issue(
+                        path, 0, 'HIGH',
+                        "Workflow has elevated permissions (packages or id-token write)"
+                    )
+            
             # Check trigger sources
             # Note: 'on' is parsed as boolean True in YAML, so check both
             if 'on' in workflow or True in workflow:
