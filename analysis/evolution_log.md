@@ -1,5 +1,27 @@
 # Evolution Log
 
+## 2026-03-06 — Round 6
+
+### Pattern Mining
+
+**新发现:**
+- GitNexus 10k stars 本地代码 RAG
+- OpenSandbox 6k stars AI Sandbox
+
+**本轮决策:**
+- MCP 相关 → 继续
+- 安全工具 → 继续
+- 代码 RAG → 新增 Experiment
+
+### Backlog
+1. ~~MCP Quick-Start~~ - Experiment
+2. ~~Agent Memory Manager~~ - Experiment
+3. ~~AI Tool Security Scanner~~ - Experiment
+4. ~~MCP Server Templates~~ - Experiment
+5. ~~Local Code RAG CLI~~ - 新增 Experiment
+
+---
+
 ## 2026-03-06 — Round 5
 
 ### Pattern Mining
