@@ -247,7 +247,7 @@
 
 ### Backlog (5 个 Active)
 1. ~~AI Tool Security Scanner~~ - Promising ✅
-2. MCP Server Templates - 继续验证
-3. Agent Memory Manager - 继续验证
+2. ~~MCP Server Templates~~ - Promising ✅ (44/50, v3)
+3. Agent Memory Manager - 继续验证 (42/50)
 4. Local Code RAG CLI - 继续验证
 5. Agent Context Manager - 继续验证
