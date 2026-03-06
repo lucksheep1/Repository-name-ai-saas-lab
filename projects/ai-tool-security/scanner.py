@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-AI Tool Security Scanner
-Lightweight security scanner for AI development tools.
+AI Tool Security Scanner v2
+Enhanced security scanner for AI development tools.
 """
 import os
 import re
@@ -10,10 +10,26 @@ import yaml
 import sys
 from pathlib import Path
 from typing import List, Dict, Optional
+from urllib.parse import urlparse
 
 
 class SecurityScanner:
     """Scan AI tools for security issues."""
+    
+    # Common typosquatting patterns
+    TYPOSQUATTING_PATTERNS = {
+        'npm': ['req', 'npmm', 'nodemon', 'node_modules', 'npx'],
+        'pip': ['pip3', 'pipx', 'pypi', 'pyptron'],
+        'git': ['githb', 'gihub', 'githb', 'githu'],
+    }
+    
+    # Prompt injection patterns
+    PROMPT_INJECTION_PATTERNS = [
+        r'ignore\s+(previous|above|all)\s+(instructions?|rules?|commands?)',
+        r'(system|You\s+are).*role.*=',
+        r'<\|.*\|>',  # Prompt injection tags
+        r'\[\[.*\]\]',  # Jailbreak markers
+    ]
     
     def __init__(self):
         self.issues: List[Dict] = []
@@ -42,6 +58,8 @@ class SecurityScanner:
             self._scan_package_json(path)
         elif path.endswith('.py'):
             self._scan_python(path)
+        elif path.endswith('.js') or path.endswith('.ts'):
+            self._scan_js(path)
         
         return self.issues
     
@@ -103,24 +121,25 @@ class SecurityScanner:
                 scripts = pkg['scripts']
                 if 'postinstall' in scripts:
                     self.add_issue(
-                        path, 0, 'WARNING',
+                        path, 0, 'HIGH',
                         f"postinstall script detected: {scripts['postinstall']}"
                     )
                 if 'preinstall' in scripts:
                     self.add_issue(
-                        path, 0, 'WARNING',
+                        path, 0, 'HIGH',
                         f"preinstall script detected: {scripts['preinstall']}"
                     )
             
             # Check dependencies
             if 'dependencies' in pkg:
                 for dep in pkg['dependencies']:
-                    # Check for typosquatting patterns
-                    if dep in ['req', 'npmm', 'node_modules']:
-                        self.add_issue(
-                            path, 0, 'WARNING',
-                            f"Suspicious dependency: {dep}"
-                        )
+                    # Check for typosquatting
+                    for pkg_manager, typos in self.TYPOSQUATTING_PATTERNS.items():
+                        if dep.lower() in typos:
+                            self.add_issue(
+                                path, 0, 'WARNING',
+                                f"Suspicious dependency (possible typosquatting): {dep}"
+                            )
                             
         except Exception as e:
             print(f"Error scanning {path}: {e}")
@@ -147,6 +166,40 @@ class SecurityScanner:
                             path, i, 'HIGH',
                             "Potential code injection: exec/eval with external input"
                         )
+                
+                # Check prompt injection patterns
+                for pattern in self.PROMPT_INJECTION_PATTERNS:
+                    if re.search(pattern, line, re.IGNORECASE):
+                        self.add_issue(
+                            path, i, 'WARNING',
+                            f"Potential prompt injection pattern: {pattern}"
+                        )
+                            
+        except Exception as e:
+            print(f"Error scanning {path}: {e}")
+    
+    def _scan_js(self, path: str):
+        """Scan JavaScript/TypeScript files."""
+        try:
+            with open(path, 'r') as f:
+                content = f.read()
+            
+            # Check for eval with external input
+            if 'eval(' in content:
+                lines = content.split('\n')
+                for i, line in enumerate(lines, 1):
+                    if 'eval(' in line:
+                        self.add_issue(
+                            path, i, 'HIGH',
+                            "Potential code injection: eval() with external input"
+                        )
+            
+            # Check for process.env with secrets
+            if 'process.env' in content and 'SECRET' in content.upper():
+                self.add_issue(
+                    path, 0, 'WARNING',
+                    "Potential secret exposure via process.env"
+                )
                             
         except Exception as e:
             print(f"Error scanning {path}: {e}")
@@ -161,6 +214,8 @@ class SecurityScanner:
         if workflow_dir.exists():
             for f in workflow_dir.glob('*.yml'):
                 self.scan_file(str(f))
+            for f in workflow_dir.glob('*.yaml'):
+                self.scan_file(str(f))
         
         # Scan package.json
         if (path_obj / 'package.json').exists():
@@ -168,10 +223,16 @@ class SecurityScanner:
         
         # Scan Python files
         for f in path_obj.rglob('*.py'):
-            # Skip common non-source directories
             if any(x in f.parts for x in ['venv', '.venv', 'env', 'node_modules', '.git']):
                 continue
             self.scan_file(str(f))
+        
+        # Scan JS/TS files
+        for ext in ['*.js', '*.ts', '*.jsx', '*.tsx']:
+            for f in path_obj.rglob(ext):
+                if any(x in f.parts for x in ['node_modules', '.git']):
+                    continue
+                self.scan_file(str(f))
         
         return self.issues
 
@@ -180,9 +241,10 @@ def main():
     """CLI entry point."""
     import argparse
     
-    parser = argparse.ArgumentParser(description='AI Tool Security Scanner')
+    parser = argparse.ArgumentParser(description='AI Tool Security Scanner v2')
     parser.add_argument('path', help='Path to scan (file or directory)')
     parser.add_argument('--json', action='store_true', help='Output as JSON')
+    parser.add_argument('--strict', action='store_true', help='Enable strict mode')
     
     args = parser.parse_args()
     
