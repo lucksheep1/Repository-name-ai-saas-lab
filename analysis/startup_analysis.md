@@ -1,64 +1,68 @@
-# Startup Analysis — SEO Content CLI
+# Startup Analysis — 2026-03-06
 
-## 1. 问题是否真实存在？
+## Project: Agent Memory Manager
 
-**证据:**
-- seomachine 1.3k stars 快速上升
-- 内容创作市场需求大
+### 1. 问题是否真实存在（证据）
 
-**结论:** 真实需求，但竞争激烈
+✅ **是**
+- ReMe 194 stars today - Memory Management 需求真实
+- AReaL 173 stars - Agent/Reasoning 领域热门
+- mcp-for-beginners 137 stars - Agent 开发教育需求旺盛
+- GitHub 上大量 Agent 项目需要记忆组件
 
----
+### 2. 谁会用（用户画像）
 
-## 2. 谁会用？
+- **AI 开发者**: 构建 Agent 应用，需要记忆功能
+- **独立开发者**: 不想用 LangChain 等重型框架
+- **研究者**: 快速实验 Agent 记忆机制
 
-- 博主、内容创作者
-- SEO 优化人员
-- 小型营销团队
+### 3. 为什么现有方案失败（竞品缺陷）
 
----
+- **ReMe**: 功能全但复杂，学习曲线高
+- **langchain.memory**: 依赖 LangChain，耦合高
+- **自定义实现**: 每个项目重复工作
 
-## 3. 为什么现有方案失败？
+### 4. MVP 是否验证核心假设（验证标准结果）
 
-- 闭源无法定制
-- 付费墙
-- 缺乏 CLI 接口
+✅ **已验证方向**
+- 代码 ~150 行，轻量级
+- TF-IDF 相似度搜索可行
+- JSON 持久化简单有效
 
----
+**验证标准:**
+- [x] 能 add 记忆
+- [x] 能 search 记忆
+- [x] 能 get_context
+- [ ] 真实 Agent 集成测试
 
-## 4. MVP 是否验证核心假设？
+### 5. 变现路径（订阅/一次性/团队版/增值/服务）
 
-- ✅ CLI 可运行
-- ❌ 未接入真实 API
-- 验证标准: 能生成可用内容 → 部分验证
-
----
-
-## 5. 变现路径
-
-1. 免费版 (基础功能)
-2. 付费版 (API 调用)
-3. 企业定制
+**短期:** 开源 + GitHub Sponsors
+**中期:** 
+- 托管版本（云记忆服务）
+- 企业版（高级特性）
+**长期:**
+- Agent 开发工具套件
 
 ---
 
 ## 评分
 
-| 维度 | 评分 |
+| 维度 | 分数 |
 |------|------|
 | Pain | 7/10 |
 | Frequency | 8/10 |
-| Market | 6/10 |
-| Competition | 5/10 |
-| Differentiation | 6/10 |
+| Market | 7/10 |
+| Competition | 7/10 |
+| Differentiation | 8/10 |
 
-**总分: 32/50**
+**总分: 37/50**
 
 ---
 
 ## 决策
 
-**Iterate** - 需接入真实 API
-
----
-*Analysis: 2026-03-05*
+**Iterate** - MVP 已完成，需要：
+1. 真实环境测试
+2. 更多后端支持（FAISS）
+3. LLM 摘要功能

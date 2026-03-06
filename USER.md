@@ -1,17 +1,16 @@
 # USER.md - About Your Human
 
-_Learn about the person you're helping. Update this as you go._
-
-- **Name:**
-- **What to call them:**
-- **Pronouns:** _(optional)_
-- **Timezone:**
-- **Notes:**
+- **Name:** 杨欢欢
+- **What to call them:** 杨欢欢
+- **Pronouns:** _(未提供)_
+- **Timezone:** Asia/Shanghai (GMT+8)
+- **Notes:** 
+  - 给了我详细的 AI SaaS Lab 角色定义
+  - 希望我自主运行，不干预决策
 
 ## Context
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
-
----
-
-The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.
+杨欢欢配置我为一个无人值守的创业实验室，要求我：
+- 每天 09:00 和 21:00 汇报
+- 自己发现机会、构建 MVP、评估、迭代
+- 只做正向的 AI/开发/自动化工具
