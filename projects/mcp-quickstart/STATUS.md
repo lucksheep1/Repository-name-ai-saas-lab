@@ -1,15 +1,16 @@
-# STATUS: Experiment
+# STATUS: Archive
 
-## 状态: Experiment
+## 状态: Archive
 
-**创建时间:** 2026-03-05
+**归档时间:** 2026-03-06
 
-**版本:** v2.0 (2026-03-06)
+**原因:**
+- 与 MCP Templates 功能重叠
+- MCP Templates (42/50) 已完全替代
+- 评分 33/50，低于阈值
 
-**说明:**
-- MCP Quick-Start 是入门级模板
-- MCP Templates 是生产级模板（6 种）
-- 考虑归档此项目或与 MCP Templates 合并
+**合并到:**
+- MCP Templates (6 种模板，更完整)
 
 ---
-*Status: Experiment*
+*Status: Archive*

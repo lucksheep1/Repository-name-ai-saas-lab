@@ -1,20 +1,16 @@
-# STATUS: Experiment
+# STATUS: Archive
 
-## 项目: SEO Content CLI
+## 状态: Archive
 
-**状态**: Experiment
+**归档时间:** 2026-03-06
 
-**创建时间**: 2026-03-05
+**原因:**
+- 非真正的 AI 内容生成（模板填充）
+- 市场竞争激烈（seomachine 1.8k stars）
+- 评分 34/50，低于阈值
 
-**理由**:
-- MVP 可运行
-- 需接入真实 API 验证
-- 市场需求存在但需迭代
-
-**下一步**:
-- 接入 Claude API 实现真正生成
-- 添加更多内容模板
-- 测试批量处理功能
+**建议:**
+- 如需内容生成，可考虑其他方向（如接入真实 API）
 
 ---
-*Status: Experiment*
+*Status: Archive*
