@@ -350,6 +350,29 @@ class SecurityScanner:
                 except:
                     pass
         
+        # Scan docker-compose files
+        for f in path_obj.rglob('docker-compose*.yml'):
+            if '.git' not in f.parts:
+                try:
+                    with open(f, 'r') as fh:
+                        content = fh.read()
+                        
+                        # Check for hardcoded secrets in environment
+                        if any(x in content for x in ['SECRET', 'PASSWORD', 'API_KEY', 'TOKEN']):
+                            self.add_issue(
+                                str(f), 0, 'WARNING',
+                                "Possible hardcoded secrets in docker-compose environment"
+                            )
+                        
+                        # Check for latest tags
+                        if 'latest' in content:
+                            self.add_issue(
+                                str(f), 0, 'WARNING',
+                                "Using 'latest' tag - specify version for reproducibility"
+                            )
+                except:
+                    pass
+        
         return self.issues
 
 
