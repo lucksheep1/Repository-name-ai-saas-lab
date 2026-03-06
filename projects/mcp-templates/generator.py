@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MCP Server Templates Generator
+MCP Server Templates Generator v2
 Quick-start templates for Model Context Protocol servers.
 """
 import os
@@ -93,6 +93,7 @@ if __name__ == "__main__":
             "README.md": "# Database MCP Server\n\n## Usage\n\n```bash\nexport DB_PATH=my.db\npython main.py\n```\n\n## Tools\n\n- `query`: Execute SQL queries\n- `tables`: List all tables\n"
         }
     },
+    
     "api": {
         "description": "REST API integration",
         "files": {
@@ -176,6 +177,7 @@ if __name__ == "__main__":
             "README.md": "# API MCP Server\n\n## Usage\n\n```bash\nexport API_BASE_URL=https://api.example.com\npython main.py\n```\n\n## Tools\n\n- `get`: Make GET requests\n- `post`: Make POST requests\n"
         }
     },
+    
     "filesystem": {
         "description": "File system operations",
         "files": {
@@ -229,7 +231,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     try:
         if name == "read":
             with open(full_path, "r") as f:
-                content = f.read(10000)  # Limit to 10KB
+                content = f.read(10000)
                 return [TextContent(type="text", text=content)]
         
         elif name == "list":
@@ -258,6 +260,289 @@ if __name__ == "__main__":
             "requirements.txt": "mcp>=1.0.0",
             "README.md": "# Filesystem MCP Server\n\n## Usage\n\n```bash\nexport ROOT_DIR=/path/to/dir\npython main.py\n```\n\n## Tools\n\n- `read`: Read a file\n- `list`: List directory contents\n"
         }
+    },
+    
+    # NEW: GitHub template
+    "github": {
+        "description": "GitHub API integration (issues, PRs, repos)",
+        "files": {
+            "main.py": '''#!/usr/bin/env python3
+"""MCP Server - GitHub Template"""
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+import httpx
+import os
+
+app = Server("mcp-github")
+
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
+REPO = os.environ.get("GITHUB_REPO", "owner/repo")
+
+@app.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name="list_issues",
+            description="List repository issues",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "state": {"type": "string", "description": "open/closed/all"}
+                }
+            }
+        ),
+        Tool(
+            name="get_issue",
+            description="Get a specific issue",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "number": {"type": "integer", "description": "Issue number"}
+                },
+                "required": ["number"]
+            }
+        ),
+        Tool(
+            name="create_issue",
+            description="Create a new issue",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Issue title"},
+                    "body": {"type": "string", "description": "Issue body"}
+                },
+                "required": ["title"]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
+    url = f"https://api.github.com/repos/{REPO}"
+    
+    async with httpx.AsyncClient(headers=headers) as client:
+        try:
+            if name == "list_issues":
+                state = arguments.get("state", "open")
+                resp = await client.get(f"{url}/issues?state={state}")
+                issues = resp.json()
+                return [TextContent(type="text", text=str([f"#{i.get('number')}: {i.get('title')}" for i in issues]))]
+            
+            elif name == "get_issue":
+                number = arguments.get("number")
+                resp = await client.get(f"{url}/issues/{number}")
+                issue = resp.json()
+                return [TextContent(type="text", text=f"#{issue.get('number')}: {issue.get('title')}\n\n{issue.get('body')}")]
+            
+            elif name == "create_issue":
+                data = {"title": arguments.get("title"), "body": arguments.get("body", "")}
+                resp = await client.post(f"{url}/issues", json=data)
+                issue = resp.json()
+                return [TextContent(type="text", text=f"Created issue #{issue.get('number')}: {issue.get('title')}")]
+        
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error: {e}")]
+    
+    return [TextContent(type="text", text="Unknown tool")]
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(
+            read_stream,
+            write_stream,
+            app.create_initialization_options()
+        )
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+''',
+            "requirements.txt": "mcp>=1.0.0 httpx",
+            "README.md": "# GitHub MCP Server\n\n## Usage\n\n```bash\nexport GITHUB_TOKEN=your_token\nexport GITHUB_REPO=owner/repo\npython main.py\n```\n\n## Tools\n\n- `list_issues`: List repository issues\n- `get_issue`: Get issue details\n- `create_issue`: Create new issue\n"
+        }
+    },
+    
+    # NEW: Slack template
+    "slack": {
+        "description": "Slack API integration (channels, messages)",
+        "files": {
+            "main.py": '''#!/usr/bin/env python3
+"""MCP Server - Slack Template"""
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+import httpx
+import os
+
+app = Server("mcp-slack")
+
+SLACK_TOKEN = os.environ.get("SLACK_TOKEN", "")
+
+@app.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name="list_channels",
+            description="List Slack channels",
+            inputSchema={"type": "object", "properties": {}}
+        ),
+        Tool(
+            name="post_message",
+            description="Post a message to a channel",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "channel": {"type": "string", "description": "Channel ID"},
+                    "text": {"type": "string", "description": "Message text"}
+                },
+                "required": ["channel", "text"]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+    headers = {"Authorization": f"Bearer {SLACK_TOKEN}"}
+    url = "https://slack.com/api"
+    
+    async with httpx.AsyncClient(headers=headers) as client:
+        try:
+            if name == "list_channels":
+                resp = await client.get(f"{url}/conversations.list")
+                data = resp.json()
+                channels = data.get("channels", [])
+                return [TextContent(type="text", text=str([c.get("name") for c in channels]))]
+            
+            elif name == "post_message":
+                data = {"channel": arguments.get("channel"), "text": arguments.get("text")}
+                resp = await client.post(f"{url}/chat.postMessage", json=data)
+                result = resp.json()
+                if result.get("ok"):
+                    return [TextContent(type="text", text="Message posted successfully")]
+                return [TextContent(type="text", text=f"Error: {result.get('error')}")]
+        
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error: {e}")]
+    
+    return [TextContent(type="text", text="Unknown tool")]
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(
+            read_stream,
+            write_stream,
+            app.create_initialization_options()
+        )
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+''',
+            "requirements.txt": "mcp>=1.0.0 httpx",
+            "README.md": "# Slack MCP Server\n\n## Usage\n\n```bash\nexport SLACK_TOKEN=xoxb-...\npython main.py\n```\n\n## Tools\n\n- `list_channels`: List Slack channels\n- `post_message`: Post message to channel\n"
+        }
+    },
+    
+    # NEW: Notion template
+    "notion": {
+        "description": "Notion API integration (pages, databases)",
+        "files": {
+            "main.py": '''#!/usr/bin/env python3
+"""MCP Server - Notion Template"""
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+import httpx
+import os
+import json
+
+app = Server("mcp-notion")
+
+NOTION_TOKEN = os.environ.get("NOTION_TOKEN", "")
+DATABASE_ID = os.environ.get("NOTION_DATABASE_ID", "")
+
+@app.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name="query_database",
+            description="Query a Notion database",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filter": {"type": "object", "description": "Filter object"}
+                }
+            }
+        ),
+        Tool(
+            name="create_page",
+            description="Create a new page",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Page title"},
+                    "content": {"type": "string", "description": "Page content"}
+                },
+                "required": ["title"]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+    headers = {
+        "Authorization": f"Bearer {NOTION_TOKEN}",
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json"
+    }
+    
+    async with httpx.AsyncClient(headers=headers) as client:
+        try:
+            if name == "query_database":
+                url = f"https://api.notion.com/v1/databases/{DATABASE_ID}/query"
+                resp = await client.post(url, json=arguments.get("filter", {}))
+                data = resp.json()
+                results = data.get("results", [])
+                return [TextContent(type="text", text=str([r.get("id") for r in results]))]
+            
+            elif name == "create_page":
+                url = "https://api.notion.com/v1/pages"
+                title = arguments.get("title", "Untitled")
+                data = {
+                    "parent": {"database_id": DATABASE_ID},
+                    "properties": {
+                        "Name": {"title": [{"text": {"content": title}}]}
+                    }
+                }
+                resp = await client.post(url, json=data)
+                page = resp.json()
+                return [TextContent(type="text", text=f"Created page: {page.get('id')}")]
+        
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error: {e}")]
+    
+    return [TextContent(type="text", text="Unknown tool")]
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(
+            read_stream,
+            write_stream,
+            app.create_initialization_options()
+        )
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+''',
+            "requirements.txt": "mcp>=1.0.0 httpx",
+            "README.md": "# Notion MCP Server\n\n## Usage\n\n```bash\nexport NOTION_TOKEN=secret_...\nexport NOTION_DATABASE_ID=...\npython main.py\n```\n\n## Tools\n\n- `query_database`: Query Notion database\n- `create_page`: Create new page\n"
+        }
     }
 }
 
@@ -269,10 +554,8 @@ def create_project(name: str, template: str):
         print(f"Available: {', '.join(TEMPLATES.keys())}")
         sys.exit(1)
     
-    # Create directory
     os.makedirs(name, exist_ok=True)
     
-    # Generate files
     for filename, content in TEMPLATES[template]["files"].items():
         filepath = os.path.join(name, filename)
         with open(filepath, "w") as f:
@@ -292,24 +575,22 @@ def list_templates():
 def main():
     import argparse
     
-    parser = argparse.ArgumentParser(description="MCP Server Templates")
+    parser = argparse.ArgumentParser(description="MCP Server Templates v2")
     subparsers = parser.add_subparsers()
     
-    # new command
     new_parser = subparsers.add_parser("new", help="Create new MCP server")
     new_parser.add_argument("name", help="Project name")
     new_parser.add_argument("--template", "-t", default="database",
                            choices=list(TEMPLATES.keys()),
                            help="Template to use")
     
-    # list command
     subparsers.add_parser("list", help="List available templates")
     
     args = parser.parse_args()
     
-    if "list" in args and args.list:
+    if hasattr(args, 'list') and args.list:
         list_templates()
-    elif "name" in args:
+    elif hasattr(args, 'name'):
         create_project(args.name, args.template)
     else:
         parser.print_help()
