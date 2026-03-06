@@ -224,6 +224,34 @@ class Memory:
         with open(filepath, 'r') as f:
             self.memories = json.load(f)
         self._save()
+    
+    def set_priority(self, memory_id: str, priority: int) -> bool:
+        """Set memory priority (1-5)."""
+        for m in self.memories:
+            if m["id"] == memory_id:
+                m["priority"] = priority
+                self._save()
+                return True
+        return False
+    
+    def get_by_priority(self, min_priority: int = 3) -> List[Dict]:
+        """Get memories by minimum priority."""
+        return [m for m in self.memories if m.get("priority", 0) >= min_priority]
+    
+    def merge(self, other_memories: List[Dict]):
+        """Merge memories from another source (avoid duplicates)."""
+        existing_ids = set(m["id"] for m in self.memories)
+        for m in other_memories:
+            if m["id"] not in existing_ids:
+                self.memories.append(m)
+        self._save()
+    
+    def get_timeline(self, limit: int = 20) -> List[Dict]:
+        """Get memories as a timeline."""
+        sorted_memories = sorted(self.memories, 
+                                key=lambda x: x.get("timestamp", ""), 
+                                reverse=True)
+        return sorted_memories[:limit]
 
 
 # CLI interface

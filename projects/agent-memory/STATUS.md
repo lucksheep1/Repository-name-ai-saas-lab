@@ -1,26 +1,26 @@
-# STATUS: Experiment
+# STATUS: Promising ✅
 
-## 状态: Experiment
+## 状态: Promising
 
 **创建时间:** 2026-03-06
 
-**版本:** v2.0 (2026-03-06 迭代)
+**版本:** v4.0 (2026-03-07 迭代)
 
 **理由:**
+- Score: 43/50 (达到门槛)
 - ReMe 证明需求
 - 轻量级差异化
 
-**v2.0 新增功能:**
-- ✅ 批量添加 (add_batch)
-- ✅ 获取最近记忆 (get_recent)
-- ✅ 记忆摘要 (summarize)
-- ✅ 删除记忆 (delete)
-- ✅ 导入/导出 (import/export)
-- ✅ FAISS 支持 (可选)
+**v4.0 新增功能:**
+- ✅ 标签系统 (add_with_tags, get_by_tag)
+- ✅ Markdown 导出 (export_markdown)
+- ✅ 优先级管理 (set_priority, get_by_priority)
+- ✅ 记忆合并 (merge)
+- ✅ 时间线视图 (get_timeline)
 
 **下一步:**
-- 添加 LLM 摘要
-- 考虑升级为 Promising
+- 推广项目
+- 持续迭代
 
 ---
-*Status: Experiment*
+*Status: Promising ✅*
