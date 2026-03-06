@@ -18,9 +18,14 @@ class SecurityScanner:
     
     # Common typosquatting patterns
     TYPOSQUATTING_PATTERNS = {
-        'npm': ['req', 'npmm', 'nodemon', 'node_modules', 'npx'],
-        'pip': ['pip3', 'pipx', 'pypi', 'pyptron'],
-        'git': ['githb', 'gihub', 'githb', 'githu'],
+        'npm': ['req', 'npmm', 'npx', 'node_moduels'],
+        'pip': ['pip3', 'pipx', 'pyptron'],
+        'git': ['githb', 'gihub', 'githu'],
+    }
+    
+    # Known malicious package patterns (typosquatted popular packages)
+    SUSPICIOUS_PACKAGES = {
+        'npm': ['pyton', 'pythn', 'node_modules', 'npms', 'yarnpkg'],
     }
     
     # Prompt injection patterns
@@ -146,13 +151,24 @@ class SecurityScanner:
             
             # Check dependencies
             if 'dependencies' in pkg:
-                for dep in pkg['dependencies']:
+                all_deps = list(pkg.get('dependencies', {}).keys())
+                all_deps.extend(list(pkg.get('devDependencies', {}).keys()))
+                
+                for dep in all_deps:
                     # Check for typosquatting
                     for pkg_manager, typos in self.TYPOSQUATTING_PATTERNS.items():
                         if dep.lower() in typos:
                             self.add_issue(
                                 path, 0, 'WARNING',
                                 f"Suspicious dependency (possible typosquatting): {dep}"
+                            )
+                    
+                    # Check for known suspicious packages
+                    for pkg_manager, suspicious in self.SUSPICIOUS_PACKAGES.items():
+                        if dep.lower() in suspicious:
+                            self.add_issue(
+                                path, 0, 'HIGH',
+                                f"Known suspicious package: {dep}"
                             )
                             
         except Exception as e:
