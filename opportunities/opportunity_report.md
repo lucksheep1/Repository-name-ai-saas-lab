@@ -1,39 +1,36 @@
-# Opportunity Report — 2026-03-06 (Round 4)
+# Opportunity Report — 2026-03-06 (Round 5)
 
-## Opportunity: AI Tool Security Scanner
+## Opportunity: MCP Server Templates
 
 **Problem Summary:**
-Clinejection 事件证明：AI 开发者工具存在严重安全漏洞，可被 prompt injection 攻击。4000 台机器被入侵。缺乏轻量级检测工具。
+MCP 生态快速增长，但开发者需要快速创建自己的 MCP Server。缺乏轻量级模板/脚手架。
 
 **Evidence:**
-1. **Clinejection 事件** (2026-02-17) - 317 points on Hacker News
-   - 通过 GitHub issue title 注入 prompt
-   - 4000 台开发者机器被入侵
-   - AI 工具安装另一个 AI (OpenClaw)
-2. **shannon** (31.8k stars) - AI Pentester 需求旺盛
-3. **trivy** (32.9k stars) - 安全扫描持续热门
+1. **mcp-for-beginners** (14.9k stars) - 微软官方 MCP 课程，证明需求旺盛
+2. MCP 官方 Registry 上线 - 生态成熟
+3. 我的 MCP Quick-Start 项目已验证可行性
 
 **Existing Solutions:**
-- trivy (偏传统安全，不检测 prompt injection)
-- snyk (企业级，昂贵)
-- 缺乏针对 AI 工具的安全检测
+- mcp-for-beginners (教程，代码量大)
+- 官方模板 (少，不够轻量)
+- 手动创建 (繁琐)
 
 **Why They Fail:**
-- 不检测 prompt injection
-- 不检测 AI 工具特有的攻击向量
-- 缺乏轻量级 CLI
+- 教程太长，没有快速启动
+- 官方模板不夠多样
+- 缺乏中文/本地化
 
 **Possible MVP:**
-- GitHub Actions workflow 安全扫描器
-- 检测常见的 prompt injection 模式
-- npm 包 postinstall 脚本检测
+- Python MCP Server 模板生成器
+- 支持多种场景 (database, api, file system)
+- 一键生成可运行代码
 
 **Opportunity Score:**
-- Pain: 9/10 (真实入侵事件)
-- Frequency: 7/10 (AI 工具越来越普及)
-- Ease: 8/10 (规则检测相对简单)
-- Market: 8/10 (开发者工具市场大)
+- Pain: 7/10
+- Frequency: 8/10
+- Ease: 9/10
+- Market: 7/10
 
 ---
 
-*Scanner Round 4: 2026-03-06 10:25 GMT+8*
+*Scanner Round 5: 2026-03-06 10:31 GMT+8*
