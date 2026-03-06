@@ -19,8 +19,8 @@
 - ✅ FAISS 支持 (可选)
 
 **下一步:**
-- 测试新功能
 - 添加 LLM 摘要
+- 考虑升级为 Promising
 
 ---
 *Status: Experiment*
