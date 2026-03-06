@@ -95,6 +95,13 @@ class SecurityScanner:
                                         path, i + 1, 'WARNING',
                                         "Potential secret exposure in logs"
                                     )
+                            
+                            # Check for cache usage (cache poisoning vulnerability)
+                            if 'uses' in step and 'cache' in step['uses']:
+                                self.add_issue(
+                                    path, i + 1, 'WARNING',
+                                    "Cache usage detected - ensure cache keys are versioned and secure"
+                                )
             
             # Check trigger sources
             if 'on' in workflow:
