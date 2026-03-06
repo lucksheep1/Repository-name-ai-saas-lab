@@ -425,6 +425,16 @@ class SecurityScanner:
                 except:
                     pass
         
+        # Check for sensitive files that should not be committed
+        sensitive_patterns = ['*.pem', '*.key', '*.p12', '*.pfx', '*.jks', 'id_rsa*', 'id_ed25519*']
+        for pattern in sensitive_patterns:
+            for f in path_obj.rglob(pattern):
+                if '.git' not in f.parts and 'node_modules' not in f.parts:
+                    self.add_issue(
+                        str(f), 0, 'HIGH',
+                        f"Sensitive file detected ({f.name}) - should not be committed to version control"
+                    )
+        
         return self.issues
 
 
