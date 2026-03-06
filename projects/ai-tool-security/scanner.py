@@ -406,6 +406,25 @@ class SecurityScanner:
                 except:
                     pass
         
+        # Scan Terraform files for hardcoded secrets
+        for f in path_obj.rglob('*.tf'):
+            if '.git' not in f.parts:
+                try:
+                    with open(f, 'r') as fh:
+                        content = fh.read()
+                        
+                        # Check for hardcoded secrets
+                        secret_patterns = ['password', 'api_key', 'secret_key', 'access_key', 'token']
+                        if any(x in content.lower() for x in secret_patterns):
+                            # Check if it's a variable or actual value
+                            if '=' in content and ('"' in content or "'" in content):
+                                self.add_issue(
+                                    str(f), 0, 'HIGH',
+                                    "Possible hardcoded secrets in Terraform file - use tfvars or secrets manager"
+                                )
+                except:
+                    pass
+        
         return self.issues
 
 
