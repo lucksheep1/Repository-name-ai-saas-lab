@@ -190,6 +190,35 @@ class Memory:
         with open(filepath, 'w') as f:
             json.dump(self.memories, f, indent=2)
     
+    def export_markdown(self, filepath: str):
+        """Export memories to a Markdown file."""
+        with open(filepath, 'w') as f:
+            f.write("# Agent Memory Export\n\n")
+            for m in self.memories:
+                f.write(f"## {m['id']} - {m['timestamp']}\n\n")
+                f.write(f"{m['text']}\n\n")
+                if m.get('tags'):
+                    f.write(f"**Tags:** {', '.join(m['tags'])}\n\n")
+                f.write("---\n\n")
+    
+    def add_with_tags(self, text: str, tags: List[str], metadata: Optional[Dict] = None) -> str:
+        """Add a memory with tags."""
+        memory_id = str(uuid.uuid4())[:8]
+        memory = {
+            "id": memory_id,
+            "text": text,
+            "timestamp": datetime.now().isoformat(),
+            "tags": tags,
+            "metadata": metadata or {}
+        }
+        self.memories.append(memory)
+        self._save()
+        return memory_id
+    
+    def get_by_tag(self, tag: str) -> List[Dict]:
+        """Get memories by tag."""
+        return [m for m in self.memories if tag in m.get('tags', [])]
+    
     def import_(self, filepath: str):
         """Import memories from a file."""
         with open(filepath, 'r') as f:

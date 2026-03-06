@@ -543,6 +543,250 @@ if __name__ == "__main__":
             "requirements.txt": "mcp>=1.0.0 httpx",
             "README.md": "# Notion MCP Server\n\n## Usage\n\n```bash\nexport NOTION_TOKEN=secret_...\nexport NOTION_DATABASE_ID=...\npython main.py\n```\n\n## Tools\n\n- `query_database`: Query Notion database\n- `create_page`: Create new page\n"
         }
+    },
+    
+    # NEW: Twitter/X template
+    "twitter": {
+        "description": "Twitter/X API integration (tweets, timeline)",
+        "files": {
+            "main.py": '''#!/usr/bin/env python3
+"""MCP Server - Twitter/X Template"""
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+import httpx
+import os
+import json
+
+app = Server("mcp-twitter")
+
+TWITTER_TOKEN = os.environ.get("TWITTER_TOKEN", "")
+BEARER_TOKEN = os.environ.get("TWITTER_BEARER_TOKEN", "")
+
+@app.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name="post_tweet",
+            description="Post a new tweet",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "description": "Tweet text"}
+                },
+                "required": ["text"]
+            }
+        ),
+        Tool(
+            name="get_timeline",
+            description="Get user timeline",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "max_results": {"type": "integer", "description": "Max tweets (1-100)"}
+                }
+            }
+        ),
+        Tool(
+            name="search_tweets",
+            description="Search tweets by query",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query"},
+                    "max_results": {"type": "integer", "description": "Max results (10-100)"}
+                },
+                "required": ["query"]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+    headers = {
+        "Authorization": f"Bearer {BEARER_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    async with httpx.AsyncClient(headers=headers) as client:
+        try:
+            if name == "post_tweet":
+                url = "https://api.twitter.com/2/tweets"
+                data = {"text": arguments.get("text", "")}
+                resp = await client.post(url, json=data)
+                result = resp.json()
+                return [TextContent(type="text", text=f"Tweet posted: {result.get('data', {}).get('id')}")]
+            
+            elif name == "get_timeline":
+                url = "https://api.twitter.com/2/users/me/tweets"
+                max_results = arguments.get("max_results", 10)
+                resp = await client.get(url, params={"max_results": max_results})
+                data = resp.json()
+                tweets = data.get("data", [])
+                return [TextContent(type="text", text=str([t.get("text", "")[:100] for t in tweets]))]
+            
+            elif name == "search_tweets":
+                url = "https://api.twitter.com/2/tweets/search/recent"
+                query = arguments.get("query", "")
+                max_results = arguments.get("max_results", 10)
+                resp = await client.get(url, params={"query": query, "max_results": max_results})
+                data = resp.json()
+                tweets = data.get("data", [])
+                return [TextContent(type="text", text=str([t.get("text", "")[:100] for t in tweets]))]
+        
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error: {e}")]
+    
+    return [TextContent(type="text", text="Unknown tool")]
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(
+            read_stream,
+            write_stream,
+            app.create_initialization_options()
+        )
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+''',
+            "requirements.txt": "mcp>=1.0.0 httpx",
+            "README.md": "# Twitter/X MCP Server\n\n## Usage\n\n```bash\nexport TWITTER_BEARER_TOKEN=...\npython main.py\n```\n\n## Tools\n\n- `post_tweet`: Post a new tweet\n- `get_timeline`: Get user timeline\n- `search_tweets`: Search tweets by query\n"
+        }
+    },
+    
+    # NEW: Email template
+    "email": {
+        "description": "Email sending via SMTP",
+        "files": {
+            "main.py": '''#!/usr/bin/env python3
+"""MCP Server - Email Template"""
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+import smtplib
+import os
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+app = Server("mcp-email")
+
+SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USER = os.environ.get("SMTP_USER", "")
+SMTP_PASS = os.environ.get("SMTP_PASS", "")
+FROM_EMAIL = os.environ.get("FROM_EMAIL", SMTP_USER)
+
+@app.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name="send_email",
+            description="Send an email",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "to": {"type": "string", "description": "Recipient email"},
+                    "subject": {"type": "string", "description": "Email subject"},
+                    "body": {"type": "string", "description": "Email body (text or HTML)"},
+                    "is_html": {"type": "boolean", "description": "Send as HTML"}
+                },
+                "required": ["to", "subject", "body"]
+            }
+        ),
+        Tool(
+            name="send_template",
+            description="Send email from template",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "to": {"type": "string", "description": "Recipient email"},
+                    "template": {"type": "string", "description": "Template name"},
+                    "vars": {"type": "object", "description": "Template variables"}
+                },
+                "required": ["to", "template"]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+    try:
+        if name == "send_email":
+            to_email = arguments.get("to", "")
+            subject = arguments.get("subject", "")
+            body = arguments.get("body", "")
+            is_html = arguments.get("is_html", False)
+            
+            msg = MIMEMultipart()
+            msg["From"] = FROM_EMAIL
+            msg["To"] = to_email
+            msg["Subject"] = subject
+            
+            msg.attach(MIMEText(body, "html" if is_html else "plain"))
+            
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+                server.starttls()
+                server.login(SMTP_USER, SMTP_PASS)
+                server.send_message(msg)
+            
+            return [TextContent(type="text", text=f"Email sent to {to_email}")]
+        
+        elif name == "send_template":
+            to_email = arguments.get("to", "")
+            template_name = arguments.get("template", "")
+            vars_dict = arguments.get("vars", {})
+            
+            templates = {
+                "welcome": ("Welcome!", "Welcome {{name}}! Thanks for joining."),
+                "reminder": ("Reminder", "Hi {{name}}, this is a reminder for {{event}}."),
+                "alert": ("Alert", "Alert: {{message}}")
+            }
+            
+            if template_name not in templates:
+                return [TextContent(type="text", text=f"Unknown template: {template_name}")]
+            
+            subject, body = templates[template_name]
+            for key, val in vars_dict.items():
+                body = body.replace(f"{{{{{key}}}}}", val)
+                subject = subject.replace(f"{{{{{key}}}}}", val)
+            
+            msg = MIMEMultipart()
+            msg["From"] = FROM_EMAIL
+            msg["To"] = to_email
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain"))
+            
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+                server.starttls()
+                server.login(SMTP_USER, SMTP_PASS)
+                server.send_message(msg)
+            
+            return [TextContent(type="text", text=f"Template email sent to {to_email}")]
+    
+    except Exception as e:
+        return [TextContent(type="text", text=f"Error: {e}")]
+    
+    return [TextContent(type="text", text="Unknown tool")]
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(
+            read_stream,
+            write_stream,
+            app.create_initialization_options()
+        )
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+''',
+            "requirements.txt": "mcp>=1.0.0",
+            "README.md": "# Email MCP Server\n\n## Usage\n\n```bash\nexport SMTP_HOST=smtp.gmail.com\nexport SMTP_PORT=587\nexport SMTP_USER=your@email.com\nexport SMTP_PASS=password\nexport FROM_EMAIL=your@email.com\npython main.py\n```\n\n## Tools\n\n- `send_email`: Send a plain/HTML email\n- `send_template`: Send email from template (welcome, reminder, alert)\n"
+        }
     }
 }
 

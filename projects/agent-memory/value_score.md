@@ -1,21 +1,21 @@
 # Value Score
 
-## Project: Agent Memory Manager v2
+## Project: Agent Memory Manager v3
 
 | Criteria | Score (1-10) | Notes |
 |----------|--------------|-------|
 | Utility | 9 | Agent memory core need |
-| Innovation | 7 | Simple combination |
+| Innovation | 8 | Tagging + Markdown export |
 | Simplicity | 9 | Easy API |
 | Reusability | 9 | Any Python agent |
 | Market | 7 | Growing market |
 
-**Total: 41/50** (+3 from v1)
+**Total: 42/50** (+1 from v2) 🎯
 
 ## Why This Score
 
 - **Utility (9)**: Memory is core to agents
-- **Innovation (7)**: Enhanced features
+- **Innovation (8)**: Tagging + Markdown export 增强
 - **Simplicity (9)**: Minimal dependencies
 - **Reusability (9)**: Works with any Python agent
 - **Market (7)**: Emerging market
