@@ -1,51 +1,22 @@
 # Startup Analysis — 2026-03-06
 
-## Project: Local Code RAG CLI
+## Project: Prompt Templates Library
 
-### 1. 问题是否真实存在（证据）
+### 问题验证
+- ✅ prompt-eng 32k stars 证明需求
+- ✅ 开发者需要可复用模板
 
-✅ **是**
-- **GitNexus** 10.1k stars 本周 - 本地代码 RAG 需求真实
-- 代码搜索是开发者日常痛点
-
-### 2. 谁会用（开发者画像）
-
-- **个人开发者**: 需要本地代码搜索
-- **团队**: 不想用云端服务
-- **学习者**: 探索代码库
-
-### 3. 为什么现有方案失败
-
-- **GitNexus**: 复杂，学习曲线高
-- **Sourcegraph**: 需要云端
-- **grep**: 不智能
-
-### 4. MVP 验证
-
-✅ TF-IDF 搜索可行
-✅ 支持多语言
-✅ CLI 简单
-
-### 5. 变现路径
-
-**短期:** 开源
-**中期:** 付费高级版（语义嵌入）
-**长期:** IDE 集成
-
----
-
-## 评分
-
+### 评分
 | 维度 | 分数 |
 |------|------|
-| Pain | 7/10 |
+| Pain | 6/10 |
 | Frequency | 8/10 |
 | Market | 7/10 |
-| Competition | 7/10 |
-| Differentiation | 8/10 |
+| Competition | 6/10 |
+| Differentiation | 7/10 |
 
-**总分: 37/50**
+**总分: 34/50**
 
 ## 决策
 
-**Iterate** - 需要测试和优化
+**Iterate** - 简单模板库可行

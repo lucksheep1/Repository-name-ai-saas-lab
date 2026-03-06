@@ -1,36 +1,34 @@
-# Opportunity Report — 2026-03-06 (Round 6)
+# Opportunity Report — 2026-03-06 (Round 7)
 
-## Opportunity: Local Code RAG CLI
+## Opportunity: Prompt Templates Library
 
 **Problem Summary:**
-开发者需要在本地快速建立代码知识库，但 GitNexus 功能全、复杂。本地轻量级 RAG 工具需求存在。
+提示工程是 AI 开发关键，但缺乏可复用的模板库。Anthropic 教程 32k stars 证明需求。
 
 **Evidence:**
-1. **GitNexus** (10.1k stars this week) - 本地代码 RAG 证明需求
-2. **Agent-Skills-for-Context-Engineering** (13.4k stars) - Agent 上下文需求
-3. 代码搜索/导航是真实痛点
+1. **prompt-eng-interactive-tutorial** (32.6k stars) - Anthropic 官方教程
+2. **learn-claude-code** (21.8k stars) - Claude Code 学习
+3. 开发者需要可复用的提示词
 
 **Existing Solutions:**
-- GitNexus (功能全但复杂)
-- Sourcegraph (云端，付费)
-- local-rag (通用，不针对代码)
+- Anthropic 教程 (太长)
+- 博客文章 (分散)
+- 手动积累
 
 **Why They Fail:**
-- GitNexus 复杂，学习曲线高
-- Sourcegraph 需要云端
-- 缺乏轻量级 CLI
+- 没有结构化模板库
+- 难以复用
 
 **Possible MVP:**
-- 简单的 Python CLI
-- 本地代码索引和搜索
-- 基于 TF-IDF 或 BM25
+- Python 提示词模板库
+- 分类：代码生成、总结、翻译等
+- CLI 工具生成提示词
 
 **Opportunity Score:**
-- Pain: 7/10
+- Pain: 6/10
 - Frequency: 8/10
 - Ease: 9/10
 - Market: 7/10
 
 ---
-
-*Scanner Round 6: 2026-03-06 10:36 GMT+8*
+*Scanner Round 7: 2026-03-06*

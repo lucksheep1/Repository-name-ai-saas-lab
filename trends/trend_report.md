@@ -1,37 +1,27 @@
-# Trend Report — 2026-03-06 (Round 6)
+# Trend Report — 2026-03-06 (Round 7)
 
 ## Observed Signals
 
-### GitHub Trending Weekly (新发现)
-1. **RuView** (28.3k stars) - WiFi 人体姿态估计
-2. **OpenSandbox** (6.4k stars) - Alibaba AI Sandbox 平台 ⭐新
-3. **GitNexus** (10.1k stars) - 本地代码 RAG/知识图谱 ⭐
-4. **deer-flow** (24.8k stars) - ByteDance SuperAgent
-5. **Scrapling** (24k stars) - Web Scraping 框架
-6. **learn-claude-code** (21.8k stars) - Claude Code 类实现
-7. **ruflo** (19.2k stars) - Agent 编排平台
-8. **moonshine** (7k stars) - 边缘设备 ASR
-9. **Agent-Skills-for-Context-Engineering** (13.4k stars) - Agent 技能
-10. **prompt-eng-interactive-tutorial** (32.6k stars) - Anthropic 提示工程
-
 ### 持续热门
-- **shannon** - AI Pentester
-- **airi** - AI Companion
-- **mcp-for-beginners** - MCP 教育
+1. **shannon** - AI Pentester (31.8k stars)
+2. **airi** - AI Companion (27.5k stars)
+3. **seomachine** - SEO 内容 (1.7k stars)
+4. **trivy** - 安全扫描 (32.9k stars)
+5. **mcp-for-beginners** - MCP 教育 (14.9k stars)
+6. **AReaL** - LLM Reasoning (4.1k stars)
+7. **codebuff** - 终端代码生成 (3.9k stars)
 
-## 新兴模式
+### 本周新发现
+1. **GitNexus** (10.1k stars) - 本地代码 RAG
+2. **OpenSandbox** (6.4k stars) - AI Sandbox
+3. **deer-flow** (24.8k stars) - SuperAgent
 
-1. **AI Sandbox** - OpenSandbox (Alibaba) 证明需求
-2. **本地代码 RAG** - GitNexus 10k stars ⭐
-3. **Agent 编排** - ruflo, deer-flow
-4. **提示工程教育** - Anthropic 官方教程 32k stars
+## 模式总结
 
-## Candidate Opportunity Themes
-
-1. **本地 RAG 工具** - GitNexus 验证需求 ⭐
-2. **AI Sandbox 集成** - OpenSandbox 生态
-3. **Agent 编排框架** - 轻量级替代
-4. **提示工程模板** - 教育需求大
+1. **AI Agent** - 持续热门，多个方向
+2. **MCP 生态** - 稳定增长
+3. **AI 安全** - 事件驱动
+4. **本地工具** - 隐私需求
 
 ---
-*Scout Round 6: 2026-03-06 10:35 GMT+8*
+*Scout Round 7: 2026-03-06 10:40 GMT+8*
