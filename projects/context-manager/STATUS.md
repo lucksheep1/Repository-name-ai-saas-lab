@@ -13,6 +13,12 @@
 - SQLite 后端存储
 - 支持 CLI 和 Python API
 
+**功能:**
+- ✅ add - 添加记忆
+- ✅ list - 列出所有记忆
+- ✅ search - 搜索记忆
+- ✅ clear - 清理旧记忆
+
 **评分:** 36/50 (Experiment)
 
 ---
