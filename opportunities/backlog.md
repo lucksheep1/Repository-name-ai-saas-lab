@@ -2,11 +2,12 @@
 
 ## Active Projects
 
-1. **AI Tool Security Scanner** - ⭐ 42/50
+1. **AI Tool Security Scanner** - ⭐ 42/50 (Promising)
 2. **MCP Server Templates** - ⭐ 42/50
 3. **Prompt Templates Library** - ⭐ 42/50
 4. **Agent Memory Manager** - 41/50
 5. **Local Code RAG CLI** - 39/50
+6. **Agent Context Manager** - 36/50
 
 ## Archived
 
