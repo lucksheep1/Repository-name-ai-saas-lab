@@ -9,6 +9,19 @@
 - ✅ 可复现用例添加
 - ✅ Scanner Gate 满足 (3+ 证据)
 
+## 检测能力 (v2)
+
+### ✅ 已实现
+- **npm/JS**: postinstall/preinstall 脚本检测
+- **依赖安全**: typosquatting 检测、可疑包检测
+- **GitHub Actions**: 外部 action、cache poisoning、权限检查、触发器验证
+- **Prompt Injection**: Python f-string 注入检测
+- **敏感文件**: .env 文件、SSH 密钥、证书检测
+- **Docker**: Dockerfile 安全扫描 (root 用户、latest tag、secret)
+- **Kubernetes**: K8s manifest 安全扫描
+- **Terraform**: Terraform 文件 secret 检测
+- **Shell**: 脚本中 hardcoded secrets 检测
+
 ## 验证步骤
 
 ```bash
@@ -53,6 +66,20 @@ jobs:
 # test.py
 user_input = request.GET['prompt']
 result = f"System: {user_input}"  # 这会被检测
+```
+
+### 用例 4: 检测 Dockerfile 安全问题
+```bash
+# 创建 Dockerfile
+echo 'FROM node:latest
+ENV API_KEY=secret
+USER root' > Dockerfile
+
+# 扫描
+ai-security-scan .
+# 输出: [WARNING] Container runs as root
+#       [WARNING] Using 'latest' tag
+#       [HIGH] Possible hardcoded secrets
 ```
 
 ---
