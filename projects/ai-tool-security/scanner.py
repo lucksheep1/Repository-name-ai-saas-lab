@@ -201,9 +201,11 @@ class SecurityScanner:
                 lines = f.readlines()
             
             for i, line in enumerate(lines, 1):
-                # Check for f-string with external input
+                # Check for f-string with external input (prompt injection vulnerability)
                 if 'f"' in line or "f'" in line:
-                    if 'github.' in line or 'issue' in line or 'request' in line:
+                    # Check for common external input sources
+                    external_inputs = ['request', 'input', 'issue', 'user', 'query', 'param', 'args']
+                    if any(x in line.lower() for x in external_inputs):
                         self.add_issue(
                             path, i, 'WARNING',
                             "Possible prompt injection: f-string with external input"
