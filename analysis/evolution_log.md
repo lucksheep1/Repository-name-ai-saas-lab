@@ -1,5 +1,37 @@
 # Evolution Log
 
+## 2026-03-06 — Round 15
+
+### Pattern Mining
+
+**新信号:**
+- Engram (686 stars) - 持久记忆系统，证明需求
+- Context+ (1.3k stars) - 语义代码理解
+- Agent-pulse - 本地 Gateway 事件分发
+
+**本轮决策:**
+- Agent Context Manager → 新增 Experiment
+- MCP Quick-Start → 建议归档（需求弱）
+
+### Scoring Calibration
+- 轻量级记忆工具差异化明显
+- SQLite 方案简单可靠
+
+### Strategy Update
+- 关注 Agent 持久化方向
+- 继续迭代现有 Memory 项目
+
+### Backlog (7 个 Experiment)
+1. ~~MCP Quick-Start~~ - 建议归档
+2. ~~Agent Memory Manager~~ - Experiment
+3. ~~AI Tool Security Scanner~~ - Experiment
+4. ~~MCP Server Templates~~ - Experiment
+5. ~~Local Code RAG CLI~~ - Experiment
+6. ~~Prompt Templates Library~~ - Experiment
+7. ~~Agent Context Manager~~ - 新增 Experiment
+
+---
+
 ## 2026-03-06 — Round 7
 
 ### Pattern Mining
