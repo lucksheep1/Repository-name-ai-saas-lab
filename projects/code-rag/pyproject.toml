@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "code-rag"
+version = "0.1.0"
+description = "Local code search using RAG"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "AI SaaS Lab", email = "lab@example.com"}
+]
+keywords = "code, search, rag, local, developer tools"
+license = {text = "MIT"}
+dependencies = [
+    "numpy",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+code-rag = "code_rag:main"
+
+[tool.setuptools]
+packages = ["."]

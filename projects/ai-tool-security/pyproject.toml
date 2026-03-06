@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-tool-security"
+version = "0.1.0"
+description = "Security scanner for AI development tools"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "AI SaaS Lab", email = "lab@example.com"}
+]
+keywords = "security, ai, scanner, github actions, npm"
+license = {text = "MIT"}
+dependencies = [
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+ai-security-scan = "ai_tool_security.scanner:main"
+
+[tool.setuptools]
+packages = ["ai_tool_security"]

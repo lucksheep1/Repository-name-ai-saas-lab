@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-memory"
+version = "0.1.0"
+description = "Lightweight memory management for AI agents"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "AI SaaS Lab", email = "lab@example.com"}
+]
+keywords = "ai, agent, memory, context, rag"
+license = {text = "MIT"}
+dependencies = [
+    "numpy",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+faiss = ["faiss-cpu"]
+
+[project.scripts]
+agent-memory = "agent_memory:main"
+
+[tool.setuptools]
+packages = ["."]

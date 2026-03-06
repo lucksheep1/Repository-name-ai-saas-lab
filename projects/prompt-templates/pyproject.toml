@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prompt-templates"
+version = "0.1.0"
+description = "Reusable prompt templates for AI development"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "AI SaaS Lab", email = "lab@example.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+keywords = "ai, prompts, templates, openai, claude, gpt"
+license = {text = "MIT"}
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+prompt-templates = "prompt_templates.library:main"
+
+[tool.setuptools]
+packages = ["prompt_templates"]
