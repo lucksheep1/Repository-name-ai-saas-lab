@@ -311,6 +311,45 @@ class SecurityScanner:
             except:
                 pass
         
+        # Scan Dockerfiles for security issues
+        for f in path_obj.rglob('Dockerfile*'):
+            if '.git' not in f.parts:
+                try:
+                    with open(f, 'r') as fh:
+                        content = fh.read()
+                        lines = content.split('\n')
+                        
+                        # Check for running as root
+                        if 'USER root' in content or 'USER 0' in content:
+                            self.add_issue(
+                                str(f), 0, 'WARNING',
+                                "Container runs as root user - consider using non-root user"
+                            )
+                        
+                        # Check for latest tag
+                        if 'FROM' in content and 'latest' in content:
+                            self.add_issue(
+                                str(f), 0, 'WARNING',
+                                "Using 'latest' tag - specify version for reproducibility"
+                            )
+                        
+                        # Check for ADD instead of COPY
+                        if 'ADD ' in content and 'COPY ' not in content:
+                            self.add_issue(
+                                str(f), 0, 'INFO',
+                                "Using ADD - prefer COPY for better caching"
+                            )
+                        
+                        # Check for exposed secrets
+                        if any(x in content for x in ['API_KEY', 'SECRET', 'PASSWORD']):
+                            if 'ENV' in content:
+                                self.add_issue(
+                                    str(f), 0, 'HIGH',
+                                    "Possible hardcoded secrets in ENV instructions"
+                                )
+                except:
+                    pass
+        
         return self.issues
 
 
