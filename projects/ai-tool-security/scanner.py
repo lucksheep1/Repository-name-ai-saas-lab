@@ -104,15 +104,22 @@ class SecurityScanner:
                                 )
             
             # Check trigger sources
-            if 'on' in workflow:
-                triggers = workflow['on']
+            # Note: 'on' is parsed as boolean True in YAML, so check both
+            if 'on' in workflow or True in workflow:
+                triggers = workflow.get('on') or workflow.get(True)
+                # Handle both dict and list formats
+                trigger_list = []
                 if isinstance(triggers, dict):
-                    for trigger in triggers:
-                        if trigger in ['issues', 'issue_comment', 'pull_request']:
-                            self.add_issue(
-                                path, 0, 'INFO',
-                                f"External trigger: {trigger} (ensure input validation)"
-                            )
+                    trigger_list = list(triggers.keys())
+                elif isinstance(triggers, list):
+                    trigger_list = triggers
+                
+                for trigger in trigger_list:
+                    if trigger in ['issues', 'issue_comment', 'pull_request', 'issue', 'pull_request']:
+                        self.add_issue(
+                            path, 0, 'INFO',
+                            f"External trigger: {trigger} (ensure input validation - vulnerable to prompt injection)"
+                        )
                             
         except Exception as e:
             print(f"Error scanning {path}: {e}")
