@@ -1,18 +1,18 @@
 # Backlog
 
-## Active Projects
+## Active Projects (Top 5)
 
-1. **AI Tool Security Scanner** - ⭐ 42/50 (Promising)
-2. **MCP Server Templates** - ⭐ 42/50
-3. **Prompt Templates Library** - ⭐ 42/50
-4. **Agent Memory Manager** - 41/50
-5. **Local Code RAG CLI** - 39/50
-6. **Agent Context Manager** - 36/50
+1. **AI Tool Security Scanner** - ⭐ 45/50 (Promising ✅)
+2. **MCP Server Templates** - ⭐ 44/50 (Promising ✅)
+3. **Agent Memory Manager** - 42/50
+4. **Local Code RAG CLI** - 39/50
+5. **Agent Context Manager** - 36/50
 
 ## Archived
 
 - ~~MCP Quick-Start~~ - 功能重叠
 - ~~SEO Content CLI~~ - 评分低
+- ~~Prompt Templates Library~~ - 合并到其他项目
 
 ---
-*Updated: 2026-03-06*
+*Updated: 2026-03-07*
