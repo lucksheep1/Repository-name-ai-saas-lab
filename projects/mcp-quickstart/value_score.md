@@ -1,23 +1,18 @@
 # Value Score
 
-## Utility (实用性)
-- 7/10 - 解决"不知道如何开始"的问题，但非刚需
+## Project: MCP Quick-Start v2
 
-## Innovation (创新性)
-- 6/10 - 聚合已有模板，无重大创新
+| Criteria | Score (1-10) | Notes |
+|----------|--------------|-------|
+| Utility | 6 | 入门级，已有 MCP Templates 替代 |
+| Innovation | 5 | 基础模板 |
+| Simplicity | 10 | 最简入门 |
+| Reusability | 6 | 与 MCP Templates 重叠 |
+| Market | 6 | MCP Templates 更完整 |
 
-## Simplicity (简洁性)
-- 9/10 - 单文件 Python，~200 行代码
+**Total: 33/50** (-4 from v1)
 
-## Reusability (可复用性)
-- 8/10 - 模板可扩展，后续添加更多模板方便
+## 说明
 
-## Market (市场)
-- 7/10 - MCP 生态增长中，需求存在
-
----
-
-**总分: 37/50**
-
----
-*Scored: 2026-03-05*
+- 与 MCP Templates 功能重叠
+- 建议归档或合并
