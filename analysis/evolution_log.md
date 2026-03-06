@@ -22,7 +22,7 @@
 1. ~~AI Tool Security Scanner~~ - Promising ✅ (45/50)
 2. ~~MCP Server Templates~~ - Promising ✅ (44/50)
 3. ~~Local Code RAG CLI~~ - Promising ✅ (43/50)
-4. Agent Memory Manager - 继续验证 (42/50)
+4. ~~Agent Memory Manager~~ - Promising ✅ (43/50)
 5. Agent Context Manager - 继续验证 (32/50)
 
 ---
