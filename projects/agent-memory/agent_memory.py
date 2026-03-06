@@ -8,9 +8,13 @@ import os
 import uuid
 from datetime import datetime
 from typing import List, Dict, Optional
-import numpy as np
-
 # Try to import optional dependencies
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+
 try:
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import cosine_similarity
@@ -92,7 +96,13 @@ class Memory:
                 query_vec = tfidf_matrix[-1]
                 memory_vecs = tfidf_matrix[:-1]
                 similarities = cosine_similarity(query_vec, memory_vecs)[0]
-                top_indices = np.argsort(similarities)[-top_k:][::-1]
+                if HAS_NUMPY:
+                    top_indices = np.argsort(similarities)[-top_k:][::-1]
+                else:
+                    # Pure Python fallback
+                    indexed_sims = list(enumerate(similarities))
+                    indexed_sims.sort(key=lambda x: x[1], reverse=True)
+                    top_indices = [x[0] for x in indexed_sims[:top_k]]
                 
                 results = []
                 for idx in top_indices:
