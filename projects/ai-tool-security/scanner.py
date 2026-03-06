@@ -373,6 +373,39 @@ class SecurityScanner:
                 except:
                     pass
         
+        # Scan kubernetes manifests
+        for f in path_obj.rglob('*.yaml'):
+            if '.github' not in f.parts and 'workflows' not in f.parts:
+                try:
+                    with open(f, 'r') as fh:
+                        content = fh.read()
+                        
+                        # Check if it's a k8s manifest
+                        if 'kind:' in content and any(x in content for x in ['Deployment', 'Service', 'ConfigMap', 'Secret']):
+                            content_lower = content.lower()
+                            # Check for hardcoded secrets in env values
+                            if 'value:' in content_lower and any(x in content_lower for x in ['password', 'apikey', 'secretkey', 'token']):
+                                self.add_issue(
+                                    str(f), 0, 'HIGH',
+                                    "Possible hardcoded secrets in Kubernetes manifest env values"
+                                )
+                            
+                            # Check for running as root
+                            if 'runAsNonRoot:' in content and content.find('runAsNonRoot: false') > 0:
+                                self.add_issue(
+                                    str(f), 0, 'WARNING',
+                                    "Container may run as root - consider setting runAsNonRoot: true"
+                                )
+                            
+                            # Check for privileged containers
+                            if 'privileged:' in content and content.find('privileged: true') > 0:
+                                self.add_issue(
+                                    str(f), 0, 'HIGH',
+                                    "Privileged container detected - ensure this is necessary"
+                                )
+                except:
+                    pass
+        
         return self.issues
 
 
