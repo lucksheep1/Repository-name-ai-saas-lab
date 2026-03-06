@@ -28,9 +28,15 @@ class ContextManager:
                 content TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 session_id TEXT,
-                metadata TEXT
+                metadata TEXT,
+                priority INTEGER DEFAULT 3,
+                tags TEXT
             )
         """)
+        # Index for faster searches
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_session ON memories(session_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_priority ON memories(priority)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_created ON memories(created_at)")
         conn.commit()
         conn.close()
     
@@ -113,6 +119,92 @@ class ContextManager:
         cursor.execute("DELETE FROM memories")
         conn.commit()
         conn.close()
+    
+    def add_with_priority(self, content: str, priority: int = 3, session_id: str = None, tags: str = None):
+        """Add a memory with priority (1-5) and tags."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO memories (content, session_id, priority, tags) VALUES (?, ?, ?, ?)",
+            (content, session_id, priority, tags)
+        )
+        conn.commit()
+        conn.close()
+    
+    def get_by_session(self, session_id: str) -> List[Dict]:
+        """Get all memories for a specific session."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, content, created_at, session_id, priority, tags FROM memories WHERE session_id = ? ORDER BY created_at DESC",
+            (session_id,)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {"id": r[0], "content": r[1], "created_at": r[2], "session_id": r[3], "priority": r[4], "tags": r[5]}
+            for r in rows
+        ]
+    
+    def get_by_priority(self, min_priority: int = 3) -> List[Dict]:
+        """Get memories by minimum priority."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, content, created_at, session_id, priority, tags FROM memories WHERE priority >= ? ORDER BY priority DESC, created_at DESC",
+            (min_priority,)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {"id": r[0], "content": r[1], "created_at": r[2], "session_id": r[3], "priority": r[4], "tags": r[5]}
+            for r in rows
+        ]
+    
+    def get_stats(self) -> Dict:
+        """Get statistics about stored memories."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT COUNT(*) FROM memories")
+        total = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(DISTINCT session_id) FROM memories")
+        sessions = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT AVG(priority) FROM memories WHERE priority IS NOT NULL")
+        avg_priority = cursor.fetchone()[0] or 0
+        
+        conn.close()
+        
+        return {
+            "total_memories": total,
+            "unique_sessions": sessions,
+            "avg_priority": round(avg_priority, 2)
+        }
+    
+    def export_json(self, filepath: str = None):
+        """Export all memories to JSON."""
+        import json
+        memories = self.list_memories()
+        output_path = filepath or f"{self.agent_name}_context_export.json"
+        
+        with open(output_path, 'w') as f:
+            json.dump(memories, f, indent=2)
+        
+        return output_path
+    
+    def get_sessions(self) -> List[str]:
+        """Get list of all unique session IDs."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT session_id FROM memories WHERE session_id IS NOT NULL")
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [r[0] for r in rows]
 
 
 # CLI interface
