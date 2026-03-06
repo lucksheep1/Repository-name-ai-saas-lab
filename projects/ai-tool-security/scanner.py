@@ -264,6 +264,31 @@ class SecurityScanner:
                     continue
                 self.scan_file(str(f))
         
+        # Scan .env files (should not be committed)
+        for f in path_obj.rglob('.env*'):
+            if '.git' not in f.parts:
+                self.add_issue(
+                    str(f), 0, 'HIGH',
+                    ".env file detected - should not be committed to version control"
+                )
+        
+        # Scan shell scripts for secrets
+        for f in path_obj.rglob('*.sh'):
+            if any(x in f.parts for x in ['.git', 'node_modules']):
+                continue
+            try:
+                with open(f, 'r') as fh:
+                    content = fh.read()
+                    # Check for hardcoded secrets
+                    if any(x in content for x in ['API_KEY', 'SECRET', 'PASSWORD', 'TOKEN']):
+                        if any(x in content for x in ['=', ':=']):
+                            self.add_issue(
+                                str(f), 0, 'WARNING',
+                                "Possible hardcoded secrets in shell script"
+                            )
+            except:
+                pass
+        
         return self.issues
 
 
