@@ -1,15 +1,15 @@
-# Trend Report — 2026-03-07 (Round 41)
+# Trend Report — 2026-03-07 (Round 42)
 
 ## Observed Signals
 
-### Prompt Management
-- prompt-manager: 238 stars
-- redesigned-pancake: 213 stars
+### Agent Orchestration
+- dify: 131k stars (workflow/orchestration)
+- crewAI: 45k stars (AI agents)
 
 ### Code Context/RAG
 - claude-context: 5564 stars
 
-### MCP Servers (2026)
+### MCP Ecosystem
 - skills: 1634 stars
 - contextplus: 1409 stars
 
@@ -17,4 +17,4 @@
 - 5/5 Projects Promising ✅
 
 ---
-*Scout Round 41: 2026-03-07 21:45*
+*Scout Round 42: 2026-03-07 22:45*
