@@ -6,11 +6,11 @@
 
 ### AM 汇报 (08:30-09:30)
 - 检查时间：每次 heartbeat 时检查是否在 08:30-09:30 窗口
-- 任务：生成 daily_report_AM.md 并提交 Git
+- 任务：生成 daily_report_AM.md → Git 提交 → **发送到你飞书**
 
 ### PM 汇报 (20:30-21:30)
 - 检查时间：每次 heartbeat 时检查是否在 20:30-21:30 窗口
-- 任务：生成 daily_report_PM.md 并提交 Git
+- 任务：生成 daily_report_PM.md → Git 提交 → **发送到你飞书**
 
 ### 无限循环 (每次 heartbeat)
 - 执行 Scout → Scanner → Builder → Analyst → Evolution
@@ -27,12 +27,14 @@
     if 今天还未生成 AM 报告:
       生成 AM 报告
       Git 提交并推送
+      **发送报告到你飞书**
       标记 AM 已完成
   
   if (hour == 20 and minute >= 30) or (hour == 21 and minute <= 30):
     if 今天还未生成 PM 报告:
       生成 PM 报告
       Git 提交并推送
+      **发送报告到你飞书**
       标记 PM 已完成
   
   // 无限循环 - 每轮 Scout 开始
