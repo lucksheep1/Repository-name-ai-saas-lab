@@ -1,10 +1,10 @@
-# Trend Report — 2026-03-07 (Round 36)
+# Trend Report — 2026-03-07 (Round 37)
 
 ## Observed Signals
 
-### Context/Config Management
-- dotai: 1138 stars
-- .config: 316 stars
+### Local Code Completion
+- local-ai-code-completion: 24 stars
+- ai-code-completion-idea-plugin: 18 stars
 
 ### MCP Servers (2026)
 - skills: 1634 stars
@@ -19,4 +19,4 @@
 - 5/5 Projects Promising ✅
 
 ---
-*Scout Round 36: 2026-03-07 19:15*
+*Scout Round 37: 2026-03-07 19:45*
