@@ -1,26 +1,24 @@
-# Trend Report — 2026-03-07 (Round 33)
+# Trend Report — 2026-03-07 (Round 35)
 
 ## Observed Signals
 
-### AI Security (Stable)
+### New MCP Servers (2026)
+- skills: 1634 stars
+- contextplus: 1409 stars
+- mcp-cli: 950 stars
+- drift: 758 stars
+
+### AI Security
 - AI-Infra-Guard: 3058 stars
 - agentic_security: 1798 stars
-- agent-scan: 1760 stars
-- agentic-radar: 922 stars
 
-### AI Flow/Tools
+### Ecosystem Validators
 - langflow: 145k stars
-- ToolJet: 37k stars
-- composio: 27k stars
-
-### MCP Ecosystem
 - awesome-mcp-servers: 82k stars
-- context7: 48k stars
-- mcp-quickstart: 14.9k stars
-- mcp-mem0: 653 stars
+- mem0: 48k stars
 
 ## Backlog Status
 - 5/5 Projects Promising ✅
 
 ---
-*Scout Round 33: 2026-03-07 17:45*
+*Scout Round 35: 2026-03-07 18:45*
