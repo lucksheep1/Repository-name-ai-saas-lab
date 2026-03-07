@@ -1,19 +1,39 @@
-# Trend Report — 2026-03-08 (Round 48)
+# Trend Report — 2026-03-08 (Round 49)
 
 ## Observed Signals
 
-### MCP + Memory
-- mcp-mem0: 654 stars (growing!)
+### OpenAI Codex Skills
+- **openai/skills**: 12,671 stars, 947 stars today
+- Skills Catalog for Codex
+- Signal: Skills/plugins for AI coding assistants is a hot area
 
-### AI DevTools
-- awesome-ai-devtools: 3596 stars
-- refact: 3512 stars
+### Qwen Agent Framework
+- **QwenLM/Qwen-Agent**: Growing rapidly
+- Features: Function Calling, MCP, Code Interpreter, RAG, Chrome extension
+- Signal: MCP integration is becoming standard in agent frameworks
 
-### AI Security
-- DB-GPT: 18k stars
+### Microsoft HVE
+- **microsoft/hve-core**: 739 stars
+- Hypervelocity Engineering components (instructions, prompts, agents, skills)
+- Signal: Enterprise is getting serious about Copilot customization
 
-## Backlog Status
-- 5/5 Projects Promising ✅
+### GitHub Trending
+- **agency-agents**: 10,717 stars, 1,468 stars today
+- AI agency with specialized agents
+- **MiroFish**: 5,590 stars - Swarm Intelligence Engine
+
+## Repeated Complaints
+
+1. **Context management** - Still a top pain point
+2. **MCP server setup complexity** - Developers want easier integration
+3. **Agent memory/persistence** - Need better state management
+
+## Candidate Opportunity Themes
+
+1. **Skills/Prompts Marketplace** - OpenAI skills format is gaining traction
+2. **MCP Templates** - Continue iterating (already promising)
+3. **Agent Memory** - Continue iterating (already promising)
+4. **Code RAG** - Continue iterating (already promising)
 
 ---
-*Scout Round 48: 2026-03-08 03:45*
+*Scout Round 49: 2026-03-08 06:50*

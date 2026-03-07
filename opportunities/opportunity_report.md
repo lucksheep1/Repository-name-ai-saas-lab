@@ -1,45 +1,44 @@
-# Opportunity Report — 2026-03-07 (Round 20)
+# Opportunity Report — 2026-03-08 (Round 49)
 
 ## Current Status: 5/5 Promising Projects
 
 | Project | Score | Status |
 |---------|-------|--------|
+| Agent Memory Manager | 43/50 | Promising ✅ |
 | AI Tool Security Scanner | 45/50 | Promising ✅ |
 | MCP Server Templates | 44/50 | Promising ✅ |
 | Local Code RAG CLI | 43/50 | Promising ✅ |
-| Agent Memory Manager | 43/50 | Promising ✅ |
 | Agent Context Manager | 39/50 | Promising ✅ |
 
-## New Signals Analysis
+## New Signals Analysis (Round 49)
 
-### MCP Security (Emerging)
-- **mcp-scanner** (832 stars) - MCP server security scanner
-- **agent-scan** (1.8k stars) - AI agent security scanner
-- **agentic_security** (1.8k stars) - LLM vulnerability scanner
+### OpenAI Codex Skills (Hot!)
+- **openai/skills**: 12,671 stars, 947 stars today
+- Signal: Skills/plugins for AI coding assistants is a hot area
+- **Related:** Microsoft hve-core (prompts, agents, skills)
 
-**Observation:** 安全方向持续增长，但 AI Tool Security Scanner 已覆盖
+### Agent Frameworks
+- **QwenLM/Qwen-Agent**: Growing with MCP, RAG, Chrome extension
+- **agency-agents**: 10,717 stars - AI agency with specialized agents
 
-### Agent Builders
-- **mcp-tool-builder** (25 stars) - MCP server that creates its own tools
-- **claude-agent-builder** (15 stars) - Claude agent building
+**Observation:** Skills/multi-agent orchestration is emerging as a major trend
 
-**Observation:** Agent 构建工具需求存在，但较细分
-
-### Documentation RAG
-- **context7** (48k stars) - Up-to-date code documentation
-
-**Observation:** 代码文档 RAG 需求强劲，但 GitNexus 已覆盖
+### Existing Projects Cover These Well
+- MCP Templates → MCP server creation
+- Agent Memory → Memory management for agents
+- Code RAG → Documentation understanding
 
 ## Scanner Decision
 
 **继续迭代现有项目:**
 - 5/5 项目已达到 Promising 状态
-- 新信号与现有项目重叠
-- 暂不扩展新方向
+- 新信号 Skills/Multi-agent 与现有项目方向一致
+- 继续深耕当前项目矩阵
 
-**监控机会:**
-- MCP Security (等待现有项目收敛)
-- Agent Builders (需求较细分)
+**关注领域:**
+- Skills marketplace (OpenAI skills format)
+- Multi-agent orchestration
+- Agent memory/context optimization
 
 ---
-*Scanner Round 20: 2026-03-07 09:05*
+*Scanner Round 49: 2026-03-08 06:55*
