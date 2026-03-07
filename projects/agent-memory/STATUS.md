@@ -1,4 +1,4 @@
-# STATUS: Promising ✅
+# STATUS: Promising ✅ (主项目 - 48h 深挖)
 
 ## 状态: Promising
 

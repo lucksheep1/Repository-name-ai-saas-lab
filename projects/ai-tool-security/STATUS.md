@@ -1,4 +1,4 @@
-# STATUS: Promising
+# STATUS: Promising ✅
 
 ## 状态: Promising
 

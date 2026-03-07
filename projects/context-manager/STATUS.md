@@ -1,4 +1,4 @@
-# STATUS: Promising ✅
+# STATUS: Experiment ⬇️ (降级 - 新规则：上限 2 个)
 
 ## Agent Context Manager
 
