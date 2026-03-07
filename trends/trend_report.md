@@ -1,22 +1,21 @@
-# Trend Report — 2026-03-07 (Round 37)
+# Trend Report — 2026-03-07 (Round 38)
 
 ## Observed Signals
 
+### Agent Orchestration
+- dify: 131k stars
+- crewAI: 45k stars
+- oh-my-openagent: 37k stars
+
 ### Local Code Completion
 - local-ai-code-completion: 24 stars
-- ai-code-completion-idea-plugin: 18 stars
 
 ### MCP Servers (2026)
 - skills: 1634 stars
 - contextplus: 1409 stars
-- mcp-cli: 950 stars
-
-### AI Security
-- AI-Infra-Guard: 3058 stars
-- agentic_security: 1798 stars
 
 ## Backlog Status
 - 5/5 Projects Promising ✅
 
 ---
-*Scout Round 37: 2026-03-07 19:45*
+*Scout Round 38: 2026-03-07 20:15*
