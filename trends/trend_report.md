@@ -36,6 +36,9 @@
 ## New Signals (To Watch)
 - context7 proving documentation RAG demand
 - fastmcp showing template approach validated
+- mem0 (48k stars) - AI Agent memory layer
+- letta (21k stars) - Stateful agents platform
+- AI-Infra-Guard - AI infrastructure security
 
 ---
-*Scout Round 19: 2026-03-07 07:40*
+*Scout Round 20: 2026-03-07 08:35*
