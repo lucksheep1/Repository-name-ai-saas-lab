@@ -1,24 +1,22 @@
-# STATUS: Experiment ⬇️
+# OpenAI Skills Converter - Status
 
-## 状态: Experiment
+## Status: Experiment
 
-**创建时间:** 2026-03-08
+**Last Updated:** 2026-03-08
 
-**版本:** v0.1 (快速验证)
+## Progress
 
-**理由:**
-- OpenAI Skills  trending: 12,671 stars
-- 需求: 开发者需要简单方式创建 skills
-- 可行性: 简单 CLI, 1-2 小时完成
+- [x] Basic CLI converter
+- [x] Batch conversion feature
+- [x] Interactive mode
+- [x] Validation
 
-**功能:**
-- ✅ Prompt 转 Skills 格式
-- ✅ 交互式 builder
-- ✅ Skills 验证
+## Next Steps
 
-**下一步:**
-- 测试验证
-- 评估需求强度
+- [ ] Add skill testing capability
+- [ ] Add publishing helpers
+- [ ] Consider skill marketplace integration
 
----
-*Status: Experiment*
+## Notes
+
+Batch conversion added, score improved from 36 to 38/50.
