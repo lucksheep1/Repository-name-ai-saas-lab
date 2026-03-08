@@ -6,7 +6,7 @@
 2. **MCP Server Templates** - ⭐ 44/50 (Promising ✅)
 3. **Local Code RAG CLI** - ⭐ 43/50 (Promising ✅)
 4. **Agent Memory Manager** - ⭐ 43/50 (Promising ✅)
-5. **OpenAI Skills Converter** - ⭐ 40/50 (Promising ✅) 🆕
+5. **OpenAI Skills Converter** - ⭐ 42/50 (Promising ✅) 🆕
 6. **Agent Context Manager** - ⭐ 40/50 (Promising ✅)
 
 ## 48h Convergence Result

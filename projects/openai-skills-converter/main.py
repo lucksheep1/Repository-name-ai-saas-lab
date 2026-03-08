@@ -24,7 +24,8 @@ def load_prompt(path: str) -> str:
         sys.exit(1)
     return p.read_text()
 
-def convert_to_skill(prompt: str, name: str = None, description: str = None) -> dict:
+def convert_to_skill(prompt: str, name: str = None, description: str = None, 
+                     tools: list = None, examples: list = None) -> dict:
     """Convert prompt to OpenAI Skills format"""
     skill = SKILL_SCHEMA.copy()
     
@@ -40,6 +41,11 @@ def convert_to_skill(prompt: str, name: str = None, description: str = None) -> 
     
     skill["instructions"] = prompt.strip()
     
+    if tools:
+        skill["tools"] = tools
+    if examples:
+        skill["examples"] = examples
+    
     return skill
 
 def validate_skill(skill: dict) -> bool:
@@ -49,8 +55,71 @@ def validate_skill(skill: dict) -> bool:
         if not skill.get(field):
             print(f"Error: Missing required field: {field}")
             return False
+    
+    # Validate tools if present
+    if skill.get("tools"):
+        for tool in skill["tools"]:
+            if not isinstance(tool, dict) or "name" not in tool:
+                print("Error: Each tool must have a 'name' field")
+                return False
+    
+    # Validate examples if present
+    if skill.get("examples"):
+        for ex in skill["examples"]:
+            if not isinstance(ex, dict) or "input" not in ex or "output" not in ex:
+                print("Error: Each example must have 'input' and 'output' fields")
+                return False
+    
     print("✅ Skill is valid!")
+    print(f"   - Name: {skill['name']}")
+    print(f"   - Description: {skill['description']}")
+    print(f"   - Instructions: {len(skill['instructions'])} chars")
+    print(f"   - Tools: {len(skill.get('tools', []))}")
+    print(f"   - Examples: {len(skill.get('examples', []))}")
     return True
+
+def add_tools_interactive() -> list:
+    """Interactive tool builder"""
+    tools = []
+    print("\n=== Add Tools (empty to finish) ===")
+    
+    while True:
+        name = input("Tool name (empty to finish): ").strip()
+        if not name:
+            break
+        
+        description = input("Tool description: ").strip()
+        parameters = input("Tool parameters (JSON or description): ").strip()
+        
+        tool = {"name": name, "description": description}
+        if parameters:
+            try:
+                tool["parameters"] = json.loads(parameters)
+            except:
+                tool["parameters"] = {"description": parameters}
+        
+        tools.append(tool)
+        print(f"✅ Added tool: {name}")
+    
+    return tools
+
+def add_examples_interactive() -> list:
+    """Interactive example builder"""
+    examples = []
+    print("\n=== Add Examples (empty to finish) ===")
+    
+    while True:
+        input_text = input("Example input (empty to finish): ").strip()
+        if not input_text:
+            break
+        
+        output_text = input("Example output: ").strip()
+        
+        example = {"input": input_text, "output": output_text}
+        examples.append(example)
+        print(f"✅ Added example {len(examples)}")
+    
+    return examples
 
 def batch_convert(input_dir: str, output_dir: str) -> int:
     """Batch convert multiple prompt files to skills"""
@@ -88,6 +157,12 @@ def interactive_mode():
     print("\nInstructions (Ctrl+D to finish):")
     skill["instructions"] = sys.stdin.read().strip()
     
+    # Add tools
+    skill["tools"] = add_tools_interactive()
+    
+    # Add examples
+    skill["examples"] = add_examples_interactive()
+    
     print("\n=== Generated Skill ===\n")
     print(json.dumps(skill, indent=2))
     
@@ -101,13 +176,14 @@ def interactive_mode():
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python main.py [convert|validate|interactive|batch]")
+        print("Usage: python main.py [convert|validate|interactive|batch|init]")
         print("")
         print("Commands:")
         print("  convert     - Convert a single prompt file to skill format")
         print("  validate    - Validate an existing skill JSON file")
-        print("  interactive - Interactive skill builder")
+        print("  interactive - Interactive skill builder with tools & examples")
         print("  batch       - Batch convert multiple prompt files")
+        print("  init        - Initialize a new skill project")
         sys.exit(1)
     
     cmd = sys.argv[1]
@@ -185,6 +261,46 @@ def main():
             sys.exit(1)
         
         batch_convert(input_dir, output_dir)
+    
+    elif cmd == "init":
+        # Initialize a new skill project
+        name = input("Skill name: ").strip()
+        description = input("Description: ").strip()
+        
+        skill_dir = Path(name.lower().replace(" ", "-"))
+        skill_dir.mkdir(exist_ok=True)
+        
+        # Create skill.json
+        skill = {
+            "name": name,
+            "description": description,
+            "instructions": "# Your instructions here\n",
+            "tools": [],
+            "examples": []
+        }
+        (skill_dir / "skill.json").write_text(json.dumps(skill, indent=2))
+        
+        # Create README.md
+        (skill_dir / "README.md").write_text(f"""# {name}
+
+{description}
+
+## Usage
+
+Describe how to use this skill.
+
+## Tools
+
+List tools here.
+
+## Examples
+
+Add examples here.
+""")
+        
+        print(f"✅ Initialized skill project: {skill_dir}/")
+        print(f"   - skill.json")
+        print(f"   - README.md")
     
     else:
         print(f"Unknown command: {cmd}")

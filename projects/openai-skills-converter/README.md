@@ -4,7 +4,7 @@ Convert your prompts and instructions into OpenAI Skills format for Codex.
 
 ## Problem
 
-OpenAI Skills (openai/skills) is trending with 12,697 stars. Developers want to create skills but need a simple way to convert existing prompts.
+OpenAI Skills (openai/skills) is trending with 12,724 stars. Developers want to create skills but need a simple way to convert existing prompts.
 
 ## Solution
 
@@ -22,19 +22,24 @@ python main.py convert --input prompt.txt --name "Code Reviewer" --description "
 # Batch convert multiple prompts
 python main.py batch --input-dir ./prompts --output-dir ./skills
 
-# Interactive mode
+# Interactive mode (with tools & examples)
 python main.py interactive
 
 # Validate existing skill
 python main.py validate skill.json
+
+# Initialize a new skill project
+python main.py init
 ```
 
 ## Features
 
 - ✅ Single prompt conversion
 - ✅ Batch processing (multiple prompts at once)
-- ✅ Interactive skill builder
+- ✅ Interactive skill builder with tools & examples
 - ✅ Skill validation
+- ✅ Project initialization
+- ✅ Schema validation
 
 ## Verification
 
@@ -42,11 +47,12 @@ python main.py validate skill.json
 ✅ Validates skill structure
 ✅ Interactive prompt builder
 ✅ Batch conversion for multiple files
+✅ Tools and examples support
+✅ Project scaffolding
 
 ## Limits
 
 - Basic converter, enterprise features later
-- No multi-file skill support yet
 
 ## Next Steps
 
@@ -56,4 +62,4 @@ python main.py validate skill.json
 
 ---
 *Created: 2026-03-08*
-*Updated: 2026-03-08 - Added batch conversion*
+*Updated: 2026-03-08 - Added tools/examples support + init command*
