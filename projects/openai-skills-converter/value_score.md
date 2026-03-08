@@ -2,13 +2,14 @@
 
 | 维度 | 评分 | 说明 |
 |------|------|------|
-| Utility | 7/10 | 简化 skill 创建流程 |
+| Utility | 8/10 | 简化 skill 创建流程 + 批量处理 |
 | Innovation | 6/10 | 细分赛道, converters 已有但针对 Skills 少 |
 | Simplicity | 9/10 | 单一 CLI, 上手快 |
-| Reusability | 6/10 | 特定格式转换器 |
+| Reusability | 7/10 | 批量处理提升复用性 |
 | Market | 8/10 | OpenAI Skills 12k+ stars, 热度高 |
 
-**总分: 36/50**
+**总分: 38/50**
 
 ---
 *评分: 2026-03-08*
+*更新: 批量处理功能提升 Utility 和 Reusability*

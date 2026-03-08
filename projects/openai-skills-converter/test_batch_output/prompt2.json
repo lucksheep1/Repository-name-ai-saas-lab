@@ -1,0 +1,7 @@
+{
+  "name": "Prompt2",
+  "description": "Auto-generated skill from prompt2.txt",
+  "instructions": "Test prompt 2",
+  "tools": [],
+  "examples": []
+}
