@@ -1,6 +1,6 @@
 # OpenAI Skills Converter - Status
 
-## Status: Experiment
+## Status: Promising ✅
 
 **Last Updated:** 2026-03-08
 
@@ -10,6 +10,13 @@
 - [x] Batch conversion feature
 - [x] Interactive mode
 - [x] Validation
+- [x] Schema verification
+
+## Score History
+
+- v1: 36/50 (Experiment)
+- v2: 38/50 (Experiment) - Added batch
+- v3: 40/50 (Promising ✅) - Schema verification
 
 ## Next Steps
 
@@ -19,4 +26,4 @@
 
 ## Notes
 
-Batch conversion added, score improved from 36 to 38/50.
+Score reached 40/50 - Promising threshold achieved!
