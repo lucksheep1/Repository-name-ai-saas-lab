@@ -13,7 +13,7 @@ Creating an MCP server from scratch is tedious:
 
 A CLI tool to generate MCP server templates in seconds:
 - **Python** support
-- **Multiple templates** (database, API, file system)
+- **12 templates** covering more scenarios
 - **Minimal code** - just what you need
 
 ## Installation
@@ -34,20 +34,35 @@ mcp-templates new api-server --template api
 # Generate a file system MCP server
 mcp-templates new fs-server --template filesystem
 
+# Generate a GitHub MCP server
+mcp-templates new github-server --template github
+
+# Generate a Slack MCP server
+mcp-templates new slack-server --template slack
+
 # List available templates
 mcp-templates list
 ```
 
-## Templates
+## Templates (12 available)
 
-### database
-Simple database query tool with SQLite support.
+### Core Templates
+- **database** - SQLite database query tool
+- **api** - REST API integration
+- **filesystem** - File system operations
 
-### api
-REST API integration with configurable endpoints.
+### Integration Templates
+- **github** - GitHub API integration (issues, PRs, repos)
+- **slack** - Slack messaging and channels
+- **notion** - Notion workspace integration
+- **twitter** - Twitter/X posting and search
+- **email** - Email sending and reading (SMTP/IMAP)
 
-### filesystem
-File system operations (read, write, list).
+### Utility Templates
+- **calculator** - Mathematical calculations
+- **weather** - Weather data from APIs
+- **currency** - Currency conversion
+- **translator** - Language translation
 
 ## Example: Create a database MCP server
 
@@ -68,17 +83,21 @@ $ python main.py
 mcp-templates/
 ├── main.py           # CLI entry point
 ├── generator.py      # Template generator
-└── templates/         # Template files
+└── templates/         # Template files (12 templates)
     ├── database.py
     ├── api.py
-    └── filesystem.py
+    ├── filesystem.py
+    ├── github.py
+    ├── slack.py
+    └── ...
 ```
 
 ## Next
 
-- [ ] Add more templates (GitHub, Slack, etc.)
 - [ ] Add TypeScript support
 - [ ] Add interactive prompts
+- [ ] Add more cloud service templates
 
 ---
 *Built: 2026-03-06*
+*Updated: 2026-03-08 - Added 4 new templates*
