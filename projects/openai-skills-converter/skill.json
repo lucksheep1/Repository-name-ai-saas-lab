@@ -1,6 +1,6 @@
 {
-  "name": "Code Reviewer",
-  "description": "AI code reviewer assistant",
+  "name": "Test Skill",
+  "description": "A test skill",
   "instructions": "You are a code reviewer.\nReview the code for bugs and issues.\nProvide clear, actionable feedback.",
   "tools": [],
   "examples": []
