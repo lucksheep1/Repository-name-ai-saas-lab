@@ -406,6 +406,61 @@ class SecurityScanner:
                 except:
                     pass
         
+        # Scan MCP server configurations
+        for f in path_obj.rglob('mcp*.json'):
+            if '.git' not in f.parts:
+                try:
+                    with open(f, 'r') as fh:
+                        mcp_config = json.load(fh)
+                        
+                        # Check for external command execution
+                        if 'command' in mcp_config:
+                            cmd = mcp_config['command']
+                            if cmd and not cmd.startswith('/') and not cmd.startswith('.'):
+                                self.add_issue(
+                                    str(f), 0, 'WARNING',
+                                    f"MCP command uses relative path: {cmd} - use absolute path for security"
+                                )
+                        
+                        # Check for environment variables with secrets
+                        if 'env' in mcp_config:
+                            env = mcp_config['env'] or {}
+                            for key, value in env.items():
+                                if value and any(x in key.upper() for x in ['SECRET', 'KEY', 'TOKEN', 'PASSWORD']):
+                                    self.add_issue(
+                                        str(f), 0, 'HIGH',
+                                        f"MCP config contains potentially sensitive env var: {key}"
+                                    )
+                        
+                        # Check for args with external input
+                        if 'args' in mcp_config:
+                            args = mcp_config['args']
+                            if args and any('http' in str(a) for a in args):
+                                self.add_issue(
+                                    str(f), 0, 'INFO',
+                                    "MCP config references external URL - ensure source is trusted"
+                                )
+                except:
+                    pass
+        
+        # Scan for prompt template files
+        for f in path_obj.rglob('*.prompt.md'):
+            if '.git' not in f.parts and 'node_modules' not in f.parts:
+                try:
+                    with open(f, 'r') as fh:
+                        content = fh.read()
+                        
+                        # Check for external variable interpolation
+                        if '{{' in content or '{%' in content:
+                            # Check if variables could come from untrusted sources
+                            if any(x in content.lower() for x in ['user.', 'request.', 'input.', 'issue.']):
+                                self.add_issue(
+                                    str(f), 0, 'WARNING',
+                                    "Prompt template may be vulnerable to prompt injection - external variables detected"
+                                )
+                except:
+                    pass
+        
         # Scan Terraform files for hardcoded secrets
         for f in path_obj.rglob('*.tf'):
             if '.git' not in f.parts:

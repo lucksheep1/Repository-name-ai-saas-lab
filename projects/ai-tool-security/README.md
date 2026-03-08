@@ -8,6 +8,7 @@ AI developer tools (Cline, GitHub Actions, npm packages) have unique security ri
 - **Prompt injection** via GitHub issues, PRs, comments
 - **Malicious postinstall scripts** in npm packages
 - **Cache poisoning** in CI/CD pipelines
+- **MCP server vulnerabilities** in agent configurations
 
 Clinejection (Feb 2026) compromised 4,000 machines via prompt injection.
 
@@ -17,6 +18,9 @@ A lightweight CLI scanner for AI tool security:
 - **GitHub Actions** workflow security
 - **npm package** manifest analysis
 - **Prompt injection** pattern detection
+- **MCP server** configuration scanning
+- **Docker** and **Kubernetes** security
+- **Terraform** secret detection
 
 ## Installation
 
@@ -34,7 +38,10 @@ ai-tool-security scan https://github.com/user/repo
 ai-tool-security scan ./my-project
 
 # Scan npm package
-ai-tool-security scan-package ./package.json
+ai-tool-security scan ./package.json
+
+# Output as JSON
+ai-tool-security scan ./my-project --json
 ```
 
 ## Checks
@@ -52,6 +59,20 @@ ai-tool-security scan-package ./package.json
 ### Prompt Injection
 - ✅ Detects unvalidated input in prompts
 - ✅ Checks for direct interpolation
+- ✅ Scans prompt template files
+
+### MCP Servers
+- ✅ Detects relative command paths
+- ✅ Detects sensitive env variables
+- ✅ Checks external URL references
+
+### Docker & Kubernetes
+- ✅ Dockerfile security checks
+- ✅ Kubernetes manifest scanning
+- ✅ Docker-compose security
+
+### Terraform
+- ✅ Hardcoded secret detection
 
 ## Example Output
 
@@ -66,6 +87,9 @@ Scanning ./my-project...
 
 [WARNING] package.json
   - postinstall script detected: 'node scripts/postinstall.js'
+
+[WARNING] mcp-config.json
+  - MCP command uses relative path: python server.py
 
 2 issues found.
 ```
@@ -84,3 +108,4 @@ Scanning ./my-project...
 
 ---
 *Built: 2026-03-06*
+*Updated: 2026-03-08 - Added MCP server scanning*
