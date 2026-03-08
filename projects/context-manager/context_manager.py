@@ -205,13 +205,63 @@ class ContextManager:
         conn.close()
         
         return [r[0] for r in rows]
+    
+    def export_markdown(self, filepath: str = None) -> str:
+        """Export all memories to Markdown file."""
+        import json
+        memories = self.list_memories()
+        sessions = self.get_sessions()
+        
+        output_path = filepath or f"{self.agent_name}_context.md"
+        
+        with open(output_path, 'w') as f:
+            f.write(f"# Agent Context: {self.agent_name}\n\n")
+            f.write(f"**Exported:** {datetime.now().isoformat()}\n\n")
+            f.write(f"**Total Memories:** {len(memories)}\n\n")
+            f.write(f"**Sessions:** {', '.join(sessions) if sessions else 'None'}\n\n")
+            f.write("---\n\n")
+            
+            # Group by session
+            by_session = {}
+            for m in memories:
+                sid = m.get('session_id', 'unknown') or 'unknown'
+                if sid not in by_session:
+                    by_session[sid] = []
+                by_session[sid].append(m)
+            
+            for sid, mems in by_session.items():
+                f.write(f"## Session: {sid}\n\n")
+                for m in mems:
+                    f.write(f"- *{m['created_at'][:16]}* - {m['content']}\n")
+                f.write("\n")
+        
+        return output_path
+    
+    def get_session_summary(self, session_id: str = None) -> Dict:
+        """Get a summary of memories for a session."""
+        if session_id:
+            memories = self.get_by_session(session_id)
+        else:
+            memories = self.list_memories()
+        
+        if not memories:
+            return {"total": 0, "sessions": 0, "earliest": None, "latest": None}
+        
+        sessions = set(m.get('session_id') for m in memories if m.get('session_id'))
+        
+        return {
+            "total": len(memories),
+            "sessions": len(sessions),
+            "earliest": memories[-1]['created_at'] if memories else None,
+            "latest": memories[0]['created_at'] if memories else None
+        }
 
 
 # CLI interface
 def main():
     if len(sys.argv) < 2:
         print("Usage: context-manager <command> [args]")
-        print("Commands: add, list, search, clear")
+        print("Commands: add, list, search, clear, stats, export, sessions")
         sys.exit(1)
     
     cmd = sys.argv[1]
@@ -244,8 +294,31 @@ def main():
         deleted = ctx.clear_older_than(days)
         print(f"✓ Cleared {deleted} memories older than {days} days")
     
+    elif cmd == "stats":
+        stats = ctx.get_stats()
+        print(f"Total memories: {stats['total_memories']}")
+        print(f"Unique sessions: {stats['unique_sessions']}")
+        print(f"Avg priority: {stats['avg_priority']}")
+    
+    elif cmd == "export":
+        if len(sys.argv) >= 3 and sys.argv[2] == "--markdown":
+            path = ctx.export_markdown()
+            print(f"✓ Exported to {path}")
+        else:
+            path = ctx.export_json()
+            print(f"✓ Exported to {path}")
+    
+    elif cmd == "sessions":
+        sessions = ctx.get_sessions()
+        if sessions:
+            for s in sessions:
+                print(s)
+        else:
+            print("No sessions found")
+    
     else:
         print(f"Unknown command: {cmd}")
+        print("Commands: add, list, search, clear, stats, export, sessions")
         sys.exit(1)
 
 
