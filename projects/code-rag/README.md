@@ -33,6 +33,21 @@ code-rag search "how to authenticate users"
 
 # Search with context
 code-rag search "auth" --context 3
+
+# Find functions by name
+code-rag find-function authenticate
+
+# Find classes by name
+code-rag find-class User
+
+# Find imports
+code-rag find-import requests
+
+# Export to Markdown
+code-rag export
+
+# Get statistics
+code-rag stats
 ```
 
 ## Features
@@ -41,6 +56,9 @@ code-rag search "auth" --context 3
 - Fast indexing
 - Natural language search
 - Code context awareness
+- Find functions, classes, imports
+- Export to Markdown
+- Statistics dashboard
 
 ## Example
 
@@ -62,6 +80,11 @@ Found 3 matches:
 3. src/models/user.py:12
    class User:
        ...
+
+$ code-rag stats
+Total blocks: 125
+Languages: ['python', 'javascript']
+Files: 45
 ```
 
 ## How It Works
@@ -85,3 +108,4 @@ Found 3 matches:
 
 ---
 *Built: 2026-03-06*
+*Updated: 2026-03-08 - Added stats and export features*
