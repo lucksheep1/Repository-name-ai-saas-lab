@@ -258,13 +258,17 @@ class Memory:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Agent Memory CLI v2")
-    parser.add_argument("command", choices=["add", "search", "clear", "context", "recent", "summarize", "delete"])
+    parser = argparse.ArgumentParser(description="Agent Memory CLI v3")
+    parser.add_argument("command", choices=["add", "search", "clear", "context", "recent", "summarize", "delete", "stats", "tags", "by-tag", "by-priority", "export", "import", "timeline"])
     parser.add_argument("--text", help="Text for add/search")
     parser.add_argument("--path", default="./memory.json", help="Memory file path")
     parser.add_argument("--top-k", type=int, default=5, help="Top K results")
     parser.add_argument("--storage", default="json", choices=["json", "faiss"], help="Storage backend")
     parser.add_argument("--id", help="Memory ID for delete")
+    parser.add_argument("--tag", help="Tag for by-tag command")
+    parser.add_argument("--priority", type=int, help="Priority for by-priority command")
+    parser.add_argument("--file", help="File for export/import")
+    parser.add_argument("--format", default="json", choices=["json", "markdown"], help="Export format")
     
     args = parser.parse_args()
     memory = Memory(storage=args.storage, path=args.path)
@@ -309,3 +313,63 @@ if __name__ == "__main__":
                 print(f"Memory not found: {args.id}")
         else:
             print("Error: --id required for delete")
+    
+    elif args.command == "stats":
+        print(f"Total memories: {memory.count()}")
+        all_tags = set()
+        priorities = []
+        for m in memory.memories:
+            if m.get('tags'):
+                all_tags.update(m['tags'])
+            if m.get('priority'):
+                priorities.append(m['priority'])
+        print(f"Unique tags: {len(all_tags)}")
+        if priorities:
+            print(f"Average priority: {sum(priorities)/len(priorities):.2f}")
+    
+    elif args.command == "tags":
+        all_tags = set()
+        for m in memory.memories:
+            if m.get('tags'):
+                all_tags.update(m['tags'])
+        if all_tags:
+            print("Tags:", ", ".join(sorted(all_tags)))
+        else:
+            print("No tags found")
+    
+    elif args.command == "by-tag":
+        if args.tag:
+            results = memory.get_by_tag(args.tag)
+            for r in results:
+                print(f"- {r['text'][:80]}...")
+            print(f"Found {len(results)} memories")
+        else:
+            print("Error: --tag required for by-tag")
+    
+    elif args.command == "by-priority":
+        priority = args.priority or 3
+        results = memory.get_by_priority(priority)
+        for r in results:
+            print(f"- [{r.get('priority', 0)}] {r['text'][:80]}...")
+        print(f"Found {len(results)} memories")
+    
+    elif args.command == "export":
+        filepath = args.file or "memory_export.json"
+        if args.format == "markdown":
+            memory.export_markdown(filepath.replace(".json", ".md"))
+            print(f"Exported to {filepath.replace('.json', '.md')}")
+        else:
+            memory.export(filepath)
+            print(f"Exported to {filepath}")
+    
+    elif args.command == "import":
+        if args.file:
+            memory.import_(args.file)
+            print(f"Imported from {args.file}")
+        else:
+            print("Error: --file required for import")
+    
+    elif args.command == "timeline":
+        timeline = memory.get_timeline(args.top_k)
+        for t in timeline:
+            print(f"[{t['timestamp'][:16]}] {t['text'][:60]}...")
