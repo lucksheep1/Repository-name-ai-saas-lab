@@ -46,12 +46,13 @@
 ## 状态跟踪
 
 - last_AM_report: 2026-03-08 08:33
-- last_PM_report: 2026-03-07 19:15
-- current_round: 51
+- last_PM_report: 2026-03-08 19:54
+- current_round: 57
 
 ## 备注
 
 - AM 报告已生成: reports/daily_report_AM.md
+- PM 报告已生成: reports/daily_report_PM.md
 - 飞书联系方式未配置，无法自动发送
 
 ---
