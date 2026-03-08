@@ -45,9 +45,14 @@
 
 ## 状态跟踪
 
-- last_AM_report: 2026-03-07 08:02
+- last_AM_report: 2026-03-08 08:33
 - last_PM_report: 2026-03-07 19:15
-- current_round: 21
+- current_round: 51
+
+## 备注
+
+- AM 报告已生成: reports/daily_report_AM.md
+- 飞书联系方式未配置，无法自动发送
 
 ---
 *Heartbeat: 每分钟检查一次*
