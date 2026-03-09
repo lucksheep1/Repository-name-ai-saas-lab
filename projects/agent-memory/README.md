@@ -168,4 +168,9 @@ Get number of memories.
 
 ---
 *Built: 2026-03-06*
-*Updated: 2026-03-08 - Enhanced CLI with stats, tags, export*
+*Updated: 2026-03-09 - v1.0.0 Release*
+
+## Feedback
+
+🐛 [Report Bug](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)
+💡 [Request Feature](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)
