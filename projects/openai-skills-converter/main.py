@@ -176,7 +176,7 @@ def interactive_mode():
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python main.py [convert|validate|interactive|batch|init]")
+        print("Usage: python main.py [convert|validate|interactive|batch|init|test]")
         print("")
         print("Commands:")
         print("  convert     - Convert a single prompt file to skill format")
@@ -184,6 +184,7 @@ def main():
         print("  interactive - Interactive skill builder with tools & examples")
         print("  batch       - Batch convert multiple prompt files")
         print("  init        - Initialize a new skill project")
+        print("  test        - Test a skill with sample prompts")
         sys.exit(1)
     
     cmd = sys.argv[1]
@@ -301,6 +302,64 @@ Add examples here.
         print(f"✅ Initialized skill project: {skill_dir}/")
         print(f"   - skill.json")
         print(f"   - README.md")
+    
+    elif cmd == "test":
+        # Test a skill with sample prompts
+        if len(sys.argv) < 3:
+            print("Usage: python main.py test <skill.json> [--prompts <dir>]")
+            print("")
+            print("Test your skill with sample prompts")
+            print("  skill.json   - Path to skill file")
+            print("  --prompts   - Optional directory with test prompts (.txt files)")
+            sys.exit(1)
+        
+        skill_file = sys.argv[2]
+        prompts_dir = None
+        
+        i = 3
+        while i < len(sys.argv):
+            if sys.argv[i] == "--prompts":
+                prompts_dir = sys.argv[i+1]
+                i += 2
+            else:
+                i += 1
+        
+        # Load skill
+        skill = json.loads(Path(skill_file).read_text())
+        print(f"\n🧪 Testing skill: {skill.get('name', 'Unknown')}")
+        print(f"   Description: {skill.get('description', 'N/A')}")
+        
+        # Show skill structure
+        print("\n📋 Skill Structure:")
+        print(f"   - Instructions: {len(skill.get('instructions', ''))} chars")
+        print(f"   - Tools: {len(skill.get('tools', []))}")
+        print(f"   - Examples: {len(skill.get('examples', []))}")
+        
+        # Test with provided examples
+        if skill.get("examples"):
+            print("\n✅ Skill has examples - ready for testing")
+            for i, ex in enumerate(skill["examples"], 1):
+                print(f"\n   Example {i}:")
+                print(f"   Input:  {ex.get('input', '')[:60]}...")
+                print(f"   Output: {ex.get('output', '')[:60]}...")
+        
+        # Test with prompts directory
+        if prompts_dir:
+            prompts_path = Path(prompts_dir)
+            if prompts_path.exists():
+                print(f"\n📁 Testing with prompts from: {prompts_dir}")
+                test_count = 0
+                for prompt_file in prompts_path.glob("*.txt"):
+                    content = prompt_file.read_text()
+                    print(f"\n   📝 {prompt_file.name}:")
+                    print(f"      {content[:80]}...")
+                    test_count += 1
+                print(f"\n✅ Loaded {test_count} test prompts")
+            else:
+                print(f"⚠️  Prompts directory not found: {prompts_dir}")
+        
+        print("\n💡 To test with OpenAI API, use the skill in Codex/Claude Code")
+        print("=" * 40)
     
     else:
         print(f"Unknown command: {cmd}")
