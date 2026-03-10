@@ -47,7 +47,7 @@
 
 - last_AM_report: 2026-03-10 08:32
 - last_PM_report: 2026-03-09 20:30
-- current_round: 61 (AM 报告已生成，执行 Scout→Builder→Analyst→Evolution)
+- current_round: 63 (AM 已完成，继续无限循环，PM 窗口 20:30-21:30)
 
 ## 备注
 
