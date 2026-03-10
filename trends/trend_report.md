@@ -1,17 +1,15 @@
-# Trend Report — 2026-03-10 (Round 61)
+# Trend Report — 2026-03-10 (Round 62)
 
 ## Observed Signals
 
-### GitHub Trending (March 10th)
-- **agency-agents**: 19,168 stars - Complete AI agency with specialized agents (4,415 stars today)
-- **MiroFish**: 10,797 stars - Swarm Intelligence Engine, predicting anything (2,294 stars today)
-- **GoogleCloudPlatform/generative-ai**: 15,264 stars - GenAI samples on Google Cloud
-- **karpathy/nanochat**: New - $100 ChatGPT implementation
-- **claude-skills**: 3,324 stars - 169 production-ready skills for Claude Code/OpenAI Codex/OpenClaw
-- **notebooklm-py**: 4,225 stars - Unofficial Python API for NotebookLM (457 stars today)
-- **NousResearch/hermes-agent**: 2,955 stars - "The agent that grows with you"
-- **alibaba/page-agent**: 2,552 stars - In-page GUI agent, control web with natural language
-- **openclaw/openclaw**: Your own personal AI assistant
+### GitHub Trending (March 10th - Weekly)
+- **moeru-ai/airi**: 31,782 stars - Self-hosted AI companion (10,661 stars this week)
+- **ruvnet/RuView**: 33,285 stars - WiFi-based human pose estimation (12,632 stars this week)
+- **koala73/worldmonitor**: 34,762 stars - Global intelligence dashboard (12,583 stars this week)
+- **alibaba/OpenSandbox**: 7,217 stars - Sandbox for AI apps (3,262 stars this week)
+- **GoogleCloudPlatform/generative-ai**: 15,279 stars - GenAI on Google Cloud
+- **agency-agents**: 19,168+ stars - Complete AI agency
+- **MiroFish**: 10,797+ stars - Swarm Intelligence Engine
 
 ### Previous Signals (Still Relevant)
 - **shareAI-lab/learn-claude-code**: 24k+ stars - Nano Claude Code-like agent
@@ -44,4 +42,4 @@
 8. **AI Code Execution Sandbox** - OpenSandbox validates this need
 
 ---
-*Scout Round 61: 2026-03-10 08:35*
+*Scout Round 62: 2026-03-10 09:02*
