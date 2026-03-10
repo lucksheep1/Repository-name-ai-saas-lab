@@ -7,7 +7,7 @@
 3. **Agent Memory Manager** - ⭐ 45/50 (Promising ✅)
 4. **Local Code RAG CLI** - ⭐ 44/50 (Promising ✅)
 5. **OpenAI Skills Converter** - ⭐ 44/50 (Promising ✅) 🆕⬆️
-6. **Agent Context Manager** - ⭐ 42/50 (Promising ✅)
+6. **Agent Context Manager** - ⭐ 44/50 (Promising ✅) 🆕⬆️
 
 ## 48h Convergence Result
 
@@ -15,6 +15,7 @@
 
 Round 61 更新:
 - OpenAI Skills Converter: 42→44/50 (新增 test 命令)
+- Agent Context Manager: 42→44/50 (新增 tags 功能)
 
 ---
 *Updated: 2026-03-10*
