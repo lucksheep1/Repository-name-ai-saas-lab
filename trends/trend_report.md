@@ -9,7 +9,7 @@
 - **alibaba/OpenSandbox**: 7,217 stars - Sandbox for AI apps (3,262 stars this week)
 - **GoogleCloudPlatform/generative-ai**: 15,279 stars - GenAI on Google Cloud
 - **agency-agents**: 19,168+ stars - Complete AI agency
-- **MiroFish**: 10,797+ stars - Swarm Intelligence Engine
+- **MiroFish**: 11,057+ stars - Swarm Intelligence Engine (growing)
 
 ### Previous Signals (Still Relevant)
 - **shareAI-lab/learn-claude-code**: 24k+ stars - Nano Claude Code-like agent
