@@ -1,59 +1,87 @@
-# HEARTBEAT.md
+# HEARTBEAT.md - Scale Gate Mode 🔒
 
-# AI SaaS Lab - 定时汇报配置
+## 阶段状态
+- **模式:** Scale Gate (主项目锁定)
+- **进入时间:** 2026-03-10 15:44
+- **主线:** agent-memory
+- **解锁时间:** 2026-03-13 15:44 (72h)
+
+---
+
+## Scale Gate 规则
+
+### 1. 主线锁定
+- ✅ 未来 72 小时只允许迭代 **agent-memory**
+- ❌ 其他项目：只允许修 bug / 文档 / 测试，不得增加新功能与新方向
+
+### 2. Evidence Gate 升级
+- Promising/Release 只能基于"外部反馈证据"
+- 禁止仅用 stars/trending 作为需求证据
+- **外部反馈证据定义:** issue/PR/comment/discussion/review 的链接或编号，至少 3 条
+
+### 3. Feedback Loop 硬目标
+- **每 24 小时必须新增至少 1 条"真实反馈入口/反馈收集动作"**
+- 写入 reports（例如：issue 模板、讨论区、反馈表、示例集成请求）
+
+### 4. 报告格式升级 (AM/PM)
+每次报告必须包含：
+- ✅ 新增外部反馈证据（链接/编号）
+- ✅ 主线项目的一个可验证里程碑（demo/集成例子/发布变更）
+- ✅ 其他项目为什么暂缓（一句话）
+
+---
 
 ## 定时任务
 
 ### AM 汇报 (08:30-09:30)
 - 检查时间：每次 heartbeat 时检查是否在 08:30-09:30 窗口
-- 任务：生成 daily_report_AM.md → Git 提交 → **发送到你飞书**
+- 任务：生成 daily_report_AM.md → Git 提交 → 发送报告
 
 ### PM 汇报 (20:30-21:30)
 - 检查时间：每次 heartbeat 时检查是否在 20:30-21:30 窗口
-- 任务：生成 daily_report_PM.md → Git 提交 → **发送到你飞书**
+- 任务：生成 daily_report_PM.md → Git 提交 → 发送报告
 
-### 无限循环 (每次 heartbeat)
-- 执行 Scout → Scanner → Builder → Analyst → Evolution
-- 每轮结束 Git 提交
+---
 
-## 执行逻辑
+## 执行逻辑 (Scale Gate Mode)
 
 ```
-每次 heartbeat (每分钟):
-  获取当前时间 (hour, minute)
+每次 heartbeat:
+  获取当前时间
   
   // 汇报窗口检查
-  if (hour == 8 and minute >= 30) or (hour == 9 and minute <= 30):
-    if 今天还未生成 AM 报告:
-      生成 AM 报告
-      Git 提交并推送
-      **发送报告到你飞书**
-      标记 AM 已完成
+  if AM窗口:
+    生成 AM 报告（含 Evidence + 里程碑 + 暂缓理由）
+    Git 提交
   
-  if (hour == 20 and minute >= 30) or (hour == 21 and minute <= 30):
-    if 今天还未生成 PM 报告:
-      生成 PM 报告
-      Git 提交并推送
-      **发送报告到你飞书**
-      标记 PM 已完成
+  if PM窗口:
+    生成 PM 报告（含 Evidence + 里程碑 + 暂缓理由）
+    Git 提交
   
-  // 无限循环 - 每轮 Scout 开始
-  执行 Scout 阶段
-  如果发现机会，进入 Scanner → Builder → Analyst → Evolution
-  Git 提交
+  // Scale Gate: 只允许主线迭代
+  if 在主线锁定周期:
+    只允许 agent-memory 迭代
+    其他项目: bug修复/文档/测试 のみ
+    每天至少1个反馈收集动作
 ```
+
+---
 
 ## 状态跟踪
 
-- last_AM_report: 2026-03-10 08:32
-- last_PM_report: 2026-03-09 20:30
-- current_round: 63 (AM 已完成，继续无限循环，PM 窗口 20:30-21:30)
+- **Scale Gate 状态:** 🔒 锁定中
+- **主线项目:** agent-memory
+- **外部反馈证据:** 0/3
+- **上次反馈收集:** -
+- **当前里程碑:** 待完成
+
+---
 
 ## 备注
 
-- AM 报告已生成: reports/daily_report_AM.md
-- PM 报告已生成: reports/daily_report_PM.md
-- 飞书联系方式未配置，无法自动发送
+- 反馈收集动作记录在: analysis/scale_gate_status.md
+- 外部反馈证据需 ≥3 条才能升级 STATUS
+- 其他项目一律暂缓，聚焦主线突破
 
 ---
-*Heartbeat: 每分钟检查一次*
+*Heartbeat: 每分钟检查一次 | Scale Gate Active*
