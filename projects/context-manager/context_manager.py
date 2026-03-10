@@ -255,13 +255,44 @@ class ContextManager:
             "earliest": memories[-1]['created_at'] if memories else None,
             "latest": memories[0]['created_at'] if memories else None
         }
+    
+    def get_by_tag(self, tag: str) -> List[Dict]:
+        """Get memories by tag."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, content, created_at, session_id, priority, tags FROM memories WHERE tags LIKE ? ORDER BY created_at DESC",
+            (f"%{tag}%",)
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        
+        return [
+            {"id": r[0], "content": r[1], "created_at": r[2], "session_id": r[3], "priority": r[4], "tags": r[5]}
+            for r in rows
+        ]
+    
+    def get_all_tags(self) -> List[str]:
+        """Get all unique tags."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT tags FROM memories WHERE tags IS NOT NULL")
+        rows = cursor.fetchall()
+        conn.close()
+        
+        tags = set()
+        for r in rows:
+            if r[0]:
+                for tag in r[0].split(','):
+                    tags.add(tag.strip())
+        return sorted(tags)
 
 
 # CLI interface
 def main():
     if len(sys.argv) < 2:
         print("Usage: context-manager <command> [args]")
-        print("Commands: add, list, search, clear, stats, export, sessions")
+        print("Commands: add, list, search, clear, stats, export, sessions, tags, tag-search")
         sys.exit(1)
     
     cmd = sys.argv[1]
@@ -315,6 +346,24 @@ def main():
                 print(s)
         else:
             print("No sessions found")
+    
+    elif cmd == "tags":
+        tags = ctx.get_all_tags()
+        if tags:
+            print("Available tags:")
+            for t in tags:
+                print(f"  - {t}")
+        else:
+            print("No tags found")
+    
+    elif cmd == "tag-search":
+        if len(sys.argv) < 3:
+            print("Usage: context-manager tag-search <tag>")
+            sys.exit(1)
+        results = ctx.get_by_tag(sys.argv[2])
+        print(f"Found {len(results)} memories with tag '{sys.argv[2]}':")
+        for r in results:
+            print(f"[{r['created_at'][:16]}] {r['content'][:80]}")
     
     else:
         print(f"Unknown command: {cmd}")
