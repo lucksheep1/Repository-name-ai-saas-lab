@@ -28,6 +28,19 @@
 - ✅ 新增外部反馈证据（链接/编号）
 - ✅ 主线项目的一个可验证里程碑（demo/集成例子/发布变更）
 - ✅ 其他项目为什么暂缓（一句话）
+- ✅ **Evidence delta**（新增证据清单）
+- ✅ **Skill delta**（新增技能条目清单）
+
+### 5. Evidence-First 硬门槛
+- 任何机会/结论/Promising 升级 → 必须附 ≥3 条可追溯证据
+- 证据优先级：A) GitHub issue/discussion/PR → B) 官方文档 → C) 技术博客
+- 无外网时：用仓库内证据（skills/Research Notes + commit permalink）
+- **不满足证据门槛 → 不得新增项目、不得升级 Promising**
+
+### 6. Skill Registry 维护
+- 每次遇到新问题 → 先查 skills/ 是否已有
+- 无则新增 skills/<topic>/playbook.md + snippets.md
+- 每轮 Scout/Scanner → 必须输出 skills/research_packs/YYYY-MM-DD.md
 
 ---
 
