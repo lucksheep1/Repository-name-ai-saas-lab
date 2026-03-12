@@ -1,0 +1,49 @@
+[
+  {
+    "id": "1a95f198",
+    "text": "user: I want to build a chatbot that remembers user preferences",
+    "timestamp": "2026-03-12T11:28:32.434539",
+    "metadata": {
+      "role": "user",
+      "priority": 1
+    }
+  },
+  {
+    "id": "6facc5a4",
+    "text": "assistant: Great! What kind of preferences do you want to store?",
+    "timestamp": "2026-03-12T11:28:32.434689",
+    "metadata": {
+      "role": "assistant",
+      "priority": 1
+    }
+  },
+  {
+    "id": "7cdbc0a1",
+    "text": "user: Theme preference, language, and notification settings",
+    "timestamp": "2026-03-12T11:28:32.434845",
+    "metadata": {
+      "role": "user",
+      "priority": 1
+    }
+  },
+  {
+    "id": "dc0ce783",
+    "text": "User: prefers dark theme, Chinese language, email notifications",
+    "timestamp": "2026-03-12T11:28:32.435703",
+    "tags": [
+      "preference",
+      "user-settings"
+    ],
+    "metadata": {}
+  },
+  {
+    "id": "89d707db",
+    "text": "User: interested in AI agents and developer tools",
+    "timestamp": "2026-03-12T11:28:32.436826",
+    "tags": [
+      "interest",
+      "ai-tools"
+    ],
+    "metadata": {}
+  }
+]

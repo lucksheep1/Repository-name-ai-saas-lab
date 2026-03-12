@@ -209,3 +209,11 @@ Demonstrates how multiple AI agents can share a central memory store.
 ```bash
 python multi_agent_example.py
 ```
+
+### FastAPI Server (`api_server.py`)
+Exposes agent-memory as a REST API service.
+
+```bash
+pip install fastapi uvicorn
+uvicorn api_server:app --reload
+```
