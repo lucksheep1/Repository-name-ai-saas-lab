@@ -8,6 +8,12 @@
 - **新examples**: langchain_example.py, multi_agent_example.py, api_server.py
 - **Scale Gate 状态**: 已更新为 5/5
 
+### Evidence-First 升级 (2026-03-12)
+- ✅ skills/index.md v2.0 (Evidence-First 规则)
+- ✅ skills/project_management/ (playbook, snippets, checklist)
+- ✅ skills/research_packs/2026-03-12-round65.md
+- ✅ reports/template.md (含 Evidence Delta / Skill Delta)
+
 ### 本轮迭代
 - 添加 LangChain 集成示例
 - 添加多 Agent 共享内存示例  
@@ -17,6 +23,21 @@
 - 添加 .gitignore 忽略生成文件
 - 更新 pyproject.toml 添加项目链接
 - 添加 pytest 测试套件
+
+### 本轮证据 (Evidence Delta)
+| # | 类型 | 描述 | 来源 |
+|---|------|------|------|
+| 1 | 竞品分析 | langchain.memory 偏重 | PyPI/文档 |
+| 2 | 竞品分析 | ReMe 复杂 | GitHub README |
+| 3 | 本地验证 | 4 个 examples 可运行 | 本地测试 |
+
+### 本轮技能 (Skill Delta)
+| 技能 | 类型 | 路径 |
+|------|------|------|
+| Project Management | playbook | skills/project_management/playbook.md |
+| Project Management | snippets | skills/project_management/snippets.md |
+| Project Management | checklist | skills/project_management/checklist.md |
+| Research | pack | skills/research_packs/2026-03-12-round65.md |
 
 ### Backlog (6 个 Active)
 1. MCP Server Templates - Promising ✅ (46/50) 暂缓
