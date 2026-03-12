@@ -85,7 +85,7 @@
 - **Scale Gate 状态:** 🔒 锁定中
 - **主线项目:** agent-memory
 - **外部反馈证据:** 5/5 (降级模式已建立)
-- **上次反馈收集:** 2026-03-11 (FAQ/SURVEY/RFC/Pack)
+- **上次反馈收集:** 2026-03-12 (examples folder added)
 - **当前里程碑:** AM报告已生成 (Day 3) | PM报告已生成 (Day 2)
 
 ---
