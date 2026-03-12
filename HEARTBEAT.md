@@ -85,7 +85,8 @@
 - **Scale Gate 状态:** 🔒 锁定中
 - **主线项目:** agent-memory
 - **外部反馈证据:** 5/5 ✅ (已满足)
-- **当前examples:** quickstart, langchain, multi_agent, api_server
+- **Evidence-First:** ✅ 已启用 (2026-03-12)
+- **Skill Registry:** ✅ 已启用
 - **当前里程碑:** 迭代中 (Round 65)
 
 ---
