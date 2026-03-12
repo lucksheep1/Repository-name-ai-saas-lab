@@ -5,14 +5,18 @@
 ### Pattern Mining
 - **Scale Gate Mode**: Day 3 - 72h 锁定主线 agent-memory
 - **外部反馈证据**: 5/5 ✅ (降级模式)
-- **新examples**: langchain_example.py, multi_agent_example.py
+- **新examples**: langchain_example.py, multi_agent_example.py, api_server.py
 - **Scale Gate 状态**: 已更新为 5/5
 
 ### 本轮迭代
 - 添加 LangChain 集成示例
-- 添加多 Agent 共享内存示例
+- 添加多 Agent 共享内存示例  
+- 添加 FastAPI REST API 示例
 - 更新 examples/README.md
 - 更新 scale_gate_status.md
+- 添加 .gitignore 忽略生成文件
+- 更新 pyproject.toml 添加项目链接
+- 添加 pytest 测试套件
 
 ### Backlog (6 个 Active)
 1. MCP Server Templates - Promising ✅ (46/50) 暂缓
