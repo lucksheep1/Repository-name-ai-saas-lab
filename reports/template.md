@@ -48,6 +48,32 @@
 
 ---
 
+## Verification Delta (本地可运行验证)
+
+| 验证项 | 状态 | 说明 |
+|--------|------|------|
+| Examples 运行 | ✅/❌ | |
+| 测试通过 | ✅/❌ | |
+| 功能验证 | ✅/❌ | |
+
+**验证命令:**
+```bash
+cd projects/<project>
+PYTHONPATH=. python3 examples/<example>.py
+```
+
+---
+
+## Retro Evidence Delta (补录: AM→PM 新增证据)
+
+| # | 类型 | 描述 | 链接/permalink |
+|---|------|------|----------------|
+| 1 | | | |
+| 2 | | | |
+| 3 | | | |
+
+---
+
 ## 外部反馈证据
 
 - **当前:** {{EVIDENCE_COUNT}}/3
