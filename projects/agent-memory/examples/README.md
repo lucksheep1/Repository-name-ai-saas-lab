@@ -193,3 +193,19 @@ def agent_task(task):
 
 ---
 *Examples added: 2026-03-12*
+
+## Additional Examples
+
+### LangChain Integration (`langchain_example.py`)
+Shows how to use agent-memory with LangChain for conversation context management.
+
+```bash
+python langchain_example.py
+```
+
+### Multi-Agent Sharing (`multi_agent_example.py`)
+Demonstrates how multiple AI agents can share a central memory store.
+
+```bash
+python multi_agent_example.py
+```
