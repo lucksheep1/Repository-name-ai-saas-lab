@@ -24,5 +24,9 @@ faiss = ["faiss-cpu"]
 [project.scripts]
 agent-memory = "agent_memory:main"
 
+[project.urls]
+Homepage = "https://github.com/lucksheep1/Repository-name-ai-saas-lab"
+Issues = "https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues"
+
 [tool.setuptools]
 packages = ["."]
