@@ -103,6 +103,7 @@
 | 2 | langchain 依赖链过长，100+ 版本导致冲突 | PyPI | 依赖过重 | 仅 pydantic + json 依赖 |
 | 3 | 多项 AI memory 项目存在集成/配置复杂度 | honcho issues | 配置成本高 | 单一文件，即装即用 |
 | 4 | langchain Memory 模块复杂难用 | GitHub Issues | 学习成本高 | Pythonic API，分钟级上手 |
+| 5 | langchain Memory 安装/依赖问题频繁 | issues list | 安装复杂 | 零依赖，即装即用 |
 
 ### 痛点归因总结
 
