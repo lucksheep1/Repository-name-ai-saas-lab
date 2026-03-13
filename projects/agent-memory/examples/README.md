@@ -2,6 +2,28 @@
 
 This folder contains example scripts demonstrating how to use agent-memory.
 
+## Quick Demo (1-minute)
+
+Run the integration demo to see the complete workflow:
+
+```bash
+cd projects/agent-memory
+pip install -e .
+cd examples
+python integration_demo.py
+```
+
+**Expected output:**
+- Initialize memory
+- Write 7 sample memories
+- Search for "AI agent programming"
+- Generate context for agent
+- Display simulated agent response
+- Store agent response
+- Show timeline view
+
+See `VERIFICATION.md` for detailed验收步骤.
+
 ## Basic Usage
 
 ```python
