@@ -2,6 +2,24 @@
 
 This folder contains example scripts demonstrating how to use agent-memory.
 
+## Quick Demo (30 seconds!)
+
+The simplest possible example - just 3 lines:
+
+```python
+from agent_memory import Memory
+memory = Memory()
+memory.add("Hello, world!")
+print(memory.get_context(max_tokens=1000))
+```
+
+**Run it:**
+```bash
+python quickstart_minimal.py
+```
+
+---
+
 ## Quick Demo (1-minute)
 
 Run the integration demo to see the complete workflow:

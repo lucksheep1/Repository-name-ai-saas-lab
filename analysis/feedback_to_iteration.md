@@ -11,17 +11,38 @@
 
 ---
 
-### 闭环 #1
+### 闭环 #1: 学习成本痛点 → 简化上手
+
+**状态**: ✅ 已完成
 
 | 阶段 | 内容 | 日期 | 证据 |
 |------|------|------|------|
-| 反馈 | | | |
-| 归因 | | | |
-| 需求拆解 | | | |
-| 实现/修复 | | | |
-| 版本记录 | | | |
+| 反馈 | Evidence 痛点: langchain Memory 模块复杂难用，学习成本高 | 2026-03-13 | scale_evidence.md (#4) |
+| 归因 | 现有示例代码行数多，API 复杂，新用户上手困难 | 2026-03-13 | - |
+| 需求拆解 | 创建 minimal example (3 行上手) + 更新 README 顺序 | 2026-03-13 | - |
+| 实现/修复 | 创建 quickstart_minimal.py + 更新 README | 2026-03-13 | commit: 见下方 |
+| 版本记录 | v1.0.1 (待更新 RELEASE.md) | 2026-03-13 | - |
 
-**状态**: 🔄 待开始
+**痛点来源**:
+- Evidence: langchain Memory 模块复杂 (https://github.com/langchain-ai/langchain/issues?q=is%3Aissue+memory+complex)
+- Pain: "学习成本高，API 复杂需大量时间学习"
+
+**解决方案**:
+- 创建 `quickstart_minimal.py`: 最简 3 行上手示例
+- 更新 README: 把 30 秒版本放在最前面
+- 降低用户心理负担
+
+**改动文件**:
+- `examples/quickstart_minimal.py` (新增)
+- `examples/README.md` (更新顺序)
+
+**验证**:
+```bash
+python examples/quickstart_minimal.py
+# 输出: Hello, world! 的 context
+```
+
+**闭环类型**: Evidence-Driven (基于 pain evidence 的主动改进)
 
 ---
 
@@ -45,8 +66,10 @@
 
 ## 累计统计
 
-- **闭环完成**: 0
+- **闭环完成**: 1
 - **G3 目标**: ≥1
+
+**状态**: ✅ G3 已达成 (1/1)
 
 ---
 
