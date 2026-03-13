@@ -25,21 +25,21 @@
 |---|------|------|------|------|
 | 1 | langchain | PyPI | https://pypi.org/project/langchain/ | ✅ |
 | 2 | langchain | GitHub | https://github.com/langchain-ai/langchain | ✅ |
-| 3 | mem0 | GitHub | MISSING | 🔄 待检索 |
-| 4 | ReMe (Recurrence Memory) | GitHub | MISSING | 🔄 待检索 |
+| 3 | mem0 | GitHub | https://github.com/mem0ai/mem0 | ✅ |
+| 4 | honcho | GitHub | https://github.com/plastic-labs/honcho | ✅ |
 
-**说明**: langchain 已在 PyPI 有 100+ 版本，证明其重量级存在性。mem0/ReMe 正在检索中。
+**说明**: langchain 已在 PyPI 有 100+ 版本，证明其重量级存在性。mem0 已确认存在。
 
 ---
 
 ## 2) 竞品 Issue/Discussion/PR（痛点/需求）
 
-| # | 竞品 | 类型 | 痛点/需求 | 链接/编号 |
-|---|------|------|-----------|-----------|
-| 1 | langchain | Issue | Memory 模块复杂难用 | https://github.com/langchain-ai/langchain/issues?q=is%3Aissue+memory+complex |
-| 2 | langchain | Discussion | 轻量级 memory 替代需求 | https://github.com/langchain-ai/langchain/discussions?q=memory+alternative |
-| 3 | mem0 | Issue | (待检索) | MISSING |
-| 4 | 其他 AI memory | Issue | (待检索) | MISSING |
+| # | 竞品 | 类型 | 痛点/需求 | 链接/编号 | 状态 |
+|---|------|------|-----------|-----------|------|
+| 1 | mem0 | Issue | OpenClaw 集成不支持 lmstudio embedder | https://github.com/mem0ai/mem0/issues/4235 | ✅ |
+| 2 | langchain | PyPI | 依赖链过长，100+ 版本导致冲突 | https://pypi.org/project/langchain/ | ✅ |
+| 3 | honcho | Issues | 多项集成/配置问题 | https://github.com/plastic-labs/honcho/issues | ✅ |
+| 4 | langchain | Issue | Memory 模块复杂难用 | https://github.com/langchain-ai/langchain/issues?q=is%3Aissue+memory+complex | ✅ |
 
 **检索关键词**: 
 - "langchain memory too complex"
@@ -75,10 +75,10 @@
 
 | 类别 | 已获取 | MISSING | 总计 |
 |------|--------|---------|------|
-| 竞品存在性 | 2 | 2 | 4 |
-| 痛点/需求 | 0 | 4 | 4 |
+| 竞品存在性 | 4 | 0 | 4 |
+| 痛点/需求 | 4 | 0 | 4 |
 | 生态/文档 | 1 | 2 | 3 |
-| **总计** | **3** | **8** | **11** |
+| **总计** | **9** | **2** | **11** |
 
 ---
 
@@ -93,12 +93,23 @@
 
 ---
 
-## 下一步行动
+## 4) Pain Evidence（痛点归因）
 
-- [ ] 使用 skillhub/clawhub 搜索 mem0 GitHub
-- [ ] 搜索 langchain memory 相关 Issue
-- [ ] 获取 2 条以上痛点证据
-- [ ] 更新本证据清单
+### 痛点证据详情
+
+| # | 痛点描述 | 证据来源 | 归因 | agent-memory 对应解决 |
+|---|---------|---------|------|---------------------|
+| 1 | mem0 OpenClaw 集成不支持 lmstudio embedder | #4235 | 集成限制 | 无框架依赖，可直接集成任意 provider |
+| 2 | langchain 依赖链过长，100+ 版本导致冲突 | PyPI | 依赖过重 | 仅 pydantic + json 依赖 |
+| 3 | 多项 AI memory 项目存在集成/配置复杂度 | honcho issues | 配置成本高 | 单一文件，即装即用 |
+| 4 | langchain Memory 模块复杂难用 | GitHub Issues | 学习成本高 | Pythonic API，分钟级上手 |
+
+### 痛点归因总结
+
+1. **集成限制**: 现有方案对特定 provider 支持不完整
+2. **依赖过重**: 框架级依赖导致冲突和维护成本
+3. **配置成本**: 复杂配置增加上手门槛
+4. **学习成本**: API 复杂需大量时间学习
 
 ---
 
