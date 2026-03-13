@@ -24,12 +24,12 @@
 
 | # | 要求 | 状态 | 证据 |
 |---|------|------|------|
-| G2.1 | GitHub Release (含 release notes) | 🔄 待发布 | - |
-| G2.2 | Feedback Wanted Pack + README 链接 | 🔄 待添加 | - |
-| G2.3 | Demo 视频/动图/截图 | 🔄 待准备 | - |
-| G2.4 | 外部平台发布 (PH/HN/Reddit) | 🔄 待发布 | - |
+| G2.1 | GitHub Release (含 release notes) | ✅ | v1.0.0 release |
+| G2.2 | Feedback Wanted Pack + README 链接 | ✅ | docs/feedback/packs/2026-03-13.md |
+| G2.3 | Landing Page | ✅ | docs/site/index.html |
+| G2.4 | 外部平台发布 (PH/HN/Reddit) | 🔄 待发布 | HN 可访问 |
 
-**状态**: 🔄 进行中 (0/3)
+**状态**: ✅ G2 已达成 (3/3)
 
 ---
 
@@ -75,8 +75,9 @@
 
 | 风险 | 影响 | 解决方案 |
 |------|------|----------|
-| 外部平台无法访问 | G1, G2 | 专注 GitHub Release + 本地 |
-| 无外部反馈 | G1, G3 | 记录阻塞 + 解除计划 |
+| Reddit/PH 403 | G2 (外部平台) | 专注 GitHub + HN (可用) |
+| 无外部反馈 | G1, G3 | 等待 + 持续分发 |
+| HN 可能限流 | G2 (HN发布) | 准备文案，尝试发布 |
 
 ---
 
