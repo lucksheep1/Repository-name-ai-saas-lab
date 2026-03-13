@@ -74,6 +74,8 @@
     → analysis/feedback_to_iteration.md
 ```
 
+**详细规则**: 见 `docs/feedback/triage_rules.md`
+
 ---
 
 *Triage Board - 2026-03-13*
