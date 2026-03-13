@@ -1,9 +1,11 @@
 # Agent Memory Manager
 
-> **🎯 Feedback Wanted!** [Share your feedback →](../../docs/feedback/packs/2026-03-13.md)  
-> **📖 Landing Page:** [docs/site/index.html](../../docs/site/index.html) *(clone repo to view)*  
-> **📦 Release:** [v1.0.0](../../docs/releases/v1.0.0.md)  
-> **💬 Discuss:** [GitHub Discussions](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
+> ⚡ **Give Feedback = Shape the Roadmap!**  
+> 📢 **[Feedback Wanted: What do you need? →](../../docs/feedback/FEEDBACK_WANTED.md)**  
+> 💬 **[Use Cases Wanted: Share your scenario →](../../docs/feedback/issues/use_case_call_stub.md)**  
+> 📖 **Landing:** [docs/site/index.html](../../docs/site/index.html) *(clone to view)*  
+> 📦 **Release:** [v1.0.0](../../docs/releases/v1.0.0.md)  
+> 💬 **Discuss:** [GitHub Discussions](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
 
 Lightweight memory management for AI agents.
 
