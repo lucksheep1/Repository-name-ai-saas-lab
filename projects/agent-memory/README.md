@@ -2,6 +2,7 @@
 
 > **🎯 Feedback Wanted!** [Share your feedback →](../../docs/feedback/packs/2026-03-13.md)  
 > **📖 Landing Page:** [docs/site/index.html](../../docs/site/index.html) *(clone repo to view)*  
+> **📦 Release:** [v1.0.0](../../docs/releases/v1.0.0.md)  
 > **💬 Discuss:** [GitHub Discussions](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
 
 Lightweight memory management for AI agents.
