@@ -11,11 +11,24 @@
 
 | # | 时间 | 分发动作 | 链接 | 状态 |
 |---|------|---------|------|------|
-| 1 | 2026-03-13 | GitHub Release v1.0.0 | https://github.com/lucksheep1/Repository-name-ai-saas-lab/releases/tag/v1.0.0 | ✅ |
+| 1 | 2026-03-13 | Release v1.0.0 (静态页) | docs/releases/v1.0.0.md | ✅ |
 | 2 | 2026-03-13 | Feedback Wanted Pack | docs/feedback/packs/2026-03-13.md | ✅ |
 | 3 | 2026-03-13 | Landing Page (repo内) | docs/site/index.html | ✅ |
 | 4 | 2026-03-13 | README 反馈入口 | projects/agent-memory/README.md | ✅ |
 | 5 | 2026-03-13 | Feedback Guide | docs/feedback/README.md | ✅ |
+| 6 | 2026-03-13 | Releases Index | docs/releases/index.md | ✅ |
+
+### 待手动操作
+
+| # | 分发动作 | 原因 | 状态 |
+|---|---------|------|------|
+| - | GitHub Release (API) | 需要 GitHub Token 认证 | 🔄 无法自动 |
+| - | Hacker News 帖子 | 需要手动在 HN 网站提交 | 🔄 无法自动 |
+
+### 替代方案
+
+由于无 gh CLI/Token，创建了静态 Release 页面作为替代：
+- https://github.com/lucksheep1/Repository-name-ai-saas-lab/blob/main/docs/releases/v1.0.0.md
 
 ---
 
