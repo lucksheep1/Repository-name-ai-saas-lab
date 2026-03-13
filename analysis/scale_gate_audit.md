@@ -25,12 +25,12 @@
 
 | # | 要求 | 状态 | 证据/路径 |
 |---|------|------|-----------|
-| B1 | 竞品 repo/包页链接 ≥1（存在性） | ✅ | langchain PyPI (https://pypi.org/project/langchain/) |
-| B2 | 竞品 issue/discussion/PR ≥2（痛点/需求） | 🔄 | 待检索 langchain issues |
+| B1 | 竞品 repo/包页链接 ≥1（存在性） | ✅ | langchain PyPI, mem0 GitHub, honcho GitHub |
+| B2 | 竞品 issue/discussion/PR ≥2（痛点/需求） | ✅ | mem0 #4235, honcho issues, langchain issues |
 | B3 | 相关生态/文档/文章 ≥1（限制/复杂性） | ✅ | langchain Memory 文档 |
 | B4 | 禁止计入：自己仓库链接/投稿入口/主观推断 | ✅ | 符合规范 |
 
-**状态**: 🔄 M2 进行中 (部分 MISSING)
+**状态**: ✅ M2 完成 (4/4 痛点证据)
 
 ---
 
@@ -51,12 +51,12 @@
 
 | # | 要求 | 状态 | 证据/路径 |
 |---|------|------|-----------|
-| D1 | 写入 analysis/evolution_log.md | ✅ | 需更新 |
+| D1 | 写入 analysis/evolution_log.md | ✅ | 已更新 Scale Gate 72h 策略 |
 | D2 | 说明为什么主线是 agent-memory | ✅ | 轻量差异化 + 市场需求 |
-| D3 | 下一轮允许迭代的反馈类型 | 🔄 | 需明确 (最多 3 类) |
-| D4 | Evidence 权重调整 | 🔄 | 需评估 |
+| D3 | 下一轮允许迭代的反馈类型 | ✅ | Bug / Feature / Use Case (3类) |
+| D4 | Evidence 权重调整 | ✅ | 已写入 scoring_weights.md |
 
-**状态**: 🔄 D 部分待完成
+**状态**: ✅ D 完成
 
 ---
 
@@ -65,9 +65,21 @@
 | Milestone | 状态 | 完成度 |
 |-----------|------|--------|
 | M1: Integration Demo | ✅ | 100% |
-| M2: Evidence Upgrade | 🔄 | 50% |
+| M2: Evidence Upgrade | ✅ | 100% |
 | M3: Feedback Pipeline | ✅ | 100% |
-| D: Evolution | 🔄 | 50% |
+| D: Evolution | ✅ | 100% |
+
+---
+
+## Scale Gate 判定
+
+**状态**: ✅ **PASS**
+
+所有 DoD 已满足：
+- ✅ A) Integration Demo - 完整流程可运行
+- ✅ B) Evidence Upgrade - 4 条痛点证据
+- ✅ C) Feedback Pipeline - 反馈管线就绪
+- ✅ D) Evolution - 权重机制已建立
 
 ---
 

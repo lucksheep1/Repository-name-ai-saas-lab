@@ -785,6 +785,31 @@
 - **保持**: 竞品存在性 (PyPI/GitHub)
 - **降低**: 文档复杂性（间接证据）
 
+### M2 缺口根因分析
+
+**问题**: 初始 M2 只有 langchain 存在性证据，缺少痛点 Issue
+
+**根因**:
+1. 检索方式单一 - 仅依赖 GitHub 搜索，未直接访问 issue 列表
+2. 缺少 Issue 编号 - 只有搜索结果页，无具体 issue 链接
+3. 未及时补齐 - Scale Gate 开始时未优先完成痛点证据收集
+
+**机制改进**:
+1. 每次 Scale Gate 启动时，优先完成 Pain Evidence 小节
+2. 使用 web_fetch 直接访问 issue 列表页面获取编号
+3. 在 scoring_weights.md 中明确 Issue 权重最高，确保优先检索
+4. 建立"先 Pain Evidence 后 Existence"的检索优先级
+
+### Evidence 权重表 (已写入 scoring_weights.md)
+
+| 证据类型 | 权重 | 计入 Evidence? |
+|----------|------|---------------|
+| Issue/Discussion/PR | 3.0 (最高) | ✅ |
+| 官方文档/规范 | 2.0 (中等) | ✅ |
+| 竞品主页 | 2.0 (中等) | ✅ |
+| Stars/Trending | 1.0 (低) | ❌ |
+| 本地验证 | 0 (不计) | ❌ |
+
 ### 本轮里程碑
 | Milestone | 状态 | 完成度 |
 |-----------|------|--------|
