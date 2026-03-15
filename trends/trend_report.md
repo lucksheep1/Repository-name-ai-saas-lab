@@ -1,45 +1,38 @@
-# Trend Report — 2026-03-10 (Round 62)
+# Trend Report — 2026-03-15 (Round 65)
 
 ## Observed Signals
 
-### GitHub Trending (March 10th - Weekly)
-- **moeru-ai/airi**: 31,782 stars - Self-hosted AI companion (10,661 stars this week)
-- **ruvnet/RuView**: 33,285 stars - WiFi-based human pose estimation (12,632 stars this week)
-- **koala73/worldmonitor**: 34,762 stars - Global intelligence dashboard (12,583 stars this week)
-- **alibaba/OpenSandbox**: 7,217 stars - Sandbox for AI apps (3,262 stars this week)
-- **GoogleCloudPlatform/generative-ai**: 15,279 stars - GenAI on Google Cloud
-- **agency-agents**: 19,168+ stars - Complete AI agency
-- **MiroFish**: 11,057+ stars - Swarm Intelligence Engine (growing)
+### GitHub Issues & Discussions (March 14-15)
 
-### Previous Signals (Still Relevant)
-- **shareAI-lab/learn-claude-code**: 24k+ stars - Nano Claude Code-like agent
-- **moeru-ai/airi**: 31k+ stars - Self-hosted AI companion
-- **alibaba/OpenSandbox**: 7k+ stars - Sandbox for AI applications
-- **openai/skills**: Skills format gaining traction
-- **Qwen-Agent**: MCP integration becoming standard
-- **agency-agents**: AI agency with specialized agents
-- **MiroFish**: Swarm Intelligence Engine
+#### MCP Server Templates (Strong Signal)
+- **awesome-mcp-servers#12**: "Add MCP server starter templates section" - 需要 TypeScript/Python/Rust/Go 模板
+- **ai-tool-center#10**: "MCP server registry" - 服务器注册需求
+- **ai-tool-center#19**: "Server templates" - 模板管理需求
+- **tumiki#899**: "MCP server template management system"
+
+#### AI Memory & Context
+- **mem0ai/mem0#4339**: GNAP (Git-Native Agent Protocol) 集成提案 - 关注任务协调与记忆层的互补
+- 持续有关于 context window 太小的抱怨
+
+#### OpenAI Skills Ecosystem
+- openai/skills 继续增长
+- Skills 格式标准化趋势
 
 ## Repeated Complaints
 
-1. **Skills/Plugins ecosystem** - claude-skills shows demand for ready-made skills
-2. **Multi-agent coordination** - agency-agents (19k stars) validates this need
-3. **In-page/browser agents** - alibaba/page-agent emerging
-4. **NotebookLM automation** - notebooklm-py shows demand
-5. **Context management** - Still a top pain point
-6. **MCP server setup complexity** - Developers want easier integration
-7. **Agent memory/persistence** - Need better state management
+1. **MCP Server Templates** - 多个 repo 明确需要 starter templates (TS/Python/Rust/Go)
+2. **Agent Memory Persistence** - mem0 issue 验证了 memory layer 需求
+3. **Multi-agent Coordination** - GNAP 提案显示 task coordination 痛点
+4. **Context Window Limits** - 持续抱怨
+5. **MCP Server Complexity** - 开发门槛高，需要模板降低难度
 
 ## Candidate Opportunity Themes
 
-1. **Skills/Prompts Marketplace** - claude-skills (3.3k stars) validates demand for ready-made skills
-2. **Multi-agent Coordination Frameworks** - agency-agents (19k stars), MiroFish (10k stars)
-3. **In-browser Page Agents** - alibaba/page-agent emerging (2.5k stars)
-4. **NotebookLM Automation** - notebooklm-py (4.2k stars) shows demand
-5. **MCP Templates** - Continue iterating (already promising)
-6. **Agent Memory** - Continue iterating (already promising)
-7. **Code RAG** - Continue iterating (already promising)
-8. **AI Code Execution Sandbox** - OpenSandbox validates this need
+1. **MCP Server Templates** ⭐ - 强烈信号，多个 issue 明确需求
+2. **Agent Memory** ⭐ - 继续验证 (agent-memory 项目)
+3. **Skills Marketplace** - OpenAI skills 格式标准化
+4. **Context Management** - 持续需求
+5. **Multi-agent Coordination** - GNAP 新方案验证
 
 ---
-*Scout Round 62: 2026-03-10 09:02*
+*Scout Round 65: 2026-03-15 11:55*
