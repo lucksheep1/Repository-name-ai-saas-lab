@@ -1,102 +1,82 @@
 # Feedback Wanted - agent-memory
 
-> **Help us build the agent memory tool you actually need.**
+> ⚡ **Give Feedback = Shape the Roadmap!**  
+> 📢 **[Feedback Wanted: What do you need? →](./FEEDBACK_WANTED.md)**
 
 ---
 
-## One-Line Value
+## One-Minute Feedback
 
-agent-memory: **~150 lines of code** vs LangChain's **100+ packages**.
+**Answer 3 Yes/No questions → Help us prioritize:**
 
-Because simplicity matters.
+### Q1: Is LangChain memory too heavy for you?
+
+- ❌ Yes, I want something lighter
+- ✅ No, LangChain is fine
+
+### Q2: Do you need this right now?
+
+- ❌ Yes, I need agent memory ASAP
+- ✅ No, not urgent
+
+### Q3: Would you try a demo if it took 30 seconds?
+
+- ❌ Yes, show me the demo
+- ✅ No, I don't have time
 
 ---
 
 ## Quick Demo (30 seconds)
 
 ```python
-# Install
 pip install agent-memory
 
-# Use
 from agent_memory import Memory
-memory = Memory(storage="json", path="./memory.json")
-memory.add("User prefers dark mode")
+memory = Memory(storage="json")
+memory.add("User likes dark mode")
 context = memory.get_context(max_tokens=2000)
+print(context)
 ```
 
-**Landing Page**: [docs/site/index.html](../site/index.html)
+**Expected output:**
+```
+Recent memories:
+- User likes dark mode
+
+Context ready for agent.
+```
 
 ---
 
-## 3 Questions We Need Your Answer
+## Who Should Feedback
 
-### 1. What's your biggest pain point with agent memory?
+**✅适合反馈:**
+- You build AI agents / chatbots
+- You've tried LangChain memory and found it too heavy
+- You want simpler memory management
 
-- [ ] Too complex to set up
-- [ ] Too many dependencies
-- [ ] Can't integrate with my stack
-- [ ] Hard to customize
-- [ ] Something else: _____
-
-### 2. What's your primary use case?
-
-- [ ] Chatbot memory
-- [ ] Agent workflow context
-- [ ] Multi-agent sharing
-- [ ] User preference storage
-- [ ] Other: _____
-
-### 3. Would you pay for?
-
-- [ ] Cloud sync
-- [ ] More storage backends (PostgreSQL, Redis)
-- [ ] Enterprise support
-- [ ] Nothing / Open source is enough
+**❌不适合反馈:**
+- You're happy with LangChain
+- You don't work with AI agents
 
 ---
 
-## How to Give Feedback
+## Where to Give Feedback
 
-### Option 1: GitHub Issues
-- [Bug Report](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues/new?template=bug_report.md)
-- [Feature Request](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues/new?template=feature_request.md)
+**Quickest way:** [GitHub Issues - Feedback](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues/new?labels=feedback)
 
-### Option 2: GitHub Discussions
-- [General Discussion](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
-
-### Option 3: Quick Feedback Form
-- [Feedback Pack](packs/2026-03-13.md)
+**Or discuss:** [GitHub Discussions](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
 
 ---
 
-## Why Your Feedback Matters
+## Why It Matters
 
-Every response shapes our roadmap:
-
-| You say... | We do... |
-|------------|----------|
-| "Too complex" | Simplify API |
-| "Need X storage" | Add backend |
-| "Can't integrate with Y" | Add integration |
+| Your answer | We prioritize |
+|-------------|---------------|
+| "Yes, too heavy" → | Simplify API further |
+| "Yes, need now" → | Ship faster |
+| "Yes, show demo" → | Build better demo |
 
 ---
 
-## Current Pain Points We're Addressing
-
-Based on community feedback:
-
-1. **LangChain is too heavy** → agent-memory: 150 lines, 2 dependencies
-2. **Integration issues** → Simple JSON/SQLite, no framework lock-in
-3. **Setup complexity** → 5-minute integration
-
----
-
-## Contact
-
-- **GitHub**: https://github.com/lucksheep1/Repository-name-ai-saas-lab
-- **Discussions**: https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions
-
----
-
-*Last updated: 2026-03-13*
+*Last updated: 2026-03-16*
