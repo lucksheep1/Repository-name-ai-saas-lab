@@ -4,7 +4,7 @@
 > 📢 **[Feedback Wanted: What do you need? →](../../docs/feedback/FEEDBACK_WANTED.md)**  
 > 💬 **[Use Cases Wanted: Share your scenario →](../../docs/feedback/issues/use_case_call_stub.md)**  
 > 📖 **Landing:** [docs/site/index.html](../../docs/site/index.html) *(clone to view)*  
-> 📦 **Release:** [v1.0.0](../../docs/releases/v1.0.0.md)  
+> 📦 **Release:** [v1.0.0](../../docs/releases/v1.0.0.md) | **v3.0** (SQLite + TTL)  
 > 💬 **Discuss:** [GitHub Discussions](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
 
 Lightweight memory management for AI agents.
@@ -15,12 +15,14 @@ Agents need to remember context across conversations, but existing solutions are
 - Too complex (ReMe, langchain.memory)
 - Too coupled (framework-specific)
 - Too heavy (many dependencies)
+- No persistent storage
 
 ## Solution
 
 A simple, standalone Python library for agent memory:
-- **Lightweight**: ~150 lines, minimal dependencies
-- **Flexible**: Multiple storage backends
+- **Lightweight**: ~200 lines, minimal dependencies
+- **Flexible**: Multiple storage backends (JSON, FAISS, SQLite)
+- **TTL Support**: Automatic memory decay/expiration
 - **Auto-summary**: Compresses old memories
 - **Easy integration**: Any Python project
 
@@ -28,6 +30,12 @@ A simple, standalone Python library for agent memory:
 
 ```bash
 pip install agent-memory
+
+# For SQLite support (included in standard library)
+# No extra dependencies needed!
+
+# For FAISS support (optional)
+pip install faiss-cpu
 ```
 
 ## Usage
@@ -35,11 +43,11 @@ pip install agent-memory
 ```python
 from agent_memory import Memory
 
-# Initialize memory
-memory = Memory(storage="json", path="./memory.json")
+# Initialize memory with SQLite (recommended for production)
+memory = Memory(storage="sqlite", path="./memory.db", ttl_days=30)
 
-# Add a memory
-memory.add("User prefers dark mode")
+# Add a memory with TTL (days until expiration)
+memory.add("User prefers dark mode", ttl_days=7)
 
 # Add with tags
 memory.add_with_tags("Bug in login", tags=["bug", "urgent"])
@@ -73,7 +81,10 @@ memory.export_markdown("memory.md")
 ## CLI
 
 ```bash
-# Add memory
+# Initialize memory with SQLite and 30-day TTL
+agent-memory init --storage sqlite --path ./memory.db --ttl-days 30
+
+# Add memory with TTL
 agent-memory add --text "User likes dark mode"
 
 # Search
@@ -112,13 +123,25 @@ agent-memory timeline --top-k 20
 
 ## Storage Backends
 
-- `json` - Simple JSON file (default)
-- `faiss` - FAISS vector store (if available)
+- `json` - Simple JSON file (default, for development)
+- `sqlite` - SQLite database (recommended for production, supports TTL)
+- `faiss` - FAISS vector store (if available, for similarity search)
+
+### TTL (Time-To-Live)
+
+SQLite backend supports automatic memory expiration:
+```python
+# Default TTL for all memories
+memory = Memory(storage="sqlite", path="./memory.db", ttl_days=30)
+
+# Per-memory TTL
+memory.add("Temporary note", ttl_days=7)
+```
 
 ## API
 
-### Memory.add(text: str, metadata: dict = None) -> str
-Add a new memory. Returns memory ID.
+### Memory.add(text: str, metadata: dict = None, ttl_days: int = None) -> str
+Add a new memory. Optionally set TTL (days until expiration).
 
 ### Memory.add_with_tags(text: str, tags: List[str], metadata: dict = None) -> str
 Add a memory with tags.
@@ -164,7 +187,6 @@ Get number of memories.
 
 ## Limits
 
-- No persistence across restarts (for json backend)
 - Simple embedding (TF-IDF based)
 - No LLM summary yet (coming soon)
 
@@ -172,6 +194,7 @@ Get number of memories.
 
 - [ ] Add LLM-based summary
 - [ ] Add more embedding options
+- [ ] Add knowledge graph support
 
 ---
 *Built: 2026-03-06*

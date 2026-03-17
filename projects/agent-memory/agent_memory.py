@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Agent Memory Manager v2 - Lightweight memory for AI agents.
-Enhanced with FAISS support and memory summarization.
+Agent Memory Manager v3 - Lightweight memory for AI agents.
+Enhanced with FAISS, SQLite support, and TTL decay.
 """
 import json
 import os
 import uuid
-from datetime import datetime
+import sqlite3
+from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 # Try to import optional dependencies
 try:
@@ -33,10 +34,11 @@ class Memory:
     """Lightweight memory manager for AI agents."""
     
     def __init__(self, storage: str = "json", path: str = "./memory.json", 
-                 vector_dim: int = 512):
+                 vector_dim: int = 512, ttl_days: Optional[int] = None):
         self.storage = storage
         self.path = path
         self.vector_dim = vector_dim
+        self.ttl_days = ttl_days
         self.memories: List[Dict] = []
         
         # TF-IDF based
@@ -50,8 +52,65 @@ class Memory:
         else:
             self.index = None
         
-        if storage == "json" and os.path.exists(path):
+        # SQLite backend
+        if storage == "sqlite":
+            self._init_sqlite()
+            self._load_sqlite()
+        elif storage == "json" and os.path.exists(path):
             self._load()
+    
+    def _init_sqlite(self):
+        """Initialize SQLite database."""
+        conn = sqlite3.connect(self.path.replace('.json', '.db'))
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS memories (
+                id TEXT PRIMARY KEY,
+                text TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                tags TEXT,
+                priority INTEGER DEFAULT 0,
+                metadata TEXT,
+                expires_at TEXT
+            )
+        """)
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON memories(timestamp)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_expires ON memories(expires_at)")
+        conn.commit()
+        conn.close()
+    
+    def _load_sqlite(self):
+        """Load memories from SQLite."""
+        conn = sqlite3.connect(self.path.replace('.json', '.db'))
+        cursor = conn.execute(
+            "SELECT id, text, timestamp, tags, priority, metadata FROM memories WHERE expires_at IS NULL OR expires_at > ?",
+            (datetime.now().isoformat(),)
+        )
+        self.memories = []
+        for row in cursor.fetchall():
+            self.memories.append({
+                "id": row[0],
+                "text": row[1],
+                "timestamp": row[2],
+                "tags": json.loads(row[3]) if row[3] else [],
+                "priority": row[4] or 0,
+                "metadata": json.loads(row[5]) if row[5] else {}
+            })
+        conn.close()
+    
+    def _save_sqlite(self):
+        """Save memories to SQLite."""
+        conn = sqlite3.connect(self.path.replace('.json', '.db'))
+        for m in self.memories:
+            expires_at = None
+            if self.ttl_days:
+                expires_at = (datetime.now() + timedelta(days=self.ttl_days)).isoformat()
+            conn.execute("""
+                INSERT OR REPLACE INTO memories (id, text, timestamp, tags, priority, metadata, expires_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (m["id"], m["text"], m["timestamp"], json.dumps(m.get("tags", [])),
+                  m.get("priority", 0), json.dumps(m.get("metadata", {})), expires_at))
+        conn.commit()
+        conn.close()
     
     def _load(self):
         """Load memories from file."""
@@ -63,15 +122,26 @@ class Memory:
         with open(self.path, 'w') as f:
             json.dump(self.memories, f, indent=2)
     
-    def add(self, text: str, metadata: Optional[Dict] = None) -> str:
-        """Add a new memory."""
+    def _save(self):
+        """Save memories to file or SQLite."""
+        if self.storage == "sqlite":
+            self._save_sqlite()
+        else:
+            with open(self.path, 'w') as f:
+                json.dump(self.memories, f, indent=2)
+    
+    def add(self, text: str, metadata: Optional[Dict] = None, ttl_days: Optional[int] = None) -> str:
+        """Add a new memory with optional TTL."""
         memory_id = str(uuid.uuid4())[:8]
+        effective_ttl = ttl_days if ttl_days is not None else self.ttl_days
         memory = {
             "id": memory_id,
             "text": text,
             "timestamp": datetime.now().isoformat(),
             "metadata": metadata or {}
         }
+        if effective_ttl:
+            memory["expires_at"] = (datetime.now() + timedelta(days=effective_ttl)).isoformat()
         self.memories.append(memory)
         self._save()
         return memory_id
@@ -263,7 +333,8 @@ if __name__ == "__main__":
     parser.add_argument("--text", help="Text for add/search")
     parser.add_argument("--path", default="./memory.json", help="Memory file path")
     parser.add_argument("--top-k", type=int, default=5, help="Top K results")
-    parser.add_argument("--storage", default="json", choices=["json", "faiss"], help="Storage backend")
+    parser.add_argument("--storage", default="json", choices=["json", "faiss", "sqlite"], help="Storage backend")
+    parser.add_argument("--ttl-days", type=int, help="Default TTL in days for memories")
     parser.add_argument("--id", help="Memory ID for delete")
     parser.add_argument("--tag", help="Tag for by-tag command")
     parser.add_argument("--priority", type=int, help="Priority for by-priority command")
@@ -271,7 +342,7 @@ if __name__ == "__main__":
     parser.add_argument("--format", default="json", choices=["json", "markdown"], help="Export format")
     
     args = parser.parse_args()
-    memory = Memory(storage=args.storage, path=args.path)
+    memory = Memory(storage=args.storage, path=args.path, ttl_days=args.ttl_days)
     
     if args.command == "add":
         if not args.text:
