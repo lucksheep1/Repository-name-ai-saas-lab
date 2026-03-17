@@ -4,14 +4,17 @@
 
 **创建时间:** 2026-03-06
 
-**版本:** v4.0 (2026-03-07 迭代)
+**版本:** v3.0 (2026-03-17 SQLite + TTL)
 
 **理由:**
-- Score: 43/50 (达到门槛)
+- Score: 48/50 (达到门槛)
 - ReMe 证明需求
 - 轻量级差异化
+- 新增: SQLite 持久化 + TTL 衰减
 
-**v4.0 新增功能:**
+**v3.0 新增功能:**
+- ✅ SQLite 后端 (生产级持久化)
+- ✅ TTL 支持 (自动过期)
 - ✅ 标签系统 (add_with_tags, get_by_tag)
 - ✅ Markdown 导出 (export_markdown)
 - ✅ 优先级管理 (set_priority, get_by_priority)
