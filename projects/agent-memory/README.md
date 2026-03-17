@@ -1,13 +1,16 @@
-# Agent Memory Manager
+# ⚡ Agent Memory - 3 Lines to Remember Anything
 
-> ⚡ **Give Feedback = Shape the Roadmap!**  
-> 📢 **[Feedback Wanted: What do you need? →](../../docs/feedback/FEEDBACK_WANTED.md)**  
-> 💬 **[Use Cases Wanted: Share your scenario →](../../docs/feedback/issues/use_case_call_stub.md)**  
-> 📖 **Landing:** [docs/site/index.html](../../docs/site/index.html) *(clone to view)*  
-> 📦 **Release:** [v1.0.0](../../docs/releases/v1.0.0.md) | **v3.0** (SQLite + TTL)  
-> 💬 **Discuss:** [GitHub Discussions](https://github.com/lucksheep1/Repository-name-ai-saas-lab/discussions)
+```python
+from agent_memory import Memory
+m = Memory(storage="json")
+m.add("User likes dark mode")
+```
 
-Lightweight memory management for AI agents.
+> 📢 **[Give Feedback →](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)** | 📦 **[v3.0 Release](docs/releases/v3.0.md)**
+
+---
+
+Lightweight memory for AI agents. No LangChain bloat. SQLite + TTL support.
 
 ## Problem
 
