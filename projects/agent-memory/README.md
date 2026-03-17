@@ -190,6 +190,14 @@ Get number of memories.
 - Simple embedding (TF-IDF based)
 - No LLM summary yet (coming soon)
 
+## v3.0 Features (2026-03-17)
+
+- ✅ SQLite backend (production-ready persistence)
+- ✅ TTL support (automatic memory expiration)
+- ✅ Tags and priority system
+- ✅ JSON and FAISS backends
+- ✅ Markdown export
+
 ## Next
 
 - [ ] Add LLM-based summary
@@ -198,7 +206,7 @@ Get number of memories.
 
 ---
 *Built: 2026-03-06*
-*Updated: 2026-03-09 - v1.0.0 Release*
+*Updated: 2026-03-17 - v3.0 Release*
 
 ## Feedback
 
