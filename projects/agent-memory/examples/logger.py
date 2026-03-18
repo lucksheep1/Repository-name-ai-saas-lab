@@ -52,7 +52,7 @@ class AgentLogger:
         metadata = metadata or {}
         metadata["level"] = level.upper()
         
-        self.memory.add(formatted, tags=tags, metadata=metadata)
+        self.memory.add_with_tags(formatted, tags=tags, metadata=metadata)
     
     def debug(self, message: str, **kwargs):
         """Log debug message."""
