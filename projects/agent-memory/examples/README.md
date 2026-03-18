@@ -257,3 +257,31 @@ Exposes agent-memory as a REST API service.
 pip install fastapi uvicorn
 uvicorn api_server:app --reload
 ```
+
+### Bot Integrations
+
+Add persistent memory to your bots with just a few lines:
+
+**Discord Bot** (`discord_bot.py`)
+```bash
+pip install discord.py
+python discord_bot.py
+```
+
+**Slack Bot** (`slack_bot.py`)
+```bash
+pip install slack-sdk flask
+python slack_bot.py
+```
+
+**Telegram Bot** (`telegram_bot.py`)
+```bash
+pip install python-telegram-bot
+python telegram_bot.py
+```
+
+Each bot supports:
+- `/remember <text>` - Save to memory
+- `/recall <query>` - Search memories
+- `/history` - Recent memories
+- Automatic context for mentions/replies
