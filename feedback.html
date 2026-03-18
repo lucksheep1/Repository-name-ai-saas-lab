@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agent Memory - Feedback</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        h1 { color: #333; }
+        .question { margin: 20px 0; }
+        label { display: block; margin: 10px 0; }
+        button { background: #007; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background: #005; }
+    </style>
+</head>
+<body>
+    <h1>Agent Memory Feedback</h1>
+    <p>We need your feedback to prioritize development!</p>
+    
+    <form action="https://httpbin.org/post" method="post">
+        <div class="question">
+            <label>1. Which feature do you need most?</label>
+            <label><input type="radio" name="feature" value="web_dashboard"> Web Dashboard</label>
+            <label><input type="radio" name="feature" value="cloud_sync"> Cloud Sync</label>
+            <label><input type="radio" name="feature" value="team_collaboration"> Team Collaboration</label>
+            <label><input type="radio" name="feature" value="enterprise"> Enterprise Edition</label>
+        </div>
+        
+        <div class="question">
+            <label>2. How much would you pay?</label>
+            <label><input type="radio" name="price" value="free"> Free is enough</label>
+            <label><input type="radio" name="price" value="5"> $5/month</label>
+            <label><input type="radio" name="price" value="10"> $10/month</label>
+            <label><input type="radio" name="price" value="20"> $20/month</label>
+        </div>
+        
+        <div class="question">
+            <label>3. Your email (optional):</label>
+            <input type="email" name="email" placeholder="your@email.com">
+        </div>
+        
+        <button type="submit">Submit Feedback</button>
+    </form>
+</body>
+</html>
