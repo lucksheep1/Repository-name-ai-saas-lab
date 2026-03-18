@@ -1,5 +1,8 @@
 # ⚡ Agent Memory - 3 Lines to Remember Anything
 
+[![CI](https://github.com/lucksheep1/Repository-name-ai-saas-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/lucksheep1/Repository-name-ai-saas-lab/actions)
+[![PyPI Version](https://img.shields.io/pypi/v/agent-memory)](https://pypi.org/project/agent-memory/)
+
 ```python
 from agent_memory import Memory
 m = Memory(storage="json")
