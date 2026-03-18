@@ -134,11 +134,14 @@ class Memory:
         """Add a new memory with optional TTL."""
         memory_id = str(uuid.uuid4())[:8]
         effective_ttl = ttl_days if ttl_days is not None else self.ttl_days
+        metadata = metadata or {}
         memory = {
             "id": memory_id,
             "text": text,
             "timestamp": datetime.now().isoformat(),
-            "metadata": metadata or {}
+            "metadata": metadata,
+            "priority": metadata.get("priority", 0),
+            "tags": metadata.get("tags", [])
         }
         if effective_ttl:
             memory["expires_at"] = (datetime.now() + timedelta(days=effective_ttl)).isoformat()
