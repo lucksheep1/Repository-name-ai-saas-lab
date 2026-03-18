@@ -40,6 +40,10 @@
     "tencent-docs": {
       "version": "1.0.3",
       "installedAt": 1772637007657
+    },
+    "github-api": {
+      "version": "1.0.3",
+      "installedAt": 1773761928427
     }
   }
 }
