@@ -6,9 +6,8 @@ from pathlib import Path
 
 
 def demo():
-    p = Path("/tmp/test")
-    p.mkdir(parents=True, exist_ok=True)
-    print(p.exists())
+    p = Path("/tmp/test.txt")
+    print(p.stem, p.suffix)
 
 
 if __name__ == "__main__":
