@@ -1,161 +1,122 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Memory Tags Manager
-==================================
-Advanced tag management.
-
-Usage:
-    from tag_manager import TagManager
-    
-    manager = TagManager(memory)
-    suggestions = manager.suggest_tags("New feature request")
+Memory Tag Manager
+Advanced tag management
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Dict, Set
-from collections import Counter
 from agent_memory import Memory
+from collections import defaultdict
 
 
 class TagManager:
-    """Advanced tag management."""
+    """Manage tags"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
     
-    def get_all_tags(self) -> List[str]:
-        """Get all unique tags."""
-        all_memories = self.memory.get_recent(limit=self.memory.count())
+    def get_all_tags(self) -> dict:
+        """Get all tags with counts"""
+        tag_counts = defaultdict(int)
         
-        tags: Set[str] = set()
-        for mem in all_memories:
-            tags.update(mem.get("tags", []))
+        for mem in self.memory.get_all():
+            for tag in mem.get("tags", []):
+                tag_counts[tag] += 1
         
-        return sorted(list(tags))
+        return dict(sorted(tag_counts.items(), key=lambda x: x[1], reverse=True))
     
-    def get_tag_counts(self) -> Dict[str, int]:
-        """Get tag usage counts."""
-        all_memories = self.memory.get_recent(limit=self.memory.count())
-        
-        tags = []
-        for mem in all_memories:
-            tags.extend(mem.get("tags", []))
-        
-        return dict(Counter(tags).most_common())
-    
-    def suggest_tags(self, text: str) -> List[str]:
-        """Suggest tags based on text."""
-        text_lower = text.lower()
-        suggestions = []
-        
-        # Common tag patterns
-        patterns = {
-            "bug": ["bug", "error", "fix", "issue", "problem"],
-            "feature": ["feature", "add", "new", "implement"],
-            "urgent": ["urgent", "critical", "asap", "important"],
-            "task": ["task", "todo", "do"],
-            "meeting": ["meeting", "call", "sync"],
-            "idea": ["idea", "thought", "consider"],
-            "question": ["question", "help", "how", "what"],
-        }
-        
-        for tag, keywords in patterns.items():
-            if any(kw in text_lower for kw in keywords):
-                suggestions.append(tag)
-        
-        return suggestions
-    
-    def merge_tags(self, source_tag: str, target_tag: str) -> int:
-        """Merge source tag into target tag."""
-        tagged = self.memory.get_by_tag(source_tag)
-        
+    def merge_tags(self, source: str, target: str) -> int:
+        """Merge one tag into another"""
         merged = 0
-        for mem in tagged:
-            text = mem["text"]
-            old_tags = mem.get("tags", [])
+        
+        for mem in self.memory.get_all():
+            tags = mem.get("tags", [])
             
-            if source_tag in old_tags:
-                old_tags.remove(source_tag)
-                if target_tag not in old_tags:
-                    old_tags.append(target_tag)
+            if source in tags:
+                tags.remove(source)
                 
-                # Delete and re-add with new tags
-                self.memory.delete(mem["id"])
-                self.memory.add_with_tags(text, tags=old_tags, metadata=mem.get("metadata"))
+                if target not in tags:
+                    tags.append(target)
+                
+                self.memory.update(mem["id"], tags=tags)
                 merged += 1
         
         return merged
     
-    def split_tag(self, tag: str, new_tags: List[str]) -> int:
-        """Split a tag into multiple tags."""
-        tagged = self.memory.get_by_tag(tag)
+    def delete_tag(self, tag: str) -> int:
+        """Delete a tag from all memories"""
+        deleted = 0
         
-        split = 0
-        for mem in tagged:
-            text = mem["text"]
-            old_tags = mem.get("tags", [])
+        for mem in self.memory.get_all():
+            tags = mem.get("tags", [])
             
-            # Remove old tag and add new ones
-            if tag in old_tags:
-                old_tags.remove(tag)
-                for new_tag in new_tags:
-                    if new_tag not in old_tags:
-                        old_tags.append(new_tag)
-                
-                self.memory.delete(mem["id"])
-                self.memory.add_with_tags(text, tags=old_tags, metadata=mem.get("metadata"))
-                split += 1
+            if tag in tags:
+                tags.remove(tag)
+                self.memory.update(mem["id"], tags=tags)
+                deleted += 1
         
-        return split
+        return deleted
+    
+    def rename_tag(self, old: str, new: str) -> int:
+        """Rename a tag"""
+        renamed = 0
+        
+        for mem in self.memory.get_all():
+            tags = mem.get("tags", [])
+            
+            if old in tags:
+                tags.remove(old)
+                tags.append(new)
+                self.memory.update(mem["id"], tags=tags)
+                renamed += 1
+        
+        return renamed
+    
+    def get_tag_cooccurrence(self) -> dict:
+        """Find which tags appear together"""
+        cooccur = defaultdict(int)
+        
+        for mem in self.memory.get_all():
+            tags = mem.get("tags", [])
+            
+            if len(tags) > 1:
+                for i, t1 in enumerate(tags):
+                    for t2 in tags[i+1:]:
+                        pair = tuple(sorted([t1, t2]))
+                        cooccur[pair] += 1
+        
+        return dict(sorted(cooccur.items(), key=lambda x: x[1], reverse=True)[:10])
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
-    
-    demo_path = os.path.join(tempfile.gettempdir(), "tag_manager_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Tag Manager Demo")
-    print("=" * 50)
-    
-    memory = Memory(storage="json", path=demo_path)
+def demo():
+    """Demo tag manager"""
+    memory = Memory(storage="json", path="./tag_manager_demo.json")
     manager = TagManager(memory)
     
-    # Add memories with tags
-    print("\n1. Adding memories...")
-    memory.add_with_tags("Fix login bug", tags=["bug", "urgent"])
-    memory.add_with_tags("Add dark mode", tags=["feature", "ui"])
-    memory.add_with_tags("Fix memory leak", tags=["bug", "performance"])
-    memory.add_with_tags("Add export feature", tags=["feature"])
-    memory.add_with_tags("Urgent meeting", tags=["meeting", "urgent"])
+    print("=== Tag Manager Demo ===\n")
     
-    print(f"   Total: {memory.count()}")
+    # Add with tags
+    memory.add("Python tutorial", tags=["python", "tutorial", "beginner"])
+    memory.add("JS tutorial", tags=["javascript", "tutorial", "beginner"])
+    memory.add("Python advanced", tags=["python", "advanced"])
+    memory.add("React guide", tags=["javascript", "frontend"])
     
-    # Get all tags
-    print("\n2. All tags:")
-    all_tags = manager.get_all_tags()
-    print(f"   {all_tags}")
+    # Show all tags
+    print("All tags:")
+    for tag, count in manager.get_all_tags().items():
+        print(f"  {tag}: {count}")
     
-    # Get tag counts
-    print("\n3. Tag counts:")
-    counts = manager.get_tag_counts()
-    for tag, count in counts.items():
-        print(f"   {tag}: {count}")
+    # Merge
+    merged = manager.merge_tags("beginner", "easy")
+    print(f"\nMerged 'beginner' into 'easy': {merged} memories")
     
-    # Suggest tags
-    print("\n4. Tag suggestions:")
-    suggestions = manager.suggest_tags("Add new feature to the UI")
-    print(f"   'Add new feature to the UI' -> {suggestions}")
+    # Co-occurrence
+    print("\nTag co-occurrence:")
+    for pair, count in manager.get_tag_cooccurrence().items():
+        print(f"  {pair[0]} + {pair[1]}: {count}")
     
-    suggestions = manager.suggest_tags("Critical bug in production")
-    print(f"   'Critical bug in production' -> {suggestions}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./tag_manager_demo.json"):
+        os.remove("./tag_manager_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
