@@ -1,143 +1,163 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Scheduled Cleanup
-================================
-Automatically clean up old memories.
-
-Usage:
-    from scheduler import ScheduledCleanup
-    
-    cleanup = ScheduledCleanup(memory)
-    cleanup.run_daily()  # Run daily cleanup
+Memory Scheduler
+Schedule memory operations at specific times
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+from agent_memory import Memory
 import time
 from datetime import datetime, timedelta
-from typing import List, Dict
-from agent_memory import Memory
+from threading import Thread
 
 
-class ScheduledCleanup:
-    """Scheduled cleanup for memory."""
+class MemoryScheduler:
+    """Schedule memory operations"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+        self.scheduled = []  # [(timestamp, callback, args)]
+        self.running = False
+    
+    def schedule(self, timestamp: float, callback: callable, *args):
+        """Schedule a callback"""
+        self.scheduled.append((timestamp, callback, args))
+    
+    def schedule_in(self, seconds: float, callback: callable, *args):
+        """Schedule callback in N seconds"""
+        timestamp = time.time() + seconds
+        self.schedule(timestamp, callback, args)
+    
+    def run(self, check_interval: float = 1.0):
+        """Run scheduler (blocking)"""
+        self.running = True
+        
+        while self.running:
+            now = time.time()
+            
+            # Check due callbacks
+            due = [(ts, cb, args) for ts, cb, args in self.scheduled if ts <= now]
+            
+            for ts, cb, args in due:
+                try:
+                    cb(*args)
+                except Exception as e:
+                    print(f"Scheduler error: {e}")
+                self.scheduled.remove((ts, cb, args))
+            
+            time.sleep(check_interval)
+    
+    def start_daemon(self):
+        """Start scheduler in background thread"""
+        thread = Thread(target=self.run, daemon=True)
+        thread.start()
+    
+    def stop(self):
+        """Stop scheduler"""
+        self.running = False
+
+
+class Reminder:
+    """Memory-based reminders"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
     
-    def get_old_memories(self, days: int = 30) -> List[dict]:
-        """Get memories older than specified days."""
-        cutoff = datetime.now() - timedelta(days=days)
-        cutoff_str = cutoff.isoformat()
+    def add_reminder(self, content: str, remind_at: str):
+        """Add a reminder
         
-        all_memories = self.memory.get_recent(limit=self.memory.count())
-        old = [m for m in all_memories if m.get("timestamp", "") < cutoff_str]
+        Args:
+            content: What to remember
+            remind_at: ISO timestamp or relative (e.g., "+1h", "2026-03-20 10:00")
+        """
+        # Parse time
+        if remind_at.startswith("+"):
+            # Relative time
+            value = int(remind_at[1:-1])
+            unit = remind_at[-1]
+            
+            if unit == "m":
+                delta = timedelta(minutes=value)
+            elif unit == "h":
+                delta = timedelta(hours=value)
+            elif unit == "d":
+                delta = timedelta(days=value)
+            else:
+                delta = timedelta(seconds=value)
+            
+            remind_time = datetime.now() + delta
+        else:
+            remind_time = datetime.fromisoformat(remind_at)
         
-        return old
+        # Store with metadata
+        self.memory.add(
+            content,
+            metadata={
+                "_reminder": True,
+                "remind_at": remind_time.isoformat()
+            }
+        )
     
-    def cleanup_old(self, days: int = 30, min_priority: int = 3) -> int:
-        """Clean up old memories with low priority."""
-        old = self.get_old_memories(days)
-        
-        deleted = 0
-        for mem in old:
-            priority = mem.get("priority", 0)
-            if priority < min_priority:
-                if self.memory.delete(mem["id"]):
-                    deleted += 1
-        
-        return deleted
-    
-    def cleanup_by_tag(self, tag: str) -> int:
-        """Clean up memories with specific tag."""
-        tagged = self.memory.get_by_tag(tag)
-        
-        deleted = 0
-        for mem in tagged:
-            if self.memory.delete(mem["id"]):
-                deleted += 1
-        
-        return deleted
-    
-    def get_stats(self) -> dict:
-        """Get cleanup statistics."""
-        total = self.memory.count()
-        
-        # Count by age
+    def get_due(self) -> list:
+        """Get due reminders"""
         now = datetime.now()
-        ages = {"week": 0, "month": 0, "older": 0}
+        due = []
         
-        recent = self.memory.get_recent(limit=total)
-        for mem in recent:
-            ts = mem.get("timestamp", "")
-            if ts:
-                try:
-                    mem_time = datetime.fromisoformat(ts[:19])
-                    age = (now - mem_time).days
-                    
-                    if age < 7:
-                        ages["week"] += 1
-                    elif age < 30:
-                        ages["month"] += 1
-                    else:
-                        ages["older"] += 1
-                except:
-                    pass
+        for mem in self.memory.get_all():
+            meta = mem.get("metadata", {})
+            
+            if meta.get("_reminder"):
+                remind_at = meta.get("remind_at")
+                if remind_at:
+                    remind_time = datetime.fromisoformat(remind_at)
+                    if remind_time <= now:
+                        due.append(mem)
         
-        return {
-            "total": total,
-            "age_distribution": ages,
-            "can_cleanup": ages["older"]
-        }
+        return due
+    
+    def clear_old(self) -> int:
+        """Clear old reminders"""
+        now = datetime.now()
+        cleared = 0
+        
+        for mem in self.memory.get_all():
+            meta = mem.get("metadata", {})
+            
+            if meta.get("_reminder"):
+                remind_at = meta.get("remind_at")
+                if remind_at:
+                    remind_time = datetime.fromisoformat(remind_at)
+                    if remind_time <= now:
+                        self.memory.forget(mem["id"])
+                        cleared += 1
+        
+        return cleared
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+def demo():
+    """Demo scheduler"""
+    memory = Memory(storage="json", path="./scheduler_demo.json")
+    scheduler = MemoryScheduler(memory)
+    reminder = Reminder(memory)
     
-    demo_path = os.path.join(tempfile.gettempdir(), "cleanup_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    print("=== Memory Scheduler Demo ===\n")
     
-    print("🤖 Agent Memory - Scheduled Cleanup Demo")
-    print("=" * 50)
+    # Add reminders
+    reminder.add_reminder("Meeting at 3pm", "+1m")  # Due in 1 minute
+    reminder.add_reminder("Call mom", "+2m")
+    reminder.add_reminder("Review PR", "+5m")
     
-    memory = Memory(storage="json", path=demo_path)
+    print("Added 3 reminders (will be due soon)")
     
-    # Add some memories
-    print("\n1. Adding memories...")
-    memory.add("Task A", metadata={"priority": 1})
-    memory.add("Task B", metadata={"priority": 2})
-    memory.add("Task C", metadata={"priority": 3})
-    memory.add("Task D", metadata={"priority": 4})
-    memory.add("Task E", metadata={"priority": 5})
+    # Check immediately (won't be due yet)
+    due = reminder.get_due()
+    print(f"Due now: {len(due)}")
     
-    print(f"   Total: {memory.count()}")
+    # Show scheduled
+    print(f"Scheduled tasks: {len(scheduler.scheduled)}")
     
     # Cleanup
-    cleanup = ScheduledCleanup(memory)
-    
-    print("\n2. Cleanup stats:")
-    stats = cleanup.get_stats()
-    print(f"   Total: {stats['total']}")
-    print(f"   Age distribution: {stats['age_distribution']}")
-    print(f"   Can cleanup (older): {stats['can_cleanup']}")
-    
-    print("\n3. Cleanup low priority (P<3):")
-    deleted = cleanup.cleanup_old(days=0, min_priority=3)
-    print(f"   Deleted: {deleted}")
-    print(f"   Remaining: {memory.count()}")
-    
-    # Show remaining
-    print("\n4. Remaining memories:")
-    recent = memory.get_recent(limit=10)
-    for mem in recent:
-        p = mem.get("priority", 0)
-        print(f"   [P{p}] {mem['text']}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    import os
+    if os.path.exists("./scheduler_demo.json"):
+        os.remove("./scheduler_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
