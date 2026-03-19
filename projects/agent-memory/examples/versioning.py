@@ -1,145 +1,137 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Version Control
-===============================
-Version control for memories.
-
-Usage:
-    from versioning import VersionedMemory
-    
-    memory = VersionedMemory()
-    memory.add("Original text")
-    memory.update("memory_id", "Updated text")
-    history = memory.get_history("memory_id")
+Memory Version Control
+Track changes to memories over time
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import time
-from typing import List, Dict, Optional
 from agent_memory import Memory
+import json
+from datetime import datetime
 
 
-class VersionedMemory(Memory):
-    """Memory with version control."""
+class VersionedMemory:
+    """Memory with version control"""
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.versions: Dict[str, List[dict]] = {}
+    def __init__(self, memory: Memory, versions_path: str = "./versions"):
+        self.memory = memory
+        self.versions_path = versions_path
+        self.versions = {}  # mem_id -> list of versions
     
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None) -> str:
-        """Add memory and create initial version."""
-        memory_id = super().add(text, metadata, ttl_days)
+    def add(self, content: str, **kwargs):
+        """Add with versioning"""
+        mem_id = self.memory.add(content, **kwargs)
         
-        # Create initial version
-        self.versions[memory_id] = [{
-            "version": 1,
-            "text": text,
-            "timestamp": time.time(),
-            "metadata": metadata
-        }]
+        # Store initial version
+        self._save_version(mem_id, content, "create")
         
-        return memory_id
+        return mem_id
     
-    def update(self, memory_id: str, new_text: str) -> bool:
-        """Update memory and create new version."""
-        # Get current memory
-        recent = self.get_recent(limit=self.count())
-        found = None
-        for mem in recent:
-            if mem["id"] == memory_id:
-                found = mem
-                break
+    def update(self, mem_id: str, **updates):
+        """Update with versioning"""
+        # Get current
+        mem = self.memory.get(mem_id)
+        if not mem:
+            return None
         
-        if not found:
-            return False
+        # Save current as new version
+        self._save_version(mem_id, mem.get("content", ""), "update")
         
-        # Delete old
-        self.delete(memory_id)
+        # Apply update
+        result = self.memory.update(mem_id, **updates)
         
-        # Add new
-        metadata = found.get("metadata", {})
-        new_id = self.add(new_text, metadata)
+        # Save new version
+        updated = self.memory.get(mem_id)
+        self._save_version(mem_id, updated.get("content", ""), "update")
         
-        # Copy version history
-        if memory_id in self.versions:
-            old_versions = self.versions[memory_id].copy()
-            new_version = {
-                "version": len(old_versions) + 1,
-                "text": new_text,
-                "timestamp": time.time(),
-                "metadata": metadata
-            }
-            old_versions.append(new_version)
-            self.versions[new_id] = old_versions
-        
-        return True
+        return result
     
-    def get_history(self, memory_id: str) -> List[dict]:
-        """Get version history of a memory."""
-        return self.versions.get(memory_id, [])
+    def forget(self, mem_id: str):
+        """Delete with versioning"""
+        mem = self.memory.get(mem_id)
+        
+        if mem:
+            self._save_version(mem_id, mem.get("content", ""), "delete")
+        
+        return self.memory.forget(mem_id)
     
-    def revert_to(self, memory_id: str, version: int) -> bool:
-        """Revert memory to a specific version."""
-        history = self.get_history(memory_id)
+    def _save_version(self, mem_id: str, content: str, action: str):
+        """Save a version"""
+        if mem_id not in self.versions:
+            self.versions[mem_id] = []
         
-        target = None
-        for v in history:
-            if v["version"] == version:
-                target = v
-                break
+        self.versions[mem_id].append({
+            "content": content,
+            "action": action,
+            "timestamp": datetime.now().isoformat()
+        })
+    
+    def get_history(self, mem_id: str) -> list:
+        """Get version history"""
+        return self.versions.get(mem_id, [])
+    
+    def restore(self, mem_id: str, version_index: int) -> bool:
+        """Restore to a specific version"""
+        history = self.get_history(mem_id)
         
-        if not target:
-            return False
+        if 0 <= version_index < len(history):
+            version = history[version_index]
+            self.memory.update(mem_id, content=version["content"])
+            return True
         
-        return self.update(memory_id, target["text"])
+        return False
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+class DiffViewer:
+    """Compare memory versions"""
     
-    demo_path = os.path.join(tempfile.gettempdir(), "version_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    @staticmethod
+    def diff(v1: str, v2: str) -> dict:
+        """Simple diff between two versions"""
+        words1 = v1.split()
+        words2 = v2.split()
+        
+        added = set(words2) - set(words1)
+        removed = set(words1) - set(words2)
+        
+        return {
+            "added": list(added),
+            "removed": list(removed),
+            "unchanged": list(set(words1) & set(words2))
+        }
+
+
+def demo():
+    """Demo version control"""
+    memory = Memory(storage="json", path="./version_demo.json")
+    vmem = VersionedMemory(memory)
     
-    print("🤖 Agent Memory - Version Control Demo")
-    print("=" * 50)
+    print("=== Versioned Memory Demo ===\n")
     
-    memory = VersionedMemory(storage="json", path=demo_path)
-    
-    # Add memory
-    print("\n1. Adding memory...")
-    memory_id = memory.add("Original task description")
-    print(f"   ID: {memory_id}")
-    print(f"   Text: Original task description")
+    # Add
+    mem_id = vmem.add("Initial content: Hello world")
+    print(f"Added memory: {mem_id}")
     
     # Update
-    print("\n2. Updating memory...")
-    memory.update(memory_id, "Updated task description - added priority")
-    print(f"   Text: Updated task description - added priority")
+    vmem.update(mem_id, content="Updated: Hello world, welcome!")
+    print("Updated memory")
     
-    # Update again
-    print("\n3. Updating again...")
-    memory.update(memory_id, "Final task description - complete")
-    print(f"   Text: Final task description - complete")
+    # Get history
+    history = vmem.get_history(mem_id)
+    print(f"\nVersion history ({len(history)} versions):")
+    for i, v in enumerate(history):
+        print(f"  {i}: {v['action']} at {v['timestamp'][:19]}")
+        print(f"      {v['content'][:50]}")
     
-    # Show history
-    print("\n4. Version history:")
-    history = memory.get_history(memory_id)
-    for v in history:
-        print(f"   v{v['version']}: {v['text']}")
+    # Show diff
+    if len(history) >= 2:
+        diff = DiffViewer.diff(history[0]["content"], history[-1]["content"])
+        print(f"\nDiff:")
+        print(f"  Added: {diff['added']}")
+        print(f"  Removed: {diff['removed']}")
     
-    # Revert
-    print("\n5. Reverting to v1...")
-    memory.revert_to(memory_id, 1)
-    recent = memory.get_recent(limit=1)
-    if recent and recent[0]["id"] == memory_id:
-        print(f"   Current: {recent[0]['text']}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./version_demo.json"):
+        os.remove("./version_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
