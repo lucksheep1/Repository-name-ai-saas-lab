@@ -6,7 +6,8 @@ import socket
 
 
 def demo():
-    print(socket.gethostname())
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print(s)
 
 
 if __name__ == "__main__":
