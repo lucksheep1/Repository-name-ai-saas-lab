@@ -1,196 +1,96 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Mobile API
-=========================
-Optimized API for mobile apps.
-
-Features:
-- Lightweight responses
-- Compression
-- Batch operations
-- Offline sync
-
-Usage:
-    python mobile_api.py
+Memory Mobile API
+Mobile-friendly API endpoints
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import json
-import zlib
-import base64
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agent_memory import Memory
 
-app = FastAPI(title="Agent Memory Mobile API")
 
-# Lightweight memory store
-memory = Memory(storage="json", path="./memory.json")
-
-
-# Lightweight models
-class MemoryItem(BaseModel):
-    id: str
-    text: str
-    timestamp: str
-
-
-class AddRequest(BaseModel):
-    text: str
-    tags: Optional[List[str]] = None
-
-
-class SearchRequest(BaseModel):
-    query: str
-    limit: int = 10
-
-
-# Routes
-@app.get("/")
-def root():
-    return {"api": "Agent Memory Mobile", "version": "1.0"}
-
-
-@app.get("/sync")
-def sync(since: str = ""):
-    """Get changes since timestamp."""
-    # Get all memories (simplified)
-    recent = memory.get_recent(limit=100)
+class MobileAPI:
+    """Mobile-friendly API"""
     
-    # Filter by timestamp if provided
-    if since:
-        recent = [m for m in recent if m.get("timestamp", "") > since]
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    # Return lightweight format
-    return {
-        "memories": [
-            {
-                "i": m["id"][:8],  # Short ID
-                "t": m["text"],
-                "ts": m["timestamp"][:19],
-                "tg": m.get("tags", [])
-            }
-            for m in recent
-        ],
-        "count": len(recent)
-    }
-
-
-@app.post("/add")
-def add(item: AddRequest):
-    """Add memory (lightweight)."""
-    if item.tags:
-        memory_id = memory.add_with_tags(item.text, tags=item.tags)
-    else:
-        memory_id = memory.add(item.text)
+    def get_timeline(self, limit: int = 20, offset: int = 0) -> dict:
+        """Get timeline for mobile"""
+        all_memories = self.memory.get_all()
+        
+        total = len(all_memories)
+        memories = all_memories[offset:offset + limit]
+        
+        return {
+            "success": True,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+            "memories": memories
+        }
     
-    return {"id": memory_id[:8], "status": "ok"}
-
-
-@app.post("/batch")
-def batch_add(items: List[AddRequest]):
-    """Add multiple memories."""
-    ids = []
-    for item in items:
-        if item.tags:
-            memory_id = memory.add_with_tags(item.text, tags=item.tags)
-        else:
-            memory_id = memory.add(item.text)
-        ids.append(memory_id[:8])
+    def search_mobile(self, query: str, limit: int = 10) -> dict:
+        """Mobile search"""
+        results = self.memory.search(query, limit=limit)
+        
+        return {
+            "success": True,
+            "query": query,
+            "count": len(results),
+            "results": results
+        }
     
-    return {"ids": ids, "count": len(ids)}
-
-
-@app.post("/search")
-def search(request: SearchRequest):
-    """Search (lightweight)."""
-    results = memory.search(request.query, top_k=request.limit)
+    def quick_add(self, content: str, tags: str = None) -> dict:
+        """Quick add from mobile"""
+        tag_list = []
+        
+        if tags:
+            tag_list = [t.strip() for t in tags.split(",")]
+        
+        mem_id = self.memory.add(content, tags=tag_list)
+        
+        return {
+            "success": True,
+            "id": mem_id
+        }
     
-    return {
-        "results": [
-            {
-                "i": m["id"][:8],
-                "t": m["text"],
-                "tg": m.get("tags", [])
-            }
-            for m in results
-        ]
-    }
+    def get_stats(self) -> dict:
+        """Get memory stats"""
+        memories = self.memory.get_all()
+        
+        tag_counts = {}
+        for mem in memories:
+            for tag in mem.get("tags", []):
+                tag_counts[tag] = tag_counts.get(tag, 0) + 1
+        
+        return {
+            "success": True,
+            "total": len(memories),
+            "tags": tag_counts
+        }
 
 
-@app.get("/recent")
-def recent(limit: int = 20):
-    """Get recent memories (lightweight)."""
-    recent = memory.get_recent(limit=limit)
+def demo():
+    """Demo mobile API"""
+    memory = Memory(storage="json", path="./mobile_demo.json")
+    api = MobileAPI(memory)
     
-    return {
-        "memories": [
-            {
-                "i": m["id"][:8],
-                "t": m["text"],
-                "ts": m["timestamp"][:19],
-                "tg": m.get("tags", [])
-            }
-            for m in recent
-        ]
-    }
-
-
-@app.get("/context")
-def context(max_tokens: int = 500):
-    """Get context (lightweight)."""
-    context = memory.get_context(max_tokens=max_tokens)
-    return {"context": context}
-
-
-@app.delete("/{memory_id}")
-def delete(memory_id: str):
-    """Delete memory (supports short ID)."""
-    # Try full ID first
-    success = memory.delete(memory_id)
+    print("=== Mobile API Demo ===\n")
     
-    if not success:
-        # Try short ID - search for it
-        recent = memory.get_recent(limit=100)
-        for m in recent:
-            if m["id"].startswith(memory_id):
-                success = memory.delete(m["id"])
-                break
+    # Add memories
+    memory.add("Test 1", tags=["a", "b"])
+    memory.add("Test 2", tags=["a"])
     
-    if success:
-        return {"status": "deleted"}
-    raise HTTPException(status_code=404, detail="Not found")
-
-
-@app.get("/stats")
-def stats():
-    """Get stats."""
-    return {
-        "count": memory.count(),
-        "tags": list(set(
-            tag 
-            for mem in memory.get_recent(limit=100) 
-            for tag in mem.get("tags", [])
-        ))
-    }
+    # Timeline
+    result = api.get_timeline()
+    print(f"Timeline: {result['total']} total")
+    
+    # Stats
+    stats = api.get_stats()
+    print(f"Stats: {stats['tags']}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./mobile_demo.json"):
+        os.remove("./mobile_demo.json")
 
 
 if __name__ == "__main__":
-    import uvicorn
-    print("📱 Starting Mobile API...")
-    print("Endpoints:")
-    print("  GET  /sync?since=<timestamp>")
-    print("  POST /add")
-    print("  POST /batch")
-    print("  POST /search")
-    print("  GET  /recent")
-    print("  GET  /context")
-    print("  DELETE /<id>")
-    print("  GET  /stats")
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    demo()
