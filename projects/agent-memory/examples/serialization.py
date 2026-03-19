@@ -1,88 +1,103 @@
 """
 Memory Serialization
-Serialize/deserialize memory to various formats
+Serialize/deserialize memories
 """
 from agent_memory import Memory
 import pickle
-import base64
 import json
 
 
 class MemorySerializer:
     """Serialize memories"""
     
-    def to_dict(self, memory: Memory) -> dict:
-        """Serialize to dict"""
-        return {
-            "version": "1.0",
-            "memories": memory.get_all()
-        }
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    def to_json(self, memory: Memory) -> str:
-        """Serialize to JSON string"""
-        return json.dumps(self.to_dict(memory), indent=2)
+    def to_dict(self) -> list:
+        """Convert to dict"""
+        return self.memory.get_all()
     
-    def to_pickle(self, memory: Memory) -> bytes:
-        """Serialize to pickle bytes"""
-        return pickle.dumps(self.to_dict(memory))
-    
-    def to_base64(self, memory: Memory) -> str:
-        """Serialize to base64 string"""
-        return base64.b64encode(self.to_pickle(memory)).decode()
-    
-    def from_dict(self, data: dict, target: Memory) -> int:
-        """Restore from dict"""
-        memories = data.get("memories", [])
+    def to_json(self, filepath: str = None) -> str:
+        """Convert to JSON string"""
+        data = self.to_dict()
+        json_str = json.dumps(data, indent=2, default=str)
         
-        imported = 0
-        for mem in memories:
-            target.add(
-                content=mem.get("content", ""),
-                tags=mem.get("tags", []),
-                metadata=mem.get("metadata", {})
+        if filepath:
+            with open(filepath, "w") as f:
+                f.write(json_str)
+        
+        return json_str
+    
+    def to_pickle(self, filepath: str = None) -> bytes:
+        """Convert to pickle bytes"""
+        data = self.to_dict()
+        pickled = pickle.dumps(data)
+        
+        if filepath:
+            with open(filepath, "wb") as f:
+                f.write(pickled)
+        
+        return pickled
+    
+    def from_dict(self, data: list):
+        """Load from dict"""
+        for item in data:
+            self.memory.add(
+                content=item.get("content", ""),
+                tags=item.get("tags", []),
+                metadata=item.get("metadata", {}),
+                priority=item.get("priority")
             )
-            imported += 1
+    
+    def from_json(self, json_str: str = None, filepath: str = None):
+        """Load from JSON"""
+        if filepath:
+            with open(filepath, "r") as f:
+                data = json.load(f)
+        else:
+            data = json.loads(json_str)
         
-        return imported
+        self.from_dict(data)
     
-    def from_json(self, json_str: str, target: Memory) -> int:
-        """Restore from JSON"""
-        data = json.loads(json_str)
-        return self.from_dict(data, target)
-    
-    def from_pickle(self, data: bytes, target: Memory) -> int:
-        """Restore from pickle"""
-        data = pickle.loads(data)
-        return self.from_dict(data, target)
+    def from_pickle(self, pickled: bytes = None, filepath: str = None):
+        """Load from pickle"""
+        if filepath:
+            with open(filepath, "rb") as f:
+                data = pickle.load(f)
+        else:
+            data = pickle.loads(pickled)
+        
+        self.from_dict(data)
 
 
 def demo():
     """Demo serialization"""
-    memory = Memory(storage="json", path="./serial_demo.json")
+    source = Memory(storage="json", path="./serial_source.json")
+    source.add("Memory 1")
+    source.add("Memory 2", tags=["test"])
     
-    print("=== Memory Serialization Demo ===\n")
-    
-    # Add memories
-    memory.add("Test 1", tags=["a"])
-    memory.add("Test 2", tags=["b"])
+    print("=== Serialization Demo ===\n")
     
     # Serialize
-    serializer = MemorySerializer()
+    serializer = MemorySerializer(source)
     
-    json_str = serializer.to_json(memory)
-    print(f"JSON length: {len(json_str)} chars")
+    json_str = serializer.to_json()
+    print(f"JSON: {json_str[:100]}...")
     
-    b64 = serializer.to_base64(memory)
-    print(f"Base64 length: {len(b64)} chars")
+    # Save to file
+    serializer.to_json("./serial_backup.json")
+    print("Saved to serial_backup.json")
     
-    # Restore to new memory
-    new_memory = Memory(storage="json", path="./serial_restore.json")
-    imported = serializer.from_json(json_str, new_memory)
-    print(f"Restored: {imported} memories")
+    # Load to new memory
+    target = Memory(storage="json", path="./serial_target.json")
+    loader = MemorySerializer(target)
+    loader.from_json(filepath="./serial_backup.json")
+    
+    print(f"Loaded: {len(target.get_all())} memories")
     
     # Cleanup
     import os
-    for f in ["./serial_demo.json", "./serial_restore.json"]:
+    for f in ["./serial_source.json", "./serial_target.json", "./serial_backup.json"]:
         if os.path.exists(f):
             os.remove(f)
 
