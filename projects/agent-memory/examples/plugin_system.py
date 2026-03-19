@@ -1,155 +1,151 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Plugin System
-============================
-Extend memory with plugins.
-
-Usage:
-    from plugin_system import MemoryWithPlugins
-    
-    memory = MemoryWithPlugins()
-    memory.register_plugin(TimestampPlugin())
-    memory.register_plugin(KeywordExtractor())
+Memory Plugins
+Extensible plugin system for memory
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import re
-from typing import List, Dict, Any, Callable
-from datetime import datetime
 from agent_memory import Memory
+from typing import Dict, Any, Callable
 
 
 class MemoryPlugin:
-    """Base class for memory plugins."""
+    """Base plugin class"""
     
-    def on_add(self, memory_id: str, text: str, metadata: dict) -> dict:
-        """Called when memory is added. Return updated metadata."""
-        return metadata
+    name = "base"
+    version = "1.0"
     
-    def on_search(self, query: str, results: List[dict]) -> List[dict]:
-        """Called after search. Return filtered/modified results."""
-        return results
-
-
-class TimestampPlugin(MemoryPlugin):
-    """Add timestamp to metadata."""
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    def on_add(self, memory_id: str, text: str, metadata: dict) -> dict:
-        metadata = metadata or {}
-        metadata["added_at"] = datetime.now().isoformat()
-        return metadata
-
-
-class KeywordExtractor(MemoryPlugin):
-    """Extract keywords from text."""
+    def on_add(self, mem_id: str, content: str, kwargs: dict):
+        """Called when memory is added"""
+        pass
     
-    def on_add(self, memory_id: str, text: str, metadata: dict) -> dict:
-        metadata = metadata or {}
-        # Simple keyword extraction
-        words = re.findall(r'\b\w+\b', text.lower())
-        # Filter common words
-        stopwords = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'to', 'of', 'and', 'in', 'for', 'on', 'at'}
-        keywords = [w for w in words if w not in stopwords and len(w) > 2]
-        metadata["keywords"] = list(set(keywords))[:5]
-        return metadata
-
-
-class SentimentPlugin(MemoryPlugin):
-    """Simple sentiment analysis."""
+    def on_search(self, results: list, query: str):
+        """Called when search happens"""
+        pass
     
-    def on_add(self, memory_id: str, text: str, metadata: dict) -> dict:
-        metadata = metadata or {}
-        text_lower = text.lower()
-        
-        positive_words = ['good', 'great', 'awesome', 'love', 'like', 'happy', 'excellent']
-        negative_words = ['bad', 'hate', 'terrible', 'awful', 'sad', 'angry', 'problem']
-        
-        pos_count = sum(1 for w in positive_words if w in text_lower)
-        neg_count = sum(1 for w in negative_words if w in text_lower)
-        
-        if pos_count > neg_count:
-            metadata["sentiment"] = "positive"
-        elif neg_count > pos_count:
-            metadata["sentiment"] = "negative"
-        else:
-            metadata["sentiment"] = "neutral"
-        
-        return metadata
+    def on_get(self, mem: dict):
+        """Called when memory is retrieved"""
+        pass
 
 
-class MemoryWithPlugins(Memory):
-    """Memory with plugin support."""
+class PluginManager:
+    """Manage memory plugins"""
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.plugins: List[MemoryPlugin] = []
+    def __init__(self, memory: Memory):
+        self.memory = memory
+        self.plugins: Dict[str, MemoryPlugin] = {}
     
-    def register_plugin(self, plugin: MemoryPlugin):
-        """Register a plugin."""
-        self.plugins.append(plugin)
+    def register(self, plugin: MemoryPlugin):
+        """Register a plugin"""
+        self.plugins[plugin.name] = plugin
     
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None) -> str:
-        """Add memory with plugin processing."""
-        # Run through plugins
-        for plugin in self.plugins:
-            metadata = plugin.on_add("", text, metadata)
-        
-        # Add memory
-        memory_id = super().add(text, metadata, ttl_days)
-        
-        # Update metadata with ID
-        for plugin in self.plugins:
-            metadata = plugin.on_add(memory_id, text, metadata)
-        
-        return memory_id
+    def unregister(self, name: str):
+        """Unregister a plugin"""
+        if name in self.plugins:
+            del self.plugins[name]
     
-    def search(self, query: str, top_k: int = 5) -> List[dict]:
-        """Search with plugin post-processing."""
-        results = super().search(query, top_k)
-        
-        # Run through plugins
-        for plugin in self.plugins:
-            results = plugin.on_search(query, results)
-        
-        return results
+    def trigger_add(self, mem_id: str, content: str, kwargs: dict):
+        """Trigger on_add for all plugins"""
+        for plugin in self.plugins.values():
+            plugin.on_add(mem_id, content, kwargs)
+    
+    def trigger_search(self, results: list, query: str):
+        """Trigger on_search for all plugins"""
+        for plugin in self.plugins.values():
+            plugin.on_search(results, query)
+    
+    def trigger_get(self, mem: dict):
+        """Trigger on_get for all plugins"""
+        for plugin in self.plugins.values():
+            plugin.on_get(mem)
 
 
-# Demo
+# Example plugins
+class LoggingPlugin(MemoryPlugin):
+    """Log all memory operations"""
+    name = "logging"
+    
+    def on_add(self, mem_id: str, content: str, kwargs: dict):
+        print(f"📝 [{self.name}] Added: {content[:30]}...")
+
+
+class AnalyticsPlugin(MemoryPlugin):
+    """Track memory analytics"""
+    name = "analytics"
+    
+    def __init__(self, memory):
+        super().__init__(memory)
+        self.stats = {"adds": 0, "searches": 0, "gets": 0}
+    
+    def on_add(self, mem_id: str, content: str, kwargs: dict):
+        self.stats["adds"] += 1
+    
+    def on_search(self, results: list, query: str):
+        self.stats["searches"] += 1
+    
+    def on_get(self, mem: dict):
+        self.stats["gets"] += 1
+    
+    def get_stats(self):
+        return self.stats
+
+
+class FilterPlugin(MemoryPlugin):
+    """Filter certain content"""
+    name = "filter"
+    
+    def __init__(self, memory, blocked_words: list = None):
+        super().__init__(memory)
+        self.blocked_words = blocked_words or ["password", "secret", "token"]
+    
+    def on_add(self, mem_id: str, content: str, kwargs: dict):
+        content_lower = content.lower()
+        
+        for word in self.blocked_words:
+            if word in content_lower:
+                print(f"🚫 [{self.name}] Blocked: contains '{word}'")
+                self.memory.forget(mem_id)
+                break
+
+
+class HighlightPlugin(MemoryPlugin):
+    """Highlight important memories"""
+    name = "highlight"
+    
+    def on_add(self, mem_id: str, content: str, kwargs: dict):
+        # Auto-highlight urgent/important
+        if any(w in content.lower() for w in ["urgent", "important", "critical"]):
+            print(f"⭐ [{self.name}] Highlighted: {content[:30]}...")
+
+
+def demo():
+    """Demo plugins"""
+    memory = Memory(storage="json", path="./plugin_demo.json")
+    manager = PluginManager(memory)
+    
+    print("=== Memory Plugins Demo ===\n")
+    
+    # Register plugins
+    manager.register(LoggingPlugin(memory))
+    analytics = AnalyticsPlugin(memory)
+    manager.register(analytics)
+    manager.register(FilterPlugin(memory))
+    manager.register(HighlightPlugin(memory))
+    
+    # Add memories (plugins will trigger)
+    print("Adding memories:\n")
+    memory.add("Normal conversation")
+    memory.add("Important meeting tomorrow")
+    memory.add("Critical bug found")
+    
+    # Show analytics
+    print(f"\nAnalytics: {analytics.get_stats()}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./plugin_demo.json"):
+        os.remove("./plugin_demo.json")
+
+
 if __name__ == "__main__":
-    import tempfile
-    
-    demo_path = os.path.join(tempfile.gettempdir(), "plugin_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Plugin System Demo")
-    print("=" * 50)
-    
-    # Create memory with plugins
-    memory = MemoryWithPlugins(storage="json", path=demo_path)
-    memory.register_plugin(TimestampPlugin())
-    memory.register_plugin(KeywordExtractor())
-    memory.register_plugin(SentimentPlugin())
-    
-    # Add memories
-    print("\n1. Adding memories with plugins...")
-    memory.add("I love this great product!", metadata={"source": "user"})
-    memory.add("There is a bad bug in the system", metadata={"source": "user"})
-    memory.add("Working on a new Python project", metadata={"source": "user"})
-    
-    # Get recent with metadata
-    print("\n2. Recent memories with metadata:")
-    recent = memory.get_recent(limit=3)
-    for mem in recent:
-        print(f"   Text: {mem['text']}")
-        print(f"   Keywords: {mem.get('metadata', {}).get('keywords', [])}")
-        print(f"   Sentiment: {mem.get('metadata', {}).get('sentiment', 'N/A')}")
-        print()
-    
-    print("✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    demo()
