@@ -6,7 +6,7 @@ import time
 
 
 def demo():
-    print(time.gmtime())
+    print(time.tzname)
 
 
 if __name__ == "__main__":
