@@ -3,76 +3,103 @@ Memory Middleware
 Middleware for memory operations
 """
 from agent_memory import Memory
+from typing import Callable
 
 
 class MemoryMiddleware:
-    """Base middleware class"""
+    """Base middleware"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
     
-    def on_add(self, content: str, kwargs: dict) -> tuple:
+    def before_add(self, content: str, kwargs: dict) -> tuple:
         """Called before add"""
         return content, kwargs
     
-    def on_get(self, mem: dict) -> dict:
-        """Called after get"""
-        return mem
+    def after_add(self, mem_id: str):
+        """Called after add"""
+        pass
     
-    def on_search(self, results: list) -> list:
+    def before_search(self, query: str, kwargs: dict) -> tuple:
+        """Called before search"""
+        return query, kwargs
+    
+    def after_search(self, results: list):
         """Called after search"""
-        return results
+        pass
 
 
 class LoggingMiddleware(MemoryMiddleware):
     """Log all operations"""
     
-    def on_add(self, content: str, kwargs: dict):
-        print(f"ADD: {content[:30]}...")
-        return super().on_add(content, kwargs)
+    def before_add(self, content: str, kwargs: dict) -> tuple:
+        print(f"📝 Adding: {content[:30]}...")
+        return content, kwargs
     
-    def on_get(self, mem: dict):
-        print(f"GET: {mem.get('id')}")
-        return super().on_get(mem)
+    def after_add(self, mem_id: str):
+        print(f"   → Added: {mem_id}")
+    
+    def before_search(self, query: str, kwargs: dict) -> tuple:
+        print(f"🔍 Searching: {query}")
+        return query, kwargs
+    
+    def after_search(self, results: list):
+        print(f"   → Found: {len(results)} results")
 
 
-class UppercaseMiddleware(MemoryMiddleware):
-    """Convert content to uppercase"""
+class ValidationMiddleware(MemoryMiddleware):
+    """Validate content"""
     
-    def on_add(self, content: str, kwargs: dict):
-        return content.upper(), kwargs
-
-
-class FilterMiddleware(MemoryMiddleware):
-    """Filter content"""
-    
-    def __init__(self, memory: Memory, blocked: list = None):
-        super().__init__(memory)
-        self.blocked = blocked or ["bad", "ugly"]
-    
-    def on_add(self, content: str, kwargs: dict):
-        for word in self.blocked:
-            content = content.replace(word, "*" * len(word))
-        return super().on_add(content, kwargs)
+    def before_add(self, content: str, kwargs: dict) -> tuple:
+        if not content or not content.strip():
+            raise ValueError("Content cannot be empty")
+        
+        if len(content) > 10000:
+            raise ValueError("Content too long")
+        
+        return content.strip(), kwargs
 
 
 class MiddlewareChain:
-    """Chain of middlewares"""
+    """Chain of middleware"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
         self.middlewares = []
     
-    def use(self, middleware: MemoryMiddleware):
+    def add(self, middleware: MemoryMiddleware):
         """Add middleware"""
         self.middlewares.append(middleware)
     
-    def add(self, content: str, **kwargs):
-        """Add with middlewares"""
+    def add_with_middleware(self, content: str, **kwargs):
+        """Add with middleware chain"""
+        # Before
         for mw in self.middlewares:
-            content, kwargs = mw.on_add(content, kwargs)
+            content, kwargs = mw.before_add(content, kwargs)
         
-        return self.memory.add(content, **kwargs)
+        # Add
+        mem_id = self.memory.add(content, **kwargs)
+        
+        # After
+        for mw in self.middlewares:
+            mw.after_add(mem_id)
+        
+        return mem_id
+    
+    def search_with_middleware(self, query: str, **kwargs):
+        """Search with middleware chain"""
+        # Before
+        for mw in self.middlewares:
+            query, kwargs = mw.before_search(query, kwargs)
+        
+        # Search
+        results = self.memory.search(query, **kwargs)
+        
+        # After
+        for mw in self.middlewares:
+            mw.after_search(results)
+        
+        return results
 
 
 def demo():
@@ -80,20 +107,18 @@ def demo():
     memory = Memory(storage="json", path="./middleware_demo.json")
     chain = MiddlewareChain(memory)
     
-    print("=== Memory Middleware Demo ===\n")
+    print("=== Middleware Demo ===\n")
     
-    # Add middlewares
-    chain.use(LoggingMiddleware(memory))
-    chain.use(UppercaseMiddleware(memory))
-    chain.use(FilterMiddleware(memory))
+    # Add middleware
+    chain.add(LoggingMiddleware(memory))
+    chain.add(ValidationMiddleware(memory))
     
-    # Add (will go through all middlewares)
-    chain.add("Hello world")
-    chain.add("This is bad content")
+    # Add with middleware
+    chain.add_with_middleware("Test memory")
+    chain.add_with_middleware("Another test")
     
-    print("\nMemories:")
-    for m in memory.get_all():
-        print(f"  {m.get('content')}")
+    print("\nSearch:")
+    chain.search_with_middleware("test")
     
     # Cleanup
     import os
