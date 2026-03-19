@@ -6,7 +6,11 @@ import csv
 
 
 def demo():
-    print("csv ready")
+    import io
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["a", "b"])
+    print(output.getvalue())
 
 
 if __name__ == "__main__":
