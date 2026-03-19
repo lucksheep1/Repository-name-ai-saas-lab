@@ -6,18 +6,14 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Point:
-    x: int
-    y: int
-    
-    def __post_init__(self):
-        if self.x < 0 or self.y < 0:
-            raise ValueError("Coordinates must be positive")
+class Config:
+    host: str = "localhost"
+    port: int = 8080
 
 
 def demo():
-    p = Point(1, 2)
-    print(p)
+    c = Config()
+    print(c.host, c.port)
 
 
 if __name__ == "__main__":
