@@ -7,10 +7,13 @@ import sqlite3
 
 def demo():
     conn = sqlite3.connect(":memory:")
-    conn.execute("CREATE TABLE users (id INT, name TEXT)")
-    conn.execute("INSERT INTO users VALUES (1, 'Alice')")
-    conn.execute("INSERT INTO users VALUES (2, 'Bob')")
-    print(conn.execute("SELECT COUNT(*) FROM users").fetchone()[0])
+    conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)")
+    conn.execute("INSERT INTO test (name) VALUES (?)", ("Alice",))
+    conn.execute("INSERT INTO test (name) VALUES (?)", ("Bob",))
+    cursor = conn.execute("SELECT * FROM test")
+    for row in cursor:
+        print(row)
+    conn.close()
 
 
 if __name__ == "__main__":
