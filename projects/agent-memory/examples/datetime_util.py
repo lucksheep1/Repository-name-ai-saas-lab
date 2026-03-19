@@ -1,15 +1,13 @@
 """
-Memory DateTime
-DateTime utilities
+Memory datetime
+datetime utilities
 """
-from memory import Memory
 from datetime import datetime, timedelta
 
 
 def demo():
     now = datetime.now()
-    delta = timedelta(days=1)
-    print(now + delta)
+    print(now + timedelta(days=7))
 
 
 if __name__ == "__main__":
