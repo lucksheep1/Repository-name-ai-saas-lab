@@ -2,12 +2,12 @@
 Memory datetime_example6
 datetime_example6
 """
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def demo():
-    now = datetime.now()
-    print(now.year, now.month, now.day)
+    now_utc = datetime.now(timezone.utc)
+    print(now_utc.isoformat())
 
 
 if __name__ == "__main__":
