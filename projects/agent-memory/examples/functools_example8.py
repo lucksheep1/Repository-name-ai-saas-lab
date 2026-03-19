@@ -13,7 +13,7 @@ def fib(n):
 
 
 def demo():
-    print(fib(10))
+    print(fib(20))
 
 
 if __name__ == "__main__":
