@@ -6,7 +6,9 @@ import itertools
 
 
 def demo():
-    print(list(itertools.islice(itertools.count(1), 5)))
+    a = [1, 2]
+    b = [3, 4]
+    print(list(itertools.chain.from_iterable([a, b])))
 
 
 if __name__ == "__main__":
