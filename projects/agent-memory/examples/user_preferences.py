@@ -1,136 +1,105 @@
-#!/usr/bin/env python3
 """
-Agent Memory - User Preferences
-==============================
-Store and retrieve user preferences.
-
-Usage:
-    from user_preferences import UserPreferences
-    
-    prefs = UserPreferences()
-    prefs.set("theme", "dark")
-    prefs.set("language", "en")
-    theme = prefs.get("theme")
+Memory User Preferences
+Store and retrieve user preferences
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import Any, Dict, Optional
 from agent_memory import Memory
 
 
-class UserPreferences:
-    """User preferences stored in memory."""
+class Preferences:
+    """User preferences stored in memory"""
     
-    def __init__(self, user_id: str = "default", storage: str = "json", path: str = "./memory.json"):
+    def __init__(self, memory: Memory, user_id: str = "default"):
+        self.memory = memory
         self.user_id = user_id
-        self.memory = Memory(storage=storage, path=path)
         self.prefix = f"pref:{user_id}:"
     
-    def set(self, key: str, value: Any):
-        """Set a preference."""
-        text = f"{self.prefix}{key}: {value}"
-        tags = ["preference", self.user_id]
-        metadata = {"key": key, "value": value, "type": "preference", "user_id": self.user_id}
+    def set(self, key: str, value):
+        """Set preference"""
+        content = f"{key}={value}"
+        mem_id = f"{self.prefix}{key}"
         
-        # Delete old preference first
-        self._delete(key)
+        # Try to update existing
+        existing = self.memory.search(key)
+        
+        for mem in existing:
+            if key in mem.get("content", ""):
+                self.memory.update(mem["id"], content=content)
+                return mem["id"]
         
         # Add new
-        self.memory.add_with_tags(text, tags=tags, metadata=metadata)
+        return self.memory.add(content, tags=["preference", "user"])
     
-    def get(self, key: str, default: Any = None) -> Any:
-        """Get a preference."""
-        recent = self.memory.get_recent(limit=self.memory.count())
+    def get(self, key: str, default=None):
+        """Get preference"""
+        search_results = self.memory.search(key)
         
-        for mem in recent:
-            if mem.get("metadata", {}).get("key") == key:
-                if mem.get("metadata", {}).get("user_id") == self.user_id:
-                    return mem.get("metadata", {}).get("value", default)
+        for mem in search_results:
+            content = mem.get("content", "")
+            
+            if content.startswith(f"{key}="):
+                value = content.split("=", 1)[1]
+                
+                # Try to parse
+                if value.lower() == "true":
+                    return True
+                elif value.lower() == "false":
+                    return False
+                elif value.isdigit():
+                    return int(value)
+                
+                return value
         
         return default
     
-    def _delete(self, key: str):
-        """Delete a preference."""
-        recent = self.memory.get_recent(limit=self.memory.count())
-        
-        for mem in recent:
-            if mem.get("metadata", {}).get("key") == key:
-                if mem.get("metadata", {}).get("user_id") == self.user_id:
-                    self.memory.delete(mem["id"])
-    
-    def delete(self, key: str):
-        """Delete a preference."""
-        self._delete(key)
-    
-    def get_all(self) -> Dict[str, Any]:
-        """Get all preferences."""
-        recent = self.memory.get_recent(limit=self.memory.count())
-        
+    def get_all(self) -> dict:
+        """Get all preferences"""
         prefs = {}
-        for mem in recent:
-            md = mem.get("metadata", {})
-            if md.get("type") == "preference" and md.get("user_id") == self.user_id:
-                key = md.get("key")
-                value = md.get("value")
-                if key:
-                    prefs[key] = value
+        
+        for mem in self.memory.get_all():
+            tags = mem.get("tags", [])
+            
+            if "preference" in tags and "user" in tags:
+                content = mem.get("content", "")
+                
+                if "=" in content:
+                    key, value = content.split("=", 1)
+                    prefs[key] = self.get(key)
         
         return prefs
     
-    def clear(self):
-        """Clear all preferences for user."""
-        recent = self.memory.get_recent(limit=self.memory.count())
-        
-        for mem in recent:
-            if mem.get("metadata", {}).get("user_id") == self.user_id:
-                if "preference" in mem.get("tags", []):
-                    self.memory.delete(mem["id"])
+    def delete(self, key: str):
+        """Delete preference"""
+        for mem in self.memory.get_all():
+            if key in mem.get("content", ""):
+                self.memory.forget(mem["id"])
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+def demo():
+    """Demo preferences"""
+    memory = Memory(storage="json", path="./pref_demo.json")
+    prefs = Preferences(memory, user_id="alice")
     
-    demo_path = os.path.join(tempfile.gettempdir(), "prefs_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - User Preferences Demo")
-    print("=" * 50)
-    
-    prefs = UserPreferences(storage="json", path=demo_path)
+    print("=== Preferences Demo ===\n")
     
     # Set preferences
-    print("\n1. Setting preferences...")
     prefs.set("theme", "dark")
-    prefs.set("language", "en")
-    prefs.set("notifications", True)
-    prefs.set("font_size", 14)
+    prefs.set("notifications", "true")
+    prefs.set("volume", 80)
     
-    print("   Set: theme=dark, language=en, notifications=True, font_size=14")
-    
-    # Get preferences
-    print("\n2. Getting preferences...")
-    print(f"   theme: {prefs.get('theme')}")
-    print(f"   language: {prefs.get('language')}")
-    print(f"   notifications: {prefs.get('notifications')}")
-    print(f"   font_size: {prefs.get('font_size')}")
+    print("Set preferences:")
+    print(f"  theme: {prefs.get('theme')}")
+    print(f"  notifications: {prefs.get('notifications')}")
+    print(f"  volume: {prefs.get('volume')}")
+    print(f"  unknown: {prefs.get('unknown', 'default_value')}")
     
     # Get all
-    print("\n3. All preferences:")
-    all_prefs = prefs.get_all()
-    for key, value in all_prefs.items():
-        print(f"   {key}: {value}")
+    print(f"\nAll prefs: {prefs.get_all()}")
     
-    # Delete one
-    print("\n4. Deleting font_size...")
-    prefs.delete("font_size")
-    print(f"   font_size: {prefs.get('font_size', 'not found')}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./pref_demo.json"):
+        os.remove("./pref_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
