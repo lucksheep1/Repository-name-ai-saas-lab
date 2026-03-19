@@ -6,7 +6,7 @@ import mmap
 
 
 def demo():
-    print("mmap ready")
+    print(mmap.ACCESS_WRITE)
 
 
 if __name__ == "__main__":
