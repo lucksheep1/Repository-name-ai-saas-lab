@@ -1,129 +1,98 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Encrypted Memory
-==============================
-Encrypt sensitive memories.
-
-Usage:
-    from encrypted import EncryptedMemory
-    
-    memory = EncryptedMemory(secret_key="my-secret-key")
-    memory.add("Sensitive data")
+Memory Encryption
+Secure memory storage with encryption
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+from agent_memory import Memory
+from cryptography.fernet import Fernet
 import base64
 import hashlib
-from typing import Optional
-try:
-    from cryptography.fernet import Fernet
-    HAS_CRYPTO = True
-except ImportError:
-    HAS_CRYPTO = False
-
-from agent_memory import Memory
+import json
 
 
-class EncryptedMemory(Memory):
-    """Memory with encryption."""
+class EncryptedMemory:
+    """Memory with automatic encryption"""
     
-    def __init__(self, *args, secret_key: str = "default", **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        if HAS_CRYPTO:
-            # Generate key from secret
-            key = hashlib.sha256(secret_key.encode()).digest()
-            self.cipher = Fernet(base64.urlsafe_b64encode(key))
-        else:
-            self.cipher = None
+    def __init__(self, memory: Memory, password: str):
+        self.memory = memory
+        self.cipher = self._create_cipher(password)
     
-    def _encrypt(self, text: str) -> str:
-        """Encrypt text."""
-        if not self.cipher:
-            return text
-        return self.cipher.encrypt(text.encode()).decode()
+    def _create_cipher(self, password: str):
+        """Create cipher from password"""
+        # Derive key from password
+        key = hashlib.sha256(password.encode()).digest()
+        key_b64 = base64.urlsafe_b64encode(key)
+        return Fernet(key_b64)
     
-    def _decrypt(self, encrypted: str) -> str:
-        """Decrypt text."""
-        if not self.cipher:
-            return encrypted
-        try:
-            return self.cipher.decrypt(encrypted.encode()).decode()
-        except:
-            return encrypted
+    def add(self, content: str, **kwargs):
+        """Add encrypted memory"""
+        # Encrypt content
+        encrypted = self.cipher.encrypt(content.encode()).decode()
+        return self.memory.add(encrypted, **kwargs)
     
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None) -> str:
-        """Add encrypted memory."""
-        encrypted_text = self._encrypt(text)
-        return super().add(encrypted_text, metadata, ttl_days)
+    def get(self, mem_id: str):
+        """Get and decrypt memory"""
+        mem = self.memory.get(mem_id)
+        if mem:
+            try:
+                mem["content"] = self.cipher.decrypt(
+                    mem["content"].encode()
+                ).decode()
+            except:
+                pass  # Not encrypted (legacy)
+        return mem
     
-    def get_recent(self, limit: int = 10):
-        """Get recent memories (decrypted)."""
-        memories = super().get_recent(limit)
-        
-        # Decrypt
-        for mem in memories:
-            mem["text"] = self._decrypt(mem["text"])
-        
+    def get_all(self):
+        """Get all decrypted memories"""
+        memories = []
+        for mem in self.memory.get_all():
+            try:
+                mem["content"] = self.cipher.decrypt(
+                    mem["content"].encode()
+                ).decode()
+            except:
+                pass  # Not encrypted
+            memories.append(mem)
         return memories
     
-    def search(self, query: str, top_k: int = 5):
-        """Search memories (limited - can't search encrypted)."""
-        # Get all and decrypt for search
-        all_memories = self.get_recent(limit=self.count())
-        
-        # Simple search on decrypted
-        results = []
-        for mem in all_memories:
-            if query.lower() in mem["text"].lower():
-                results.append(mem)
-                if len(results) >= top_k:
-                    break
-        
-        return results
+    def search(self, query: str, **kwargs):
+        """Search (returns encrypted - can't search encrypted)"""
+        # Warning: search won't work on encrypted content
+        print("⚠️ Warning: Search doesn't work on encrypted content!")
+        return []
 
 
-# Demo
+def demo():
+    """Demo encryption"""
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        print("cryptography not installed, skipping demo")
+        return
+    
+    password = "secret_password"
+    
+    memory = Memory(storage="json", path="./encrypted_demo.json")
+    encrypted = EncryptedMemory(memory, password)
+    
+    print("=== Encrypted Memory Demo ===\n")
+    
+    # Add encrypted memories
+    encrypted.add("Secret information 1")
+    encrypted.add("Secret information 2", tags=["private"])
+    
+    print("Added 2 encrypted memories")
+    
+    # Retrieve (decrypted)
+    all_mem = encrypted.get_all()
+    print(f"\nRetrieved {len(all_mem)} decrypted memories:")
+    for mem in all_mem:
+        print(f"  - {mem['content']}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./encrypted_demo.json"):
+        os.remove("./encrypted_demo.json")
+
+
 if __name__ == "__main__":
-    import tempfile
-    
-    demo_path = os.path.join(tempfile.gettempdir(), "encrypted_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Encrypted Demo")
-    print("=" * 50)
-    
-    if not HAS_CRYPTO:
-        print("⚠️ cryptography not installed. Running basic demo.")
-    
-    # Create encrypted memory
-    memory = EncryptedMemory(storage="json", path=demo_path, secret_key="secret123")
-    
-    # Add memories
-    print("\n1. Adding encrypted memories...")
-    memory.add("API Key: sk-1234567890")
-    memory.add("Password: mypassword123")
-    memory.add("Public note: Hello world")
-    
-    print(f"   Total: {memory.count()}")
-    
-    # Get recent (decrypted)
-    print("\n2. Getting recent (decrypted):")
-    recent = memory.get_recent(limit=3)
-    for mem in recent:
-        print(f"   - {mem['text']}")
-    
-    # Search
-    print("\n3. Searching for 'password':")
-    results = memory.search("password")
-    for mem in results:
-        print(f"   - {mem['text']}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    demo()
