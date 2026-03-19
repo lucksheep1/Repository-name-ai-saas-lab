@@ -2,16 +2,17 @@
 Memory enum_example7
 enum_example7
 """
-from enum import Enum
+from enum import Enum, auto
 
 
-class Status(Enum):
-    PENDING = "pending"
-    DONE = "done"
+class Priority(Enum):
+    LOW = auto()
+    MEDIUM = auto()
+    HIGH = auto()
 
 
 def demo():
-    print(Status.PENDING.value)
+    print(list(Priority))
 
 
 if __name__ == "__main__":
