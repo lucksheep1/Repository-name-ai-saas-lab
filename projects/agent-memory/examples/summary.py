@@ -1,119 +1,111 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Summary
-======================
-Quick summary of all examples.
-
-This file documents all the examples available in agent-memory.
+Memory Summarization
+Auto-summarize memories
 """
+from agent_memory import Memory
 
-# Complete list of examples (50 total)
 
-EXAMPLES = {
-    # Core
-    "quickstart_minimal.py": "Minimal 3-line demo",
-    "demo_30s.py": "30-second demo",
-    "quickstart.py": "Quick start guide",
-    "integration_demo.py": "Complete integration demo",
+class MemorySummarizer:
+    """Summarize memories"""
     
-    # Storage Backends
-    "fts_demo.py": "Full-text search demo",
+    def summarize(self, content: str, max_len: int = 100) -> str:
+        """Summarize content"""
+        if len(content) <= max_len:
+            return content
+        
+        # Simple: take first sentence + key points
+        sentences = content.split(".")
+        
+        if len(sentences) > 1:
+            summary = sentences[0] + "."
+            
+            # Add more if needed
+            if len(summary) < max_len // 2:
+                for s in sentences[1:]:
+                    if len(summary) + len(s) < max_len:
+                        summary += s + "."
+            
+            return summary
+        
+        return content[:max_len] + "..."
     
-    # Advanced Features
-    "langchain_example.py": "LangChain integration",
-    "multi_agent_example.py": "Multi-agent sharing",
-    "memory_mixer.py": "Combine multiple memory sources",
-    "event_driver.py": "Event-driven memory",
-    "cached_memory.py": "Cached memory layer",
-    "plugin_system.py": "Plugin architecture",
-    "priority_queue.py": "Priority queue semantics",
-    "batch_ops.py": "Batch operations",
-    "analytics.py": "Memory analytics",
-    "compression.py": "Memory compression",
-    "scheduler.py": "Scheduled cleanup",
-    "notifications.py": "Notification system",
-    "cloud_sync.py": "Cloud sync",
-    "versioning.py": "Version control",
-    "encryption.py": "Encryption",
-    "multiuser.py": "Multi-user support",
-    "tag_manager.py": "Advanced tag management",
-    "triggers.py": "Automation triggers",
-    "backup_manager.py": "Backup and restore",
-    
-    # API & Web
-    "web_api.py": "FastAPI web server",
-    "web_dashboard.py": "Web dashboard",
-    "api_auth.py": "API with authentication",
-    "mobile_api.py": "Mobile-optimized API",
-    "graphql_api.py": "GraphQL API",
-    "cli.py": "Command-line interface",
-    "cli_interactive.py": "Interactive CLI",
-    "rest_client.py": "REST client library",
-    "webhook.py": "Webhook handler",
-    "lambda_function.py": "AWS Lambda handler",
-    
-    # Bot Integrations
-    "discord_bot.py": "Discord bot",
-    "slack_bot.py": "Slack bot",
-    "telegram_bot.py": "Telegram bot",
-    
-    # LLM Integrations
-    "chatgpt_integration.py": "ChatGPT/GPT-4",
-    "claude_integration.py": "Anthropic Claude",
-    "azure_openai.py": "Azure OpenAI",
-    "vertex_agent.py": "Google Vertex AI",
-    "openai_assistant.py": "OpenAI Assistant",
-    "langchain_adapter.py": "LangChain adapter",
-    
-    # Use Cases
-    "logger.py": "Structured logging",
-    "task_tracker.py": "Task tracking",
-    "conversation.py": "Conversation context",
-    "user_preferences.py": "User preferences",
-    "knowledge_base.py": "Knowledge base",
-    
-    # Export/Import
-    "export_formats.py": "Export to CSV/XML/HTML",
-    
-    # Docker
-    "Dockerfile.api": "Docker container",
-    "DOCKER.md": "Docker guide",
-}
+    def summarize_all(self, memory: Memory) -> dict:
+        """Summarize all memories"""
+        summaries = []
+        
+        for mem in memory.get_all():
+            content = mem.get("content", "")
+            summary = self.summarize(content)
+            
+            summaries.append({
+                "id": mem.get("id"),
+                "original": content[:50] + "...",
+                "summary": summary
+            })
+        
+        return summaries
 
-def print_summary():
-    """Print summary."""
-    print("=" * 60)
-    print("🤖 Agent Memory - Examples Summary")
-    print("=" * 60)
-    print(f"\nTotal: {len(EXAMPLES)} examples\n")
+
+class ConversationSummary:
+    """Summarize conversation"""
     
-    # Group by category
-    categories = {
-        "Core": ["quickstart_minimal.py", "demo_30s.py", "quickstart.py", "integration_demo.py"],
-        "Storage": ["fts_demo.py"],
-        "Advanced": ["langchain_example.py", "multi_agent_example.py", "memory_mixer.py", 
-                    "event_driver.py", "cached_memory.py", "plugin_system.py", "priority_queue.py",
-                    "batch_ops.py", "analytics.py", "compression.py", "scheduler.py",
-                    "notifications.py", "cloud_sync.py", "versioning.py", "encryption.py",
-                    "multiuser.py", "tag_manager.py", "triggers.py", "backup_manager.py"],
-        "API & Web": ["web_api.py", "web_dashboard.py", "api_auth.py", "mobile_api.py",
-                      "graphql_api.py", "cli.py", "cli_interactive.py", "rest_client.py",
-                      "webhook.py", "lambda_function.py"],
-        "Bots": ["discord_bot.py", "slack_bot.py", "telegram_bot.py"],
-        "LLM": ["chatgpt_integration.py", "claude_integration.py", "azure_openai.py",
-                "vertex_agent.py", "openai_assistant.py", "langchain_adapter.py"],
-        "Use Cases": ["logger.py", "task_tracker.py", "conversation.py", 
-                      "user_preferences.py", "knowledge_base.py"],
-        "Export": ["export_formats.py"],
-        "Docker": ["Dockerfile.api", "DOCKER.md"],
-    }
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    for cat, files in categories.items():
-        print(f"\n{cat} ({len(files)}):")
-        for f in files:
-            desc = EXAMPLES.get(f, "")
-            print(f"  - {f}: {desc}")
+    def summarize_conversation(self) -> str:
+        """Summarize entire conversation"""
+        messages = self.memory.get_all()
+        
+        if not messages:
+            return "No conversation yet."
+        
+        # Get topics
+        topics = set()
+        for m in messages:
+            tags = m.get("tags", [])
+            topics.update(tags)
+        
+        # Count message types
+        roles = {}
+        for m in messages:
+            role = m.get("metadata", {}).get("role", "unknown")
+            roles[role] = roles.get(role, 0) + 1
+        
+        summary = f"Conversation with {len(messages)} messages.\n"
+        summary += f"Topics: {', '.join(topics) if topics else 'general'}\n"
+        summary += f"Messages by role: {roles}"
+        
+        return summary
+
+
+def demo():
+    """Demo summarization"""
+    memory = Memory(storage="json", path="./summary_demo.json")
+    
+    print("=== Memory Summarization Demo ===\n")
+    
+    # Add memories
+    memory.add("This is a very long memory that contains a lot of detailed information about various topics including programming, science, and mathematics. It has many sentences and paragraphs.")
+    memory.add("Short.")
+    
+    # Summarize
+    summarizer = MemorySummarizer()
+    for s in summarizer.summarize_all(memory):
+        print(f"Original: {s['original']}")
+        print(f"Summary: {s['summary']}\n")
+    
+    # Conversation summary
+    conv = ConversationSummary(memory)
+    memory.add("User message 1", metadata={"role": "user"})
+    memory.add("Assistant response", metadata={"role": "assistant"})
+    
+    print("Conversation:", conv.summarize_conversation())
+    
+    # Cleanup
+    import os
+    if os.path.exists("./summary_demo.json"):
+        os.remove("./summary_demo.json")
 
 
 if __name__ == "__main__":
-    print_summary()
+    demo()
