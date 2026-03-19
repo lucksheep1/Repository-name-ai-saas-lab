@@ -1,6 +1,6 @@
 """
 Memory urllib
-urllib utilities
+urllib example
 """
 from urllib.request import urlopen
 
