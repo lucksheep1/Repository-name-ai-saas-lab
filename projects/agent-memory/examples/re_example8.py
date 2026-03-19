@@ -6,9 +6,9 @@ import re
 
 
 def demo():
-    text = "hello123world456"
-    numbers = re.findall(r"\d+", text)
-    print(numbers)
+    text = "Price: $19.99, Tax: $1.50"
+    prices = re.findall(r"\$(\d+\.\d+)", text)
+    print(prices)
 
 
 if __name__ == "__main__":
