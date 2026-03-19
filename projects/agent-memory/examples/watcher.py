@@ -1,9 +1,10 @@
 """
 Memory Watcher
-Watch for memory changes
+Watch for changes in memory
 """
 from agent_memory import Memory
 import time
+import threading
 
 
 class MemoryWatcher:
@@ -11,86 +12,123 @@ class MemoryWatcher:
     
     def __init__(self, memory: Memory):
         self.memory = memory
-        self.watchers = []  # [(pattern, callback)]
-        self.last_snapshot = {}
+        self.last_state = {}
+        self.callbacks = []
         self.running = False
     
-    def watch(self, pattern: str, callback: callable):
-        """Watch for pattern"""
-        self.watchers.append((pattern, callback))
-    
-    def check_changes(self):
-        """Check for changes"""
-        current = {m["id"]: m.get("content", "") for m in self.memory.get_all()}
-        
-        # Find new
-        for mem_id, content in current.items():
-            if mem_id not in self.last_snapshot:
-                for pattern, callback in self.watchers:
-                    if pattern in content:
-                        callback("added", mem_id, content)
-        
-        # Find removed
-        for mem_id in self.last_snapshot:
-            if mem_id not in current:
-                for pattern, callback in self.watchers:
-                    callback("removed", mem_id, self.last_snapshot[mem_id])
-        
-        self.last_snapshot = current
-    
-    def watch_loop(self, interval: float = 1.0):
-        """Watch loop"""
+    def start(self, interval: float = 1.0):
+        """Start watching"""
         self.running = True
+        self._capture_state()
         
-        while self.running:
-            self.check_changes()
-            time.sleep(interval)
-    
-    def start_daemon(self, interval: float = 1.0):
-        """Start watching in background"""
-        import threading
-        thread = threading.Thread(target=self.watch_loop, args=(interval,), daemon=True)
+        thread = threading.Thread(target=self._watch_loop, args=(interval,), daemon=True)
         thread.start()
     
     def stop(self):
         """Stop watching"""
         self.running = False
+    
+    def _capture_state(self):
+        """Capture current state"""
+        self.last_state = {}
+        for mem in self.memory.get_all():
+            self.last_state[mem["id"]] = mem
+    
+    def on_change(self, callback: callable):
+        """Register callback"""
+        self.callbacks.append(callback)
+    
+    def _watch_loop(self, interval: float):
+        """Watch loop"""
+        while self.running:
+            try:
+                self._check_changes()
+            except:
+                pass
+            time.sleep(interval)
+    
+    def _check_changes(self):
+        """Check for changes"""
+        current = {}
+        for mem in self.memory.get_all():
+            current[mem["id"]] = mem
+        
+        # New memories
+        for mem_id, mem in current.items():
+            if mem_id not in self.last_state:
+                self._trigger("add", mem)
+        
+        # Deleted memories
+        for mem_id in self.last_state:
+            if mem_id not in current:
+                self._trigger("delete", self.last_state[mem_id])
+        
+        self.last_state = current
+    
+    def _trigger(self, event: str, mem: dict):
+        """Trigger callbacks"""
+        for callback in self.callbacks:
+            try:
+                callback(event, mem)
+            except:
+                pass
+
+
+class MemoryHooks:
+    """Hooks for memory events"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+        self.hooks = {
+            "pre_add": [],
+            "post_add": [],
+            "pre_search": [],
+            "post_search": [],
+        }
+    
+    def register(self, event: str, hook: callable):
+        """Register hook"""
+        if event in self.hooks:
+            self.hooks[event].append(hook)
+    
+    def trigger(self, event: str, *args, **kwargs):
+        """Trigger hooks"""
+        for hook in self.hooks.get(event, []):
+            hook(*args, **kwargs)
 
 
 def demo():
     """Demo watcher"""
-    memory = Memory(storage="json", path="./watch_demo.json")
+    memory = Memory(storage="json", path="./watcher_demo.json")
     watcher = MemoryWatcher(memory)
     
     print("=== Memory Watcher Demo ===\n")
     
-    # Watch for patterns
-    watcher.watch("error", lambda action, id, content: 
-        print(f"🚨 {action}: {content[:30]}"))
+    # Register callback
+    def on_change(event, mem):
+        print(f"Change: {event} - {mem.get('content', '')[:30]}")
     
-    watcher.watch("important", lambda action, id, content:
-        print(f"⭐ {action}: {content[:30]}"))
+    watcher.on_change(on_change)
     
     # Start watching
-    watcher.start_daemon(interval=0.5)
+    watcher.start(interval=0.5)
     
-    # Add memories (watcher will detect)
-    memory.add("Normal operation")
+    # Add memories
     time.sleep(0.2)
-    memory.add("Error occurred in system")
-    time.sleep(0.2)
-    memory.add("Important note")
+    memory.add("Memory 1")
+    memory.add("Memory 2")
     
-    # Wait for detection
     time.sleep(1)
     
+    # Stop
     watcher.stop()
-    print("\nWatcher stopped")
+    
+    print("Done!")
     
     # Cleanup
     import os
-    if os.path.exists("./watch_demo.json"):
-        os.remove("./watch_demo.json")
+    if os.path.exists("./watcher_demo.json"):
+        os.remove("./watcher_demo.json")
 
 
 if __name__ == "__main__":
