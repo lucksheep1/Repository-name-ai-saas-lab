@@ -1,12 +1,12 @@
 """
 Memory http
-http utilities
+http example
 """
-from http.server import HTTPServer
+import http.client
 
 
 def demo():
-    print("http ready")
+    print(http.client.HTTPConnection)
 
 
 if __name__ == "__main__":
