@@ -11,51 +11,41 @@ class MemoryMigrator:
     def __init__(self, source: Memory):
         self.source = source
     
-    def migrate_to(self, target_storage: str, target_path: str) -> int:
-        """Migrate to new storage"""
-        target = Memory(storage=target_storage, path=target_path)
+    def migrate_to_json(self, path: str) -> int:
+        """Migrate to JSON storage"""
+        target = Memory(storage="json", path=path)
         
-        migrated = 0
-        
+        count = 0
         for mem in self.source.get_all():
             target.add(
                 content=mem.get("content", ""),
                 tags=mem.get("tags", []),
-                metadata=mem.get("metadata", {})
+                metadata=mem.get("metadata", {}),
+                priority=mem.get("priority")
             )
-            migrated += 1
+            count += 1
         
-        return migrated
+        return count
     
-    def export_import(self, target_storage: str, target_path: str) -> int:
-        """Export then import (for schema changes)"""
-        # Export to JSON
-        import json
-        with open("./migration_temp.json", "w") as f:
-            json.dump(self.source.get_all(), f)
+    def migrate_to_sqlite(self, path: str) -> int:
+        """Migrate to SQLite storage"""
+        target = Memory(storage="sqlite", path=path)
         
-        # Clear target
-        target = Memory(storage=target_storage, path=target_path)
-        
-        # Import
-        import json
-        with open("./migration_temp.json", "r") as f:
-            memories = json.load(f)
-        
-        migrated = 0
-        for mem in memories:
+        count = 0
+        for mem in self.source.get_all():
             target.add(
                 content=mem.get("content", ""),
                 tags=mem.get("tags", []),
-                metadata=mem.get("metadata", {})
+                metadata=mem.get("metadata", {}),
+                priority=mem.get("priority")
             )
-            migrated += 1
+            count += 1
         
-        # Cleanup
-        import os
-        os.remove("./migration_temp.json")
-        
-        return migrated
+        return count
+    
+    def backup(self, path: str) -> int:
+        """Backup to JSON"""
+        return self.migrate_to_json(path)
 
 
 def demo():
@@ -63,25 +53,24 @@ def demo():
     # Source
     source = Memory(storage="json", path="./source.json")
     source.add("Memory 1")
-    source.add("Memory 2", tags=["test"])
+    source.add("Memory 2")
+    source.add("Memory 3", tags=["test"])
     
-    print("=== Memory Migration Demo ===\n")
+    print("=== Migration Demo ===\n")
     print(f"Source: {len(source.get_all())} memories")
     
     # Migrate
     migrator = MemoryMigrator(source)
-    target_path = "./target.db"
-    
-    migrated = migrator.migrate_to("sqlite", target_path)
-    print(f"Migrated: {migrated} memories")
+    count = migrator.migrate_to_json("./target.json")
+    print(f"Migrated: {count} memories")
     
     # Verify
-    target = Memory(storage="sqlite", path=target_path)
+    target = Memory(storage="json", path="./target.json")
     print(f"Target: {len(target.get_all())} memories")
     
     # Cleanup
     import os
-    for f in ["./source.json", target_path]:
+    for f in ["./source.json", "./target.json"]:
         if os.path.exists(f):
             os.remove(f)
 
