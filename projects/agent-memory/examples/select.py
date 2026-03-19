@@ -6,7 +6,7 @@ import select
 
 
 def demo():
-    print(select.kqueue())
+    print(select.select)
 
 
 if __name__ == "__main__":
