@@ -2,15 +2,15 @@
 Memory typing_example8
 typing_example8
 """
-from typing import Dict
+from typing import Set
 
 
-def process(data: Dict[str, int]) -> int:
-    return sum(data.values())
+def process(items: Set[int]) -> int:
+    return sum(items)
 
 
 def demo():
-    print(process({"a": 1, "b": 2, "c": 3}))
+    print(process({1, 2, 3, 4}))
 
 
 if __name__ == "__main__":
