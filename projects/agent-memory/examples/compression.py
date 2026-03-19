@@ -1,130 +1,147 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Compression
-===========================
-Compress old memories to save space.
-
-Usage:
-    from compression import CompressedMemory
-    
-    memory = CompressedMemory()
-    # Old memories get compressed automatically
+Memory Compression
+Compress old memories to save space
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import json
-import zlib
-import base64
-from typing import List, Dict, Any
 from agent_memory import Memory
+import zlib
+import json
+import base64
 
 
-class CompressedMemory(Memory):
-    """Memory with automatic compression of old memories."""
+class CompressedMemory:
+    """Memory with automatic compression"""
     
-    def __init__(self, *args, compression_threshold_days: int = 7, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.compression_threshold_days = compression_threshold_days
+    def __init__(self, memory: Memory, compress_older_than_days: int = 7):
+        self.memory = memory
+        self.compress_older_than_days = compress_older_than_days
     
-    def compress_memory(self, memory_id: str) -> bool:
-        """Compress a specific memory."""
-        recent = self.get_recent(limit=self.count())
+    def add(self, content: str, **kwargs):
+        """Add memory (normal)"""
+        return self.memory.add(content, **kwargs)
+    
+    def compress_all(self) -> int:
+        """Compress old memories"""
+        from datetime import datetime, timedelta
         
-        for mem in recent:
-            if mem["id"] == memory_id:
-                text = mem["text"]
+        now = datetime.now()
+        compressed = 0
+        
+        for mem in self.memory.get_all():
+            created = datetime.fromisoformat(mem.get("created_at", now.isoformat()))
+            age = (now - created).days
+            
+            if age >= self.compress_older_than_days:
+                content = mem.get("content", "")
                 
                 # Compress
-                compressed = zlib.compress(text.encode())
-                encoded = base64.b64encode(compressed).decode()
+                compressed_content = self._compress(content)
                 
-                # Replace with compressed version
-                self.delete(memory_id)
-                self.add(f"[COMPRESSED]{encoded}", metadata={
-                    "compressed": True,
-                    "original_length": len(text)
-                })
-                return True
+                # Update with compressed
+                self.memory.update(mem["id"], 
+                    content=compressed_content,
+                    metadata={**mem.get("metadata", {}), "_compressed": True}
+                )
+                compressed += 1
         
-        return False
+        return compressed
     
-    def decompress_memory(self, memory_id: str) -> str:
-        """Decompress a memory."""
-        recent = self.get_recent(limit=self.count())
+    def decompress(self, mem_id: str) -> str:
+        """Decompress a memory"""
+        mem = self.memory.get(mem_id)
         
-        for mem in recent:
-            if mem["id"] == memory_id:
-                text = mem["text"]
-                if text.startswith("[COMPRESSED]"):
-                    encoded = text[12:]
-                    compressed = base64.b64decode(encoded)
-                    decompressed = zlib.decompress(compressed).decode()
-                    return decompressed
-                return text
+        if not mem:
+            return None
         
-        return ""
+        if mem.get("metadata", {}).get("_compressed"):
+            content = mem.get("content", "")
+            return self._decompress(content)
+        
+        return mem.get("content", "")
     
-    def auto_compress_old(self, days: int = 7):
-        """Compress memories older than specified days."""
-        # This is a simplified version
-        # In production, you'd check timestamps
-        recent = self.get_recent(limit=self.count())
-        
-        # Compress half of them for demo
-        to_compress = recent[len(recent)//2:]
-        
-        for mem in to_compress:
-            if not mem.get("metadata", {}).get("compressed"):
-                self.compress_memory(mem["id"])
+    def _compress(self, content: str) -> str:
+        """Compress string"""
+        compressed = zlib.compress(content.encode())
+        return base64.b64encode(compressed).decode()
+    
+    def _decompress(self, content: str) -> str:
+        """Decompress string"""
+        try:
+            decoded = base64.b64decode(content.encode())
+            return zlib.decompress(decoded).decode()
+        except:
+            return content
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+class SummarizedMemory:
+    """Memory with auto-summarization"""
     
-    demo_path = os.path.join(tempfile.gettempdir(), "compression_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    def __init__(self, memory: Memory, summarize_older_than_days: int = 7):
+        self.memory = memory
+        self.summarize_older_than_days = summarize_older_than_days
     
-    print("🤖 Agent Memory - Compression Demo")
-    print("=" * 50)
+    def summarize_all(self) -> int:
+        """Summarize old memories"""
+        from datetime import datetime, timedelta
+        
+        now = datetime.now()
+        summarized = 0
+        
+        for mem in self.memory.get_all():
+            created = datetime.fromisoformat(mem.get("created_at", now.isoformat()))
+            age = (now - created).days
+            
+            if age >= self.summarize_older_than_days:
+                content = mem.get("content", "")
+                
+                # Simple summarize (first 100 chars + note)
+                summary = self._summarize(content)
+                
+                self.memory.update(mem["id"], 
+                    content=summary,
+                    metadata={**mem.get("metadata", {}), "_summarized": True}
+                )
+                summarized += 1
+        
+        return summarized
     
-    memory = CompressedMemory(storage="json", path=demo_path)
+    def _summarize(self, content: str) -> str:
+        """Summarize content"""
+        max_len = 100
+        
+        if len(content) <= max_len:
+            return content
+        
+        return content[:max_len] + f"... [was {len(content)} chars]"
+
+
+def demo():
+    """Demo compression"""
+    memory = Memory(storage="json", path="./compress_demo.json")
+    compressed = CompressedMemory(memory)
     
-    # Add some long memories
-    print("\n1. Adding long memories...")
-    long_text1 = "This is a very long memory " * 50
-    long_text2 = "Another long memory " * 50
+    print("=== Compressed Memory Demo ===\n")
     
-    id1 = memory.add(long_text1)
-    id2 = memory.add(long_text2)
+    # Add memories
+    compressed.add("Short memory")
+    compressed.add("This is a much longer memory that contains a lot of " * 10)
     
-    print(f"   Memory 1 length: {len(long_text1)}")
-    print(f"   Memory 2 length: {len(long_text2)}")
-    
-    # Get sizes
-    recent = memory.get_recent(limit=2)
-    for mem in recent:
-        print(f"   Stored length: {len(mem['text'])}")
+    print("Added 2 memories")
     
     # Compress
-    print("\n2. Compressing memories...")
-    memory.compress_memory(id1)
+    count = compressed.compress_all()
+    print(f"Compressed {count} memories")
     
-    recent = memory.get_recent(limit=2)
-    for mem in recent:
-        is_compressed = mem["text"].startswith("[COMPRESSED]")
-        print(f"   Compressed: {is_compressed}, Length: {len(mem['text'])}")
+    # Show content (decompressed)
+    for mem in memory.get_all():
+        is_compressed = mem.get("metadata", {}).get("_compressed", False)
+        content = compressed.decompress(mem["id"]) if is_compressed else mem.get("content", "")
+        print(f"  [{'compressed' if is_compressed else 'normal'}] {content[:40]}...")
     
-    # Decompress
-    print("\n3. Decompressing...")
-    decompressed = memory.decompress_memory(id1)
-    print(f"   Original restored: {len(decompressed)} chars")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./compress_demo.json"):
+        os.remove("./compress_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
