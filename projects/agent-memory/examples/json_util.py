@@ -6,7 +6,7 @@ import json
 
 
 def demo():
-    print(json.dumps({"key": "value"}))
+    print(json.dumps({"a": 1}))
 
 
 if __name__ == "__main__":
