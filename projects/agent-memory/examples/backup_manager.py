@@ -1,30 +1,16 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Backup Manager
-=============================
-Automated backup and restore.
-
-Usage:
-    from backup_manager import BackupManager
-    
-    manager = BackupManager(memory)
-    manager.backup()  # Create backup
-    manager.restore(backup_id)  # Restore from backup
+Memory Backup & Restore
+Automated backup and point-in-time recovery
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import json
-import time
-from typing import List, Dict, Optional
-from datetime import datetime
 from agent_memory import Memory
+import shutil
+import os
+import json
+from datetime import datetime
 
 
 class BackupManager:
-    """Manage memory backups."""
+    """Manage memory backups"""
     
     def __init__(self, memory: Memory, backup_dir: str = "./backups"):
         self.memory = memory
@@ -32,140 +18,114 @@ class BackupManager:
         os.makedirs(backup_dir, exist_ok=True)
     
     def backup(self, name: str = None) -> str:
-        """Create a backup."""
-        if not name:
+        """Create a backup"""
+        if name is None:
             name = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Get all memories
-        memories = self.memory.get_recent(limit=self.memory.count())
-        
-        # Create backup
-        backup = {
-            "name": name,
-            "timestamp": time.time(),
-            "datetime": datetime.now().isoformat(),
-            "count": len(memories),
-            "memories": memories
-        }
-        
-        # Save
         filepath = os.path.join(self.backup_dir, f"backup_{name}.json")
+        
+        memories = self.memory.get_all()
+        
         with open(filepath, "w") as f:
-            json.dump(backup, f, indent=2, default=str)
+            json.dump({
+                "version": "1.0",
+                "timestamp": datetime.now().isoformat(),
+                "memories": memories
+            }, f, indent=2)
         
         return filepath
     
-    def restore(self, backup_path: str) -> int:
-        """Restore from backup."""
-        with open(backup_path, "r") as f:
-            backup = json.load(f)
+    def restore(self, filepath: str) -> int:
+        """Restore from backup"""
+        with open(filepath, "r") as f:
+            data = json.load(f)
         
-        # Clear current memory
-        self.memory.clear()
+        memories = data.get("memories", [])
         
-        # Restore memories
-        restored = 0
-        for mem in backup.get("memories", []):
-            text = mem.get("text", "")
-            tags = mem.get("tags", [])
-            metadata = mem.get("metadata", {})
-            
-            if tags:
-                self.memory.add_with_tags(text, tags=tags, metadata=metadata)
-            else:
-                self.memory.add(text, metadata=metadata)
-            
-            restored += 1
+        # Clear current and restore
+        current = self.memory.get_all()
+        for mem in current:
+            self.memory.forget(mem["id"])
         
-        return restored
+        # Add restored memories
+        for mem in memories:
+            self.memory.add(
+                content=mem.get("content", ""),
+                tags=mem.get("tags", []),
+                metadata=mem.get("metadata", {}),
+                priority=mem.get("priority")
+            )
+        
+        return len(memories)
     
-    def list_backups(self) -> List[Dict]:
-        """List all backups."""
+    def list_backups(self) -> list:
+        """List all backups"""
         backups = []
         
-        for filename in os.listdir(self.backup_dir):
-            if filename.startswith("backup_") and filename.endswith(".json"):
-                filepath = os.path.join(self.backup_dir, filename)
-                with open(filepath, "r") as f:
-                    data = json.load(f)
-                    backups.append({
-                        "name": data.get("name"),
-                        "datetime": data.get("datetime"),
-                        "count": data.get("count"),
-                        "path": filepath
-                    })
+        for f in os.listdir(self.backup_dir):
+            if f.startswith("backup_") and f.endswith(".json"):
+                path = os.path.join(self.backup_dir, f)
+                size = os.path.getsize(path)
+                mtime = datetime.fromtimestamp(os.path.getmtime(path))
+                backups.append({
+                    "name": f.replace("backup_", "").replace(".json", ""),
+                    "path": path,
+                    "size": size,
+                    "mtime": mtime.isoformat()
+                })
         
-        # Sort by datetime (newest first)
-        backups.sort(key=lambda x: x.get("datetime", ""), reverse=True)
+        return sorted(backups, key=lambda x: x["mtime"], reverse=True)
+    
+    def auto_backup(self, max_backups: int = 10):
+        """Auto backup with rotation"""
+        # Create new backup
+        self.backup()
         
-        return backups
-    
-    def delete_backup(self, backup_path: str) -> bool:
-        """Delete a backup."""
-        try:
-            os.remove(backup_path)
-            return True
-        except:
-            return False
-    
-    def auto_backup(self, interval_hours: int = 24) -> str:
-        """Create timestamped backup."""
-        name = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return self.backup(name)
+        # Rotate old backups
+        backups = self.list_backups()
+        
+        if len(backups) > max_backups:
+            for old in backups[max_backups:]:
+                os.remove(old["path"])
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+def demo():
+    """Demo backup"""
+    memory = Memory(storage="json", path="./backup_demo.json")
+    manager = BackupManager(memory, backup_dir="./demo_backups")
     
-    demo_path = os.path.join(tempfile.gettempdir(), "backup_demo.json")
-    backup_dir = os.path.join(tempfile.gettempdir(), "backups")
+    print("=== Backup Manager Demo ===\n")
     
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    if os.path.exists(backup_dir):
-        import shutil
-        shutil.rmtree(backup_dir)
-    
-    print("🤖 Agent Memory - Backup Manager Demo")
-    print("=" * 50)
-    
-    # Create memory with data
-    memory = Memory(storage="json", path=demo_path)
-    
-    print("\n1. Adding memories...")
+    # Add some memories
     memory.add("Memory 1")
     memory.add("Memory 2")
     memory.add("Memory 3")
-    print(f"   Total: {memory.count()}")
     
-    # Create backup manager
-    manager = BackupManager(memory, backup_dir)
+    print("Added 3 memories")
     
-    print("\n2. Creating backup...")
-    backup_path = manager.backup("test_backup")
-    print(f"   Saved to: {backup_path}")
+    # Create backup
+    path = manager.backup("test")
+    print(f"Created backup: {path}")
     
-    print("\n3. Adding more memories...")
-    memory.add("Memory 4")
-    memory.add("Memory 5")
-    print(f"   Total: {memory.count()}")
+    # Delete all memories
+    for mem in memory.get_all():
+        memory.forget(mem["id"])
+    print("Deleted all memories")
     
-    print("\n4. Restoring from backup...")
-    restored = manager.restore(backup_path)
-    print(f"   Restored: {restored} memories")
-    print(f"   Current: {memory.count()} memories")
+    # Restore
+    count = manager.restore(path)
+    print(f"Restored {count} memories")
     
-    print("\n5. Listing backups...")
+    # List backups
     backups = manager.list_backups()
-    for b in backups:
-        print(f"   - {b['datetime']}: {b['count']} memories")
-    
-    print("\n✅ Demo complete!")
+    print(f"Backups: {len(backups)}")
     
     # Cleanup
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    if os.path.exists(backup_dir):
-        import shutil
-        shutil.rmtree(backup_dir)
+    import shutil
+    shutil.rmtree("./demo_backups", ignore_errors=True)
+    if os.path.exists("./backup_demo.json"):
+        os.remove("./backup_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
