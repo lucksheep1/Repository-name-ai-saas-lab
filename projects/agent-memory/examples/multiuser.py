@@ -1,127 +1,97 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Multi-User Support
-================================
-Share memory across multiple users with access control.
-
-Usage:
-    from multiuser import MultiUserMemory
-    
-    memory = MultiUserMemory()
-    memory.add("Secret", owner="user1", allowed=["user1", "user2"])
+Memory Multi-User
+Multi-user memory support
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Optional
 from agent_memory import Memory
 
 
-class MultiUserMemory(Memory):
-    """Memory with multi-user support."""
+class UserMemory:
+    """Isolated memory per user"""
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, memory: Memory, user_id: str):
+        self.memory = memory
+        self.user_id = user_id
+        self.prefix = f"user:{user_id}:"
     
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None,
-            owner: str = None, allowed: List[str] = None) -> str:
-        """Add memory with ownership."""
-        metadata = metadata or {}
-        
-        if owner:
-            metadata["owner"] = owner
-        if allowed:
-            metadata["allowed"] = allowed
-        
-        return super().add(text, metadata, ttl_days)
+    def add(self, content: str, **kwargs):
+        """Add user-specific memory"""
+        return self.memory.add(
+            f"{self.prefix}{content}",
+            tags=["user", self.user_id] + kwargs.get("tags", []),
+            metadata=kwargs.get("metadata", {})
+        )
     
-    def get_by_owner(self, owner: str, limit: int = 10) -> List[dict]:
-        """Get memories by owner."""
-        all_memories = self.get_recent(limit=self.count())
-        owned = [m for m in all_memories 
-                if m.get("metadata", {}).get("owner") == owner]
-        return owned[:limit]
+    def get_all(self):
+        """Get user's memories"""
+        return [m for m in self.memory.get_all() 
+                if f"user:{self.user_id}:" in m.get("content", "")]
     
-    def get_shared_with(self, user: str, limit: int = 10) -> List[dict]:
-        """Get memories shared with user."""
-        all_memories = self.get_recent(limit=self.count())
-        shared = []
-        
-        for m in all_memories:
-            allowed = m.get("metadata", {}).get("allowed", [])
-            if user in allowed:
-                shared.append(m)
-        
-        return shared[:limit]
-    
-    def can_access(self, memory_id: str, user: str) -> bool:
-        """Check if user can access memory."""
-        recent = self.get_recent(limit=self.count())
-        
-        for mem in recent:
-            if mem["id"] == memory_id:
-                metadata = mem.get("metadata", {})
-                
-                # Owner can always access
-                if metadata.get("owner") == user:
-                    return True
-                
-                # Check allowed list
-                allowed = metadata.get("allowed", [])
-                if user in allowed:
-                    return True
-                
-                # No restrictions
-                if not metadata.get("owner") and not allowed:
-                    return True
-                
-                return False
-        
-        return False
+    def search(self, query: str):
+        """Search user's memories"""
+        return [m for m in self.memory.search(query) 
+                if f"user:{self.user_id}:" in m.get("content", "")]
 
 
-# Demo
+class TeamMemory:
+    """Shared memory for teams"""
+    
+    def __init__(self, memory: Memory, team_id: str):
+        self.memory = memory
+        self.team_id = team_id
+        self.prefix = f"team:{team_id}:"
+    
+    def add(self, content: str, user_id: str = None, **kwargs):
+        """Add team memory"""
+        meta = kwargs.get("metadata", {})
+        meta["team"] = self.team_id
+        meta["user"] = user_id
+        
+        return self.memory.add(
+            f"{self.prefix}{content}",
+            tags=["team", self.team_id] + kwargs.get("tags", []),
+            metadata=meta
+        )
+    
+    def get_all(self):
+        """Get team memories"""
+        return self.memory.get_by_tag(self.team_id)
+    
+    def get_by_user(self, user_id: str):
+        """Get user's contributions to team"""
+        team_mems = self.get_all()
+        return [m for m in team_mems 
+                if m.get("metadata", {}).get("user") == user_id]
+
+
+def demo():
+    """Demo multi-user"""
+    memory = Memory(storage="json", path="./multiuser_demo.json")
+    
+    print("=== Multi-User Demo ===\n")
+    
+    # User memories
+    alice = UserMemory(memory, "alice")
+    bob = UserMemory(memory, "bob")
+    
+    alice.add("Alice's secret")
+    alice.add("Alice's preference: dark mode")
+    bob.add("Bob's note")
+    
+    print(f"Alice's memories: {len(alice.get_all())}")
+    print(f"Bob's memories: {len(bob.get_all())}")
+    
+    # Team memory
+    team = TeamMemory(memory, "engineering")
+    team.add("Sprint planning", user_id="alice")
+    team.add("Code review", user_id="bob")
+    
+    print(f"Team memories: {len(team.get_all())}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./multiuser_demo.json"):
+        os.remove("./multiuser_demo.json")
+
+
 if __name__ == "__main__":
-    import tempfile
-    
-    demo_path = os.path.join(tempfile.gettempdir(), "multiuser_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Multi-User Demo")
-    print("=" * 50)
-    
-    memory = MultiUserMemory(storage="json", path=demo_path)
-    
-    # Add memories with owners
-    print("\n1. Adding memories...")
-    memory.add("User1's private note", owner="user1")
-    memory.add("User2's private note", owner="user2")
-    memory.add("Shared between user1 and user2", owner="user1", allowed=["user1", "user2"])
-    memory.add("Team task", owner="admin", allowed=["user1", "user2", "admin"])
-    
-    print(f"   Total: {memory.count()}")
-    
-    # Get by owner
-    print("\n2. User1's memories:")
-    user1_memories = memory.get_by_owner("user1")
-    for mem in user1_memories:
-        print(f"   - {mem['text']}")
-    
-    print("\n3. User2's memories:")
-    user2_memories = memory.get_by_owner("user2")
-    for mem in user2_memories:
-        print(f"   - {mem['text']}")
-    
-    # Get shared
-    print("\n4. Memories shared with user1:")
-    shared = memory.get_shared_with("user1")
-    for mem in shared:
-        print(f"   - {mem['text']}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    demo()
