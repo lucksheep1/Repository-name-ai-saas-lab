@@ -6,7 +6,7 @@ import signal
 
 
 def demo():
-    print(signal.SIGINT)
+    print(signal.SIGTERM)
 
 
 if __name__ == "__main__":
