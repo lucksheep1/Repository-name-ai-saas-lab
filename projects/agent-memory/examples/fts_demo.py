@@ -1,77 +1,116 @@
-#!/usr/bin/env python3
 """
-Agent Memory - SQLite-backed with Full-Text Search
-==================================================
-Use SQLite FTS5 for better search.
-
-Usage:
-    memory = Memory(storage="fts", path="./memory.db")
+Memory FTS (Full-Text Search) Demo
+Full-text search capabilities
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from agent_memory import Memory
+import re
 
 
-# Note: This requires pysqlite3 or Python 3.11+ with FTS5 support
-# For demo, we'll use the SQLite backend
+class FTSMemory:
+    """Full-text search for memory"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+    
+    def search_advanced(self, query: str, options: dict = None) -> list:
+        """Advanced search with options"""
+        options = options or {}
+        
+        results = []
+        
+        for mem in self.memory.get_all():
+            content = mem.get("content", "").lower()
+            query_lower = query.lower()
+            
+            # Simple FTS: word matching
+            matches = []
+            
+            # AND search
+            if options.get("AND"):
+                words = query_lower.split()
+                if all(w in content for w in words):
+                    matches.append("AND")
+            
+            # OR search
+            if options.get("OR"):
+                words = query_lower.split()
+                if any(w in content for w in words):
+                    matches.append("OR")
+            
+            # Phrase search
+            if options.get("phrase"):
+                if query_lower in content:
+                    matches.append("PHRASE")
+            
+            # Regex search
+            if options.get("regex"):
+                try:
+                    if re.search(options["regex"], content, re.I):
+                        matches.append("REGEX")
+                except:
+                    pass
+            
+            # Default: simple contains
+            if not matches:
+                if query_lower in content:
+                    matches.append("CONTAINS")
+            
+            if matches:
+                results.append({**mem, "match_type": matches[0]})
+        
+        return results
+    
+    def highlight(self, query: str) -> list:
+        """Highlight matching terms"""
+        results = []
+        
+        for mem in self.memory.get_all():
+            content = mem.get("content", "")
+            
+            # Highlight
+            pattern = re.compile(re.escape(query), re.I)
+            highlighted = pattern.sub(f"**{query}**", content)
+            
+            results.append({
+                **mem,
+                "highlighted": highlighted
+            })
+        
+        return results
 
-def demo_fts():
-    """Demo full-text search features."""
-    import tempfile
-    demo_path = os.path.join(tempfile.gettempdir(), "fts_demo.db")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+
+def demo():
+    """Demo FTS"""
+    memory = Memory(storage="json", path="./fts_demo.json")
+    fts = FTSMemory(memory)
     
-    print("🤖 Agent Memory - SQLite Full-Text Search Demo")
-    print("=" * 50)
+    print("=== FTS Demo ===\n")
     
-    # Use SQLite backend
-    memory = Memory(storage="sqlite", path=demo_path, ttl_days=30)
+    # Add memories
+    memory.add("Python is great for AI")
+    memory.add("JavaScript is great for web")
+    memory.add("Python and JavaScript are both popular")
+    memory.add("I love programming in Python")
     
-    # Add memories with different content
-    print("\n1. Adding memories...")
-    memory.add("Python is a great programming language", metadata={"topic": "python"})
-    memory.add("JavaScript is used for web development", metadata={"topic": "javascript"})
-    memory.add("Rust is a systems programming language", metadata={"topic": "rust"})
-    memory.add("Go is efficient for concurrent programming", metadata={"topic": "go"})
-    memory.add("TypeScript adds types to JavaScript", metadata={"topic": "typescript"})
+    # Basic search
+    results = fts.search_advanced("Python")
+    print(f"Basic search 'Python': {len(results)} results")
     
-    # Search for "programming"
-    print("\n2. Search for 'programming':")
-    results = memory.search("programming")
-    for r in results:
-        print(f"   - {r['text']}")
+    # AND search
+    results = fts.search_advanced("Python", {"AND": True})
+    print(f"AND search 'Python': {len(results)} results")
     
-    # Search for "language"
-    print("\n3. Search for 'language':")
-    results = memory.search("language")
-    for r in results:
-        print(f"   - {r['text']}")
+    # Highlight
+    results = fts.highlight("Python")
+    print("\nHighlight results:")
+    for r in results[:2]:
+        print(f"  {r.get('highlighted')}")
     
-    # Search for "web"
-    print("\n4. Search for 'web':")
-    results = memory.search("web")
-    for r in results:
-        print(f"   - {r['text']}")
-    
-    # Get timeline
-    print("\n5. Timeline:")
-    timeline = memory.get_timeline()
-    for t in timeline:
-        print(f"   {t['timestamp'][:19]} | {t['text'][:40]}")
-    
-    # Stats
-    print("\n6. Stats:")
-    print(f"   Total memories: {memory.count()}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./fts_demo.json"):
+        os.remove("./fts_demo.json")
 
 
 if __name__ == "__main__":
-    demo_fts()
+    demo()
