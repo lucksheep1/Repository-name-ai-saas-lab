@@ -6,7 +6,7 @@ import uuid
 
 
 def demo():
-    print(uuid.uuid4().hex)
+    print(uuid.uuid4().hex[:16])
 
 
 if __name__ == "__main__":
