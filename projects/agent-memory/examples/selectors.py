@@ -6,7 +6,8 @@ import selectors
 
 
 def demo():
-    print(selectors.DefaultSelector())
+    sel = selectors.DefaultSelector()
+    print(sel)
 
 
 if __name__ == "__main__":
