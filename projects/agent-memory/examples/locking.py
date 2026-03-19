@@ -8,23 +8,33 @@ import threading
 
 
 class MemoryLock:
-    """Lock memory operations"""
+    """Lock for memory operations"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
-        self.locks = {}  # mem_id -> lock
+        self.locks = {}
+        self.lock = threading.Lock()
     
-    def acquire(self, mem_id: str, timeout: float = 10) -> bool:
+    def acquire(self, key: str, timeout: float = 10) -> bool:
         """Acquire lock"""
-        if mem_id not in self.locks:
-            self.locks[mem_id] = threading.Lock()
+        start = time.time()
         
-        return self.locks[mem_id].acquire(timeout=timeout)
+        while True:
+            with self.lock:
+                if key not in self.locks:
+                    self.locks[key] = True
+                    return True
+            
+            if time.time() - start > timeout:
+                return False
+            
+            time.sleep(0.1)
     
-    def release(self, mem_id: str):
+    def release(self, key: str):
         """Release lock"""
-        if mem_id in self.locks:
-            self.locks[mem_id].release()
+        with self.lock:
+            if key in self.locks:
+                del self.locks[key]
     
     def __enter__(self):
         return self
@@ -33,48 +43,34 @@ class MemoryLock:
         pass
 
 
-class AtomicUpdate:
-    """Atomic memory updates"""
+class LockedMemory:
+    """Memory with locking"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
+        self.locker = MemoryLock(memory)
     
-    def update_if(self, mem_id: str, condition: callable, update: dict) -> bool:
-        """Update only if condition is true"""
-        mem = self.memory.get(mem_id)
-        
-        if not mem:
-            return False
-        
-        if condition(mem):
-            self.memory.update(mem_id, **update)
-            return True
-        
-        return False
+    def add_with_lock(self, content: str, lock_key: str = "default", **kwargs):
+        """Add with lock"""
+        if self.locker.acquire(lock_key):
+            try:
+                return self.memory.add(content, **kwargs)
+            finally:
+                self.locker.release(lock_key)
+        else:
+            raise Exception("Could not acquire lock")
 
 
 def demo():
     """Demo locking"""
     memory = Memory(storage="json", path="./lock_demo.json")
-    lock = MemoryLock(memory)
-    atomic = AtomicUpdate(memory)
+    locked = LockedMemory(memory)
     
-    print("=== Memory Locking Demo ===\n")
+    print("=== Lock Demo ===\n")
     
-    # Add memory
-    mem_id = memory.add("Counter: 0")
-    
-    # Atomic update
-    success = atomic.update_if(
-        mem_id,
-        lambda m: "Counter: 0" in m.get("content", ""),
-        {"content": "Counter: 1"}
-    )
-    print(f"Atomic update: {success}")
-    
-    # Verify
-    mem = memory.get(mem_id)
-    print(f"New content: {mem.get('content')}")
+    # Add with lock
+    mem_id = locked.add_with_lock("Locked memory", lock_key="mykey")
+    print(f"Added with lock: {mem_id}")
     
     # Cleanup
     import os
