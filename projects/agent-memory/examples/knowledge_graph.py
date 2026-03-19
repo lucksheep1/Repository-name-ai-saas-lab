@@ -1,93 +1,127 @@
 """
 Memory Knowledge Graph
-Entity extraction and relationships
+Build knowledge graph from memories
 """
 from agent_memory import Memory
-import re
+from collections import defaultdict
 
 
-class EntityExtractor:
-    """Extract entities from memories"""
+class KnowledgeGraph:
+    """Build graph from memories"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
-        self.entities = {}  # entity -> list of mem_ids
+        self.entities = defaultdict(set)  # entity -> related
+        self.relations = defaultdict(list)  # (e1, e2) -> relation
     
-    def extract(self, text: str) -> dict:
-        """Extract entities from text"""
-        entities = {
-            "emails": re.findall(r'[\w.-]+@[\w.-]+', text),
-            "urls": re.findall(r'https?://[^\s]+', text),
-            "mentions": re.findall(r'@(\w+)', text),
-            "hashtags": re.findall(r'#(\w+)', text),
-        }
+    def build(self):
+        """Build graph from memories"""
+        # Clear
+        self.entities.clear()
+        self.relations.clear()
         
-        # Extract capitalized words as potential names
-        names = re.findall(r'\b[A-Z][a-z]+\s+[A-Z][a-z]+\b', text)
-        entities["names"] = names
-        
-        return entities
+        for mem in self.memory.get_all():
+            content = mem.get("content", "")
+            
+            # Simple entity extraction (capitalized words)
+            import re
+            entities = re.findall(r'\b[A-Z][a-z]+\b', content)
+            
+            for entity in entities:
+                self.entities[entity].add(mem["id"])
+            
+            # Simple relations (co-occurrence)
+            for i, e1 in enumerate(entities):
+                for e2 in entities[i+1:]:
+                    key = tuple(sorted([e1, e2]))
+                    self.relations[key].append(mem["id"])
     
-    def index(self, mem_id: str):
-        """Index memory entities"""
-        mem = self.memory.get(mem_id)
-        if not mem:
-            return
+    def get_related(self, entity: str) -> list:
+        """Get entities related to this one"""
+        related_ids = self.entities.get(entity, set())
         
-        text = mem.get("content", "")
-        entities = self.extract(text)
+        related = []
+        for mem in self.memory.get_all():
+            if mem["id"] in related_ids:
+                related.append(mem)
         
-        # Store in metadata
-        self.memory.update(mem_id, metadata={
-            **mem.get("metadata", {}),
-            "_entities": entities
-        })
-        
-        # Add to index
-        for etype, values in entities.items():
-            for v in values:
-                if v not in self.entities:
-                    self.entities[v] = []
-                self.entities[v].append(mem_id)
+        return related
     
-    def search_by_entity(self, entity: str) -> list:
-        """Find memories with entity"""
-        if entity in self.entities:
-            return [self.memory.get(mid) for mid in self.entities[entity]]
-        return []
+    def get_relations(self, entity1: str, entity2: str) -> list:
+        """Get relation between two entities"""
+        key = tuple(sorted([entity1, entity2]))
+        mem_ids = self.relations.get(key, [])
+        
+        return [self.memory.get(mid) for mid in mem_ids if self.memory.get(mid)]
+
+
+class ConceptMemory:
+    """Memory organized by concepts"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+        self.concepts = defaultdict(list)  # concept -> memories
+    
+    def index(self):
+        """Index memories by concepts"""
+        self.concepts.clear()
+        
+        for mem in self.memory.get_all():
+            content = mem.get("content", "").lower()
+            
+            # Simple concept detection
+            concept_keywords = {
+                "code": ["code", "function", "class", "method"],
+                "data": ["data", "database", "query", "storage"],
+                "user": ["user", "login", "profile", "account"],
+                "api": ["api", "endpoint", "request", "response"],
+                "error": ["error", "bug", "issue", "problem"],
+            }
+            
+            for concept, keywords in concept_keywords.items():
+                if any(kw in content for kw in keywords):
+                    self.concepts[concept].append(mem["id"])
+    
+    def get_concept(self, concept: str) -> list:
+        """Get memories by concept"""
+        mem_ids = self.concepts.get(concept, [])
+        return [self.memory.get(mid) for mid in mem_ids if self.memory.get(mid)]
 
 
 def demo():
-    """Demo entity extraction"""
-    memory = Memory(storage="json", path="./entity_demo.json")
-    extractor = EntityExtractor(memory)
-    
-    print("=== Entity Extraction Demo ===\n")
+    """Demo knowledge graph"""
+    memory = Memory(storage="json", path="./graph_demo.json")
     
     # Add memories with entities
-    memory.add("Contact @john at john@example.com for help")
-    memory.add("Check https://api.example.com/docs for docs")
-    memory.add("Meeting with @alice about #projectX")
+    memory.add("Python is great for AI")
+    memory.add("Python has great libraries")
+    memory.add("AI uses machine learning")
+    memory.add("Machine learning needs data")
     
-    # Index
-    for mem in memory.get_all():
-        extractor.index(mem.get("id"))
+    print("=== Knowledge Graph Demo ===\n")
     
-    # Search
-    print("Search for 'john':")
-    for m in extractor.search_by_entity("john"):
-        print(f"  {m.get('content')}")
+    # Build graph
+    kg = KnowledgeGraph(memory)
+    kg.build()
     
-    print("\nSearch for 'example.com':")
-    for m in extractor.search_by_entity("example.com"):
-        print(f"  {m.get('content')}")
+    print(f"Entities: {list(kg.entities.keys())}")
+    print(f"Relations: {len(kg.relations)} pairs")
     
-    print("\nAll entities:", extractor.entities)
+    # Query
+    print("\nRelated to 'Python':")
+    for mem in kg.get_related("Python"):
+        print(f"  {mem.get('content')}")
+    
+    # Concept memory
+    cm = ConceptMemory(memory)
+    cm.index()
+    
+    print(f"\nConcepts: {list(cm.concepts.keys())}")
     
     # Cleanup
     import os
-    if os.path.exists("./entity_demo.json"):
-        os.remove("./entity_demo.json")
+    if os.path.exists("./graph_demo.json"):
+        os.remove("./graph_demo.json")
 
 
 if __name__ == "__main__":

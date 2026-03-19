@@ -1,130 +1,120 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Task Tracker
-==========================
-Track tasks with memory.
-
-Usage:
-    from task_tracker import TaskTracker
-    
-    tracker = TaskTracker()
-    tracker.add_task("Fix bug")
-    tracker.complete_task("Fix bug")
-    tracker.get_pending()
+Memory Task Tracker
+Track tasks and todos with memory
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Dict, Optional
 from agent_memory import Memory
+from datetime import datetime
 
 
 class TaskTracker:
-    """Task tracking with memory."""
+    """Track tasks using memory"""
     
-    def __init__(self, storage: str = "json", path: str = "./memory.json"):
-        self.memory = Memory(storage=storage, path=path)
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    def add_task(self, task: str, tags: List[str] = None, priority: int = 3) -> str:
-        """Add a task."""
-        tags = tags or ["task", "pending"]
-        metadata = {"status": "pending", "priority": priority, "type": "task"}
-        
-        return self.memory.add_with_tags(task, tags=tags, metadata=metadata)
-    
-    def complete_task(self, task_id: str) -> bool:
-        """Mark task as completed."""
-        # Get the task
-        recent = self.memory.get_recent(limit=self.memory.count())
-        
-        for mem in recent:
-            if mem["id"] == task_id:
-                text = mem["text"]
-                old_tags = mem.get("tags", [])
-                old_metadata = mem.get("metadata", {})
-                
-                # Update tags and metadata
-                new_tags = [t for t in old_tags if t != "pending"]
-                new_tags.append("completed")
-                
-                # Delete and re-add
-                self.memory.delete(task_id)
-                self.memory.add_with_tags(
-                    text, 
-                    tags=new_tags,
-                    metadata={**old_metadata, "status": "completed"}
-                )
-                return True
-        
-        return False
-    
-    def get_pending(self, limit: int = 20) -> List[Dict]:
-        """Get pending tasks."""
-        return self.memory.get_by_tag("pending")
-    
-    def get_completed(self, limit: int = 20) -> List[Dict]:
-        """Get completed tasks."""
-        return self.memory.get_by_tag("completed")
-    
-    def get_all_tasks(self, limit: int = 50) -> List[Dict]:
-        """Get all tasks."""
-        return self.memory.get_recent(limit=limit)
-    
-    def get_stats(self) -> Dict:
-        """Get task statistics."""
-        pending = self.get_pending()
-        completed = self.get_completed()
-        
-        return {
-            "total": len(pending) + len(completed),
-            "pending": len(pending),
-            "completed": len(completed)
+    def add_task(self, title: str, due: str = None, priority: int = 3) -> str:
+        """Add a task"""
+        metadata = {
+            "_task": True,
+            "priority": priority,
+            "status": "pending"
         }
+        
+        if due:
+            metadata["due"] = due
+        
+        return self.memory.add(title, tags=["task"], metadata=metadata)
+    
+    def complete_task(self, task_id: str):
+        """Mark task as complete"""
+        mem = self.memory.get(task_id)
+        if mem:
+            metadata = mem.get("metadata", {})
+            metadata["status"] = "completed"
+            metadata["completed_at"] = datetime.now().isoformat()
+            self.memory.update(task_id, metadata=metadata)
+    
+    def get_pending(self) -> list:
+        """Get pending tasks"""
+        pending = []
+        
+        for mem in self.memory.get_all():
+            meta = mem.get("metadata", {})
+            
+            if meta.get("_task") and meta.get("status") == "pending":
+                pending.append(mem)
+        
+        # Sort by priority
+        pending.sort(key=lambda m: m.get("metadata", {}).get("priority", 0), reverse=True)
+        return pending
+    
+    def get_completed(self, limit: int = 10) -> list:
+        """Get completed tasks"""
+        completed = []
+        
+        for mem in self.memory.get_all():
+            meta = mem.get("metadata", {})
+            
+            if meta.get("_task") and meta.get("status") == "completed":
+                completed.append(mem)
+        
+        return completed[:limit]
+    
+    def get_overdue(self) -> list:
+        """Get overdue tasks"""
+        now = datetime.now()
+        overdue = []
+        
+        for mem in self.memory.get_all():
+            meta = mem.get("metadata", {})
+            
+            if meta.get("_task") and meta.get("status") == "pending":
+                due = meta.get("due")
+                
+                if due:
+                    due_date = datetime.fromisoformat(due)
+                    
+                    if due_date < now:
+                        overdue.append(mem)
+        
+        return overdue
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+def demo():
+    """Demo task tracker"""
+    memory = Memory(storage="json", path="./task_demo.json")
+    tracker = TaskTracker(memory)
     
-    demo_path = os.path.join(tempfile.gettempdir(), "task_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Task Tracker Demo")
-    print("=" * 50)
-    
-    tracker = TaskTracker(storage="json", path=demo_path)
+    print("=== Task Tracker Demo ===\n")
     
     # Add tasks
-    print("\n1. Adding tasks...")
-    t1 = tracker.add_task("Fix login bug", priority=5)
-    t2 = tracker.add_task("Add dark mode", priority=3)
-    t3 = tracker.add_task("Write tests", priority=2)
-    t4 = tracker.add_task("Update docs", priority=1)
+    tracker.add_task("Review PR #123", priority=4)
+    tracker.add_task("Write documentation", priority=2)
+    tracker.add_task("Fix critical bug", priority=5)
+    tracker.add_task("Update dependencies", priority=1)
     
-    print(f"   Added 4 tasks")
+    print("Added 4 tasks\n")
     
     # Get pending
-    print("\n2. Pending tasks:")
+    print("Pending tasks:")
+    for task in tracker.get_pending():
+        p = task.get("metadata", {}).get("priority")
+        print(f"  [{p}] {task.get('content')}")
+    
+    # Complete one
     pending = tracker.get_pending()
-    for p in pending:
-        pr = p.get("metadata", {}).get("priority", 0)
-        print(f"   [P{pr}] {p['text']}")
+    if pending:
+        tracker.complete_task(pending[0]["id"])
+        print(f"\nCompleted: {pending[0]['content']}")
     
-    # Complete a task
-    print("\n3. Completing task:", t1)
-    tracker.complete_task(t1)
+    # Show remaining
+    print(f"\nRemaining: {len(tracker.get_pending())} tasks")
     
-    # Show stats
-    print("\n4. Stats:")
-    stats = tracker.get_stats()
-    print(f"   Total: {stats['total']}")
-    print(f"   Pending: {stats['pending']}")
-    print(f"   Completed: {stats['completed']}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./task_demo.json"):
+        os.remove("./task_demo.json")
+
+
+if __name__ == "__main__":
+    demo()

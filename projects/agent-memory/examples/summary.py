@@ -1,105 +1,89 @@
 """
-Memory Summarization
-Auto-summarize memories
+Memory Auto-Summary
+Automatically summarize memories
 """
 from agent_memory import Memory
 
 
-class MemorySummarizer:
-    """Summarize memories"""
-    
-    def summarize(self, content: str, max_len: int = 100) -> str:
-        """Summarize content"""
-        if len(content) <= max_len:
-            return content
-        
-        # Simple: take first sentence + key points
-        sentences = content.split(".")
-        
-        if len(sentences) > 1:
-            summary = sentences[0] + "."
-            
-            # Add more if needed
-            if len(summary) < max_len // 2:
-                for s in sentences[1:]:
-                    if len(summary) + len(s) < max_len:
-                        summary += s + "."
-            
-            return summary
-        
-        return content[:max_len] + "..."
-    
-    def summarize_all(self, memory: Memory) -> dict:
-        """Summarize all memories"""
-        summaries = []
-        
-        for mem in memory.get_all():
-            content = mem.get("content", "")
-            summary = self.summarize(content)
-            
-            summaries.append({
-                "id": mem.get("id"),
-                "original": content[:50] + "...",
-                "summary": summary
-            })
-        
-        return summaries
-
-
-class ConversationSummary:
-    """Summarize conversation"""
+class AutoSummary:
+    """Auto-summarize memories"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
     
-    def summarize_conversation(self) -> str:
-        """Summarize entire conversation"""
-        messages = self.memory.get_all()
+    def summarize_all(self, max_length: int = 100) -> str:
+        """Summarize all memories"""
+        memories = self.memory.get_all()
         
-        if not messages:
-            return "No conversation yet."
+        if not memories:
+            return "No memories to summarize."
         
-        # Get topics
-        topics = set()
-        for m in messages:
-            tags = m.get("tags", [])
-            topics.update(tags)
+        # Simple summarization (first sentence of recent memories)
+        recent = memories[-5:]
         
-        # Count message types
-        roles = {}
-        for m in messages:
-            role = m.get("metadata", {}).get("role", "unknown")
-            roles[role] = roles.get(role, 0) + 1
+        summary_parts = ["Summary of recent memories:"]
         
-        summary = f"Conversation with {len(messages)} messages.\n"
-        summary += f"Topics: {', '.join(topics) if topics else 'general'}\n"
-        summary += f"Messages by role: {roles}"
+        for mem in recent:
+            content = mem.get("content", "")
+            
+            # Take first sentence
+            sentences = content.split(".")
+            first = sentences[0].strip()
+            
+            if first:
+                summary_parts.append(f"- {first}")
         
-        return summary
+        return "\n".join(summary_parts)
+    
+    def summarize_by_tag(self, tag: str) -> str:
+        """Summarize memories by tag"""
+        mems = self.memory.get_by_tag(tag)
+        
+        if not mems:
+            return f"No memories with tag '{tag}'."
+        
+        return f"Found {len(mems)} memories with tag '{tag}':\n" + \
+            "\n".join(f"- {m.get('content', '')[:60]}" for m in mems[:5])
+    
+    def extract_topics(self) -> dict:
+        """Extract topics from memories"""
+        topics = {}
+        
+        for mem in self.memory.get_all():
+            content = mem.get("content", "").lower()
+            
+            # Simple keyword extraction
+            words = content.split()
+            
+            for word in words:
+                if len(word) > 4:
+                    topics[word] = topics.get(word, 0) + 1
+        
+        # Return top topics
+        sorted_topics = sorted(topics.items(), key=lambda x: x[1], reverse=True)
+        return dict(sorted_topics[:20])
 
 
 def demo():
-    """Demo summarization"""
+    """Demo auto-summary"""
     memory = Memory(storage="json", path="./summary_demo.json")
+    summarizer = AutoSummary(memory)
     
-    print("=== Memory Summarization Demo ===\n")
+    print("=== Auto Summary Demo ===\n")
     
     # Add memories
-    memory.add("This is a very long memory that contains a lot of detailed information about various topics including programming, science, and mathematics. It has many sentences and paragraphs.")
-    memory.add("Short.")
+    memory.add("Python is a great programming language for AI and machine learning.")
+    memory.add("FastAPI is a modern web framework for building APIs.")
+    memory.add("SQLite is a lightweight database that works great for small projects.")
+    memory.add("Memory is important for AI agents to maintain context.")
     
     # Summarize
-    summarizer = MemorySummarizer()
-    for s in summarizer.summarize_all(memory):
-        print(f"Original: {s['original']}")
-        print(f"Summary: {s['summary']}\n")
+    print(summarizer.summarize_all())
     
-    # Conversation summary
-    conv = ConversationSummary(memory)
-    memory.add("User message 1", metadata={"role": "user"})
-    memory.add("Assistant response", metadata={"role": "assistant"})
-    
-    print("Conversation:", conv.summarize_conversation())
+    # Topics
+    print("\nTop topics:")
+    for topic, count in summarizer.extract_topics().items():
+        print(f"  {topic}: {count}")
     
     # Cleanup
     import os
