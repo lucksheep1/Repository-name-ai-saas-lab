@@ -1,122 +1,157 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Batch Operations
-================================
-Batch add, search, and export operations.
-
-Usage:
-    from batch_ops import batch_add, batch_search
-    
-    memories = [
-        {"text": "Task 1"},
-        {"text": "Task 2"},
-        {"text": "Task 3"}
-    ]
-    batch_add(memory, memories)
+Memory Batch Operations
+Efficiently process multiple memories
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Dict, Any
 from agent_memory import Memory
+from typing import List, Callable
 
 
-def batch_add(memory: Memory, items: List[Dict[str, Any]]) -> List[str]:
-    """Add multiple memories at once."""
-    ids = []
-    for item in items:
-        text = item.get("text", "")
-        tags = item.get("tags")
-        metadata = item.get("metadata")
-        ttl_days = item.get("ttl_days")
+class BatchProcessor:
+    """Batch process memories"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+    
+    def process(self, items: List[dict], operation: Callable) -> List[dict]:
+        """Process items in batch"""
+        results = []
         
-        if tags:
-            memory_id = memory.add_with_tags(text, tags=tags, metadata=metadata)
-        else:
-            memory_id = memory.add(text, metadata=metadata, ttl_days=ttl_days)
-        ids.append(memory_id)
+        for item in items:
+            try:
+                result = operation(item)
+                results.append({"success": True, "result": result})
+            except Exception as e:
+                results.append({"success": False, "error": str(e)})
+        
+        return results
     
-    return ids
-
-
-def batch_search(memory: Memory, queries: List[str], top_k: int = 5) -> Dict[str, List[dict]]:
-    """Search for multiple queries at once."""
-    results = {}
-    for query in queries:
-        results[query] = memory.search(query, top_k=top_k)
-    return results
-
-
-def batch_export(memory: Memory, filepath: str, format: str = "json"):
-    """Export memory to file."""
-    if format == "markdown":
-        memory.export_markdown(filepath)
-    else:
-        memory.export(filepath)
-
-
-def batch_import(memory: Memory, filepath: str):
-    """Import memories from file."""
-    memory.import_(filepath)
-
-
-# Demo
-if __name__ == "__main__":
-    import tempfile
+    def bulk_add(self, items: List[dict]) -> int:
+        """Bulk add memories
+        
+        items: [{"content": "...", "tags": [...], "metadata": {...}}, ...]
+        """
+        added = 0
+        
+        for item in items:
+            try:
+                self.memory.add(
+                    content=item.get("content", ""),
+                    tags=item.get("tags", []),
+                    metadata=item.get("metadata", {}),
+                    priority=item.get("priority")
+                )
+                added += 1
+            except Exception as e:
+                print(f"Error adding: {e}")
+        
+        return added
     
-    demo_path = os.path.join(tempfile.gettempdir(), "batch_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    def bulk_delete(self, mem_ids: List[str]) -> int:
+        """Bulk delete memories"""
+        deleted = 0
+        
+        for mem_id in mem_ids:
+            try:
+                self.memory.forget(mem_id)
+                deleted += 1
+            except:
+                pass
+        
+        return deleted
     
-    print("🤖 Agent Memory - Batch Operations Demo")
-    print("=" * 50)
+    def bulk_tag(self, mem_ids: List[str], tags: List[str]) -> int:
+        """Bulk add tags"""
+        updated = 0
+        
+        for mem_id in mem_ids:
+            mem = self.memory.get(mem_id)
+            if mem:
+                current_tags = set(mem.get("tags", []))
+                current_tags.update(tags)
+                self.memory.update(mem_id, tags=list(current_tags))
+                updated += 1
+        
+        return updated
+
+
+class BulkImporter:
+    """Import memories from various sources"""
     
-    memory = Memory(storage="json", path=demo_path)
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    # Batch add
-    print("\n1. Batch adding memories...")
+    def from_lines(self, text: str, delimiter: str = "\n") -> int:
+        """Import from line-separated text"""
+        lines = [l.strip() for l in text.split(delimiter) if l.strip()]
+        
+        processor = BatchProcessor(self.memory)
+        return processor.bulk_add([{"content": line} for line in lines])
+    
+    def from_json(self, data: List[dict]) -> int:
+        """Import from JSON array"""
+        processor = BatchProcessor(self.memory)
+        return processor.bulk_add(data)
+
+
+class BulkExporter:
+    """Export memories in bulk"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+    
+    def to_lines(self) -> str:
+        """Export as line-separated text"""
+        memories = self.memory.get_all()
+        lines = [mem.get("content", "") for mem in memories]
+        return "\n".join(lines)
+    
+    def to_json(self) -> List[dict]:
+        """Export as JSON array"""
+        return self.memory.get_all()
+
+
+def demo():
+    """Demo batch operations"""
+    memory = Memory(storage="json", path="./batch_demo.json")
+    processor = BatchProcessor(memory)
+    
+    print("=== Batch Processor Demo ===\n")
+    
+    # Bulk add
     items = [
-        {"text": "Remember to buy milk", "tags": ["shopping"]},
-        {"text": "Call doctor tomorrow", "tags": ["health"], "metadata": {"priority": 4}},
-        {"text": "Finish project report", "tags": ["work"], "metadata": {"priority": 3}},
-        {"text": "Water the plants", "tags": ["home"]},
-        {"text": "Read chapter 5", "tags": ["reading"]},
+        {"content": f"Memory {i}", "tags": ["batch"]}
+        for i in range(10)
     ]
-    ids = batch_add(memory, items)
-    print(f"   Added {len(ids)} memories")
     
-    # Batch search
-    print("\n2. Batch searching...")
-    queries = ["health", "work", "shopping"]
-    results = batch_search(memory, queries)
-    for query, hits in results.items():
-        print(f"   '{query}': {len(hits)} results")
+    added = processor.bulk_add(items)
+    print(f"Bulk added: {added} memories")
     
-    # Export
-    print("\n3. Exporting...")
-    export_path = os.path.join(tempfile.gettempdir(), "batch_export.json")
-    batch_export(memory, export_path)
-    print(f"   Exported to: {export_path}")
+    # Get all IDs
+    all_memories = memory.get_all()
+    ids = [m["id"] for m in all_memories[:5]]
     
-    # Import to new memory
-    print("\n4. Importing to new memory...")
-    new_memory = Memory(storage="json", path=demo_path + ".new")
-    batch_import(new_memory, export_path)
-    print(f"   Imported {new_memory.count()} memories")
+    # Bulk tag
+    tagged = processor.bulk_tag(ids, ["important"])
+    print(f"Bulk tagged: {tagged} memories")
     
-    # Stats
-    print("\n5. Stats:")
-    print(f"   Original: {memory.count()} memories")
-    print(f"   New: {new_memory.count()} memories")
+    # Bulk delete
+    deleted = processor.bulk_delete(ids)
+    print(f"Bulk deleted: {deleted} memories")
     
-    print("\n✅ Demo complete!")
+    # Remaining
+    remaining = len(memory.get_all())
+    print(f"Remaining: {remaining} memories")
+    
+    # Import demo
+    importer = BulkImporter(memory)
+    count = importer.from_lines("Line 1\nLine 2\nLine 3")
+    print(f"Imported from lines: {count}")
     
     # Cleanup
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    if os.path.exists(demo_path + ".new"):
-        os.remove(demo_path + ".new")
-    if os.path.exists(export_path):
-        os.remove(export_path)
+    import os
+    if os.path.exists("./batch_demo.json"):
+        os.remove("./batch_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
