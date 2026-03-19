@@ -1,129 +1,142 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Notification System
-=================================
-Get notified when important memories are added.
-
-Usage:
-    from notifications import MemoryNotifier
-    
-    notifier = MemoryNotifier(memory)
-    notifier.watch("urgent", send_alert)
+Memory Notifications
+Send notifications based on memory events
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import Callable, List, Dict
 from agent_memory import Memory
+from typing import Callable, List
 
 
-class MemoryNotifier:
-    """Notification system for memory events."""
+class NotificationManager:
+    """Manage notifications based on memory"""
     
     def __init__(self, memory: Memory):
         self.memory = memory
-        self.watchers: Dict[str, List[Callable]] = {}
+        self.handlers = []  # [(condition, handler)]
     
-    def watch(self, tag: str, callback: Callable):
-        """Watch for memories with specific tag."""
-        if tag not in self.watchers:
-            self.watchers[tag] = []
-        self.watchers[tag].append(callback)
+    def register(self, condition: Callable, handler: Callable):
+        """Register notification handler"""
+        self.handlers.append((condition, handler))
     
-    def unwatch(self, tag: str, callback: Callable = None):
-        """Stop watching a tag."""
-        if tag in self.watchers:
-            if callback:
-                self.watchers[tag].remove(callback)
-            else:
-                del self.watchers[tag]
-    
-    def notify(self, memory_id: str, text: str, tags: List[str], metadata: dict):
-        """Notify watchers of new memory."""
-        for tag in tags:
-            if tag in self.watchers:
-                for callback in self.watchers[tag]:
-                    try:
-                        callback({
-                            "id": memory_id,
-                            "text": text,
-                            "tags": tags,
-                            "metadata": metadata
-                        })
-                    except Exception as e:
-                        print(f"Notification error: {e}")
-    
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None) -> str:
-        """Add memory and notify watchers."""
-        # Get tags before adding
-        tags = metadata.get("tags", []) if metadata else []
+    def check_and_notify(self, mem_id: str = None):
+        """Check memories and send notifications"""
+        if mem_id:
+            mems = [self.memory.get(mem_id)]
+        else:
+            mems = self.memory.get_all()
         
-        # Add memory
-        memory_id = self.memory.add(text, metadata, ttl_days)
+        notified = []
         
-        # Get the added memory with tags
-        recent = self.memory.get_recent(limit=1)
-        if recent and recent[0]["id"] == memory_id:
-            actual_tags = recent[0].get("tags", [])
-            self.notify(memory_id, text, actual_tags, metadata or {})
+        for mem in mems:
+            for condition, handler in self.handlers:
+                try:
+                    if condition(mem):
+                        handler(mem)
+                        notified.append(mem["id"])
+                except Exception as e:
+                    print(f"Notification error: {e}")
         
-        return memory_id
+        return notified
+
+
+# Example handlers
+def email_handler(mem):
+    """Send email notification"""
+    print(f"📧 Email: {mem.get('content', '')[:50]}")
+
+
+def slack_handler(mem):
+    """Send Slack notification"""
+    print(f"💬 Slack: {mem.get('content', '')[:50]}")
+
+
+def webhook_handler(mem):
+    """Send webhook notification"""
+    print(f"🌐 Webhook: {mem.get('content', '')[:50]}")
+
+
+# Example conditions
+def urgent_condition(mem) -> bool:
+    """Check if memory is urgent"""
+    tags = mem.get("tags", [])
+    priority = mem.get("priority", 0)
     
-    def add_with_tags(self, text: str, tags: List[str], metadata: dict = None) -> str:
-        """Add memory with tags and notify."""
-        memory_id = self.memory.add_with_tags(text, tags, metadata)
-        self.notify(memory_id, text, tags, metadata or {})
-        return memory_id
+    return "urgent" in tags or priority >= 4
 
 
-# Demo callbacks
-def print_alert(memory):
-    """Print alert for urgent memories."""
-    print(f"   🚨 URGENT: {memory['text']}")
-
-
-def print_bug(memory):
-    """Print alert for bug memories."""
-    print(f"   🐛 BUG: {memory['text']}")
-
-
-# Demo
-if __name__ == "__main__":
-    import tempfile
+def bug_condition(mem) -> bool:
+    """Check if memory is bug-related"""
+    tags = mem.get("tags", [])
+    content = mem.get("content", "").lower()
     
-    demo_path = os.path.join(tempfile.gettempdir(), "notification_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    return "bug" in tags or "error" in content or "exception" in content
+
+
+def feedback_condition(mem) -> bool:
+    """Check if memory is feedback"""
+    return "feedback" in mem.get("tags", [])
+
+
+class AlertRule:
+    """Reusable alert rule"""
     
-    print("🤖 Agent Memory - Notification Demo")
-    print("=" * 50)
+    def __init__(self, name: str, condition: Callable, handler: Callable, 
+                 cooldown: int = 3600):
+        self.name = name
+        self.condition = condition
+        self.handler = handler
+        self.cooldown = cooldown
+        self.last_triggered = {}
     
-    memory = Memory(storage="json", path=demo_path)
-    notifier = MemoryNotifier(memory)
+    def should_trigger(self, mem) -> bool:
+        """Check if should trigger (respects cooldown)"""
+        mem_id = mem.get("id", "")
+        
+        if mem_id in self.last_triggered:
+            import time
+            elapsed = time.time() - self.last_triggered[mem_id]
+            if elapsed < self.cooldown:
+                return False
+        
+        return self.condition(mem)
     
-    # Set up watchers
-    print("\n1. Setting up watchers...")
-    notifier.watch("urgent", print_alert)
-    notifier.watch("bug", print_bug)
-    print("   Watching: urgent, bug")
+    def trigger(self, mem):
+        """Trigger the handler"""
+        self.handler(mem)
+        
+        import time
+        mem_id = mem.get("id", "")
+        self.last_triggered[mem_id] = time.time()
+
+
+def demo():
+    """Demo notifications"""
+    memory = Memory(storage="json", path="./notify_demo.json")
+    manager = NotificationManager(memory)
+    
+    print("=== Notification Manager Demo ===\n")
+    
+    # Register handlers
+    manager.register(urgent_condition, email_handler)
+    manager.register(bug_condition, slack_handler)
+    manager.register(feedback_condition, webhook_handler)
     
     # Add memories
-    print("\n2. Adding memories...")
-    notifier.add("Normal task", metadata={"tags": ["task"]})
-    print("   Added: Normal task")
+    memory.add("Normal conversation", tags=["chat"])
+    memory.add("Critical: System down!", tags=["urgent"], priority=5)
+    memory.add("Bug in payment", tags=["bug"])
+    memory.add("User feedback: love it!", tags=["feedback"])
     
-    notifier.add_with_tags("Fix critical bug!", tags=["bug", "urgent"])
-    print("   Added: Fix critical bug!")
+    print("Added 4 memories with different types\n")
     
-    notifier.add_with_tags("Server is down!", tags=["urgent"])
-    print("   Added: Server is down!")
+    # Check and notify
+    print("Notifications:")
+    manager.check_and_notify()
     
-    notifier.add("Regular reminder", metadata={"tags": ["reminder"]})
-    print("   Added: Regular reminder")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./notify_demo.json"):
+        os.remove("./notify_demo.json")
+
+
+if __name__ == "__main__":
+    demo()
