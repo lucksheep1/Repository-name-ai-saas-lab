@@ -1,144 +1,105 @@
-#!/usr/bin/env python3
 """
-Agent Memory - API with Authentication
-=====================================
-Secure REST API with token-based auth.
-
-Usage:
-    python api_auth.py
-    
-    # Then test:
-    curl -H "Authorization: Bearer token123" http://localhost:8000/memory
+Memory API Authentication
+Secure API with authentication
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import hashlib
-import time
-from functools import wraps
-from fastapi import FastAPI, HTTPException, Header
-from pydantic import BaseModel
-from typing import Optional, List
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agent_memory import Memory
-
-app = FastAPI(title="Agent Memory API (Auth)")
-
-# In-memory token store (use database in production)
-TOKENS = {
-    "token123": {"user": "admin", "expires": time.time() + 86400},
-    "readonly": {"user": "reader", "expires": time.time() + 86400, "readonly": True}
-}
-
-# Global memory
-memory = Memory(storage="json", path="./memory.json")
+import hashlib
+import hmac
+import time
 
 
-def verify_token(authorization: str = Header(None)) -> dict:
-    """Verify authorization token."""
-    if not authorization:
-        raise HTTPException(status_code=401, detail="Missing authorization")
+class AuthMemory:
+    """Memory with API authentication"""
     
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid authorization format")
+    def __init__(self, memory: Memory):
+        self.memory = memory
+        self.api_keys = {}  # key -> {"user": ..., "created": ...}
     
-    token = authorization[7:]
+    def create_key(self, user: str) -> str:
+        """Create API key for user"""
+        import random
+        import string
+        
+        key = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+        
+        self.api_keys[key] = {
+            "user": user,
+            "created": time.time()
+        }
+        
+        return key
     
-    if token not in TOKENS:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    def verify_key(self, key: str) -> str:
+        """Verify API key, return user or None"""
+        if key in self.api_keys:
+            return self.api_keys[key]["user"]
+        return None
     
-    token_data = TOKENS[token]
+    def revoke_key(self, key: str):
+        """Revoke API key"""
+        if key in self.api_keys:
+            del self.api_keys[key]
+
+
+class SecureMemory:
+    """Memory with signed requests"""
     
-    if token_data["expires"] < time.time():
-        raise HTTPException(status_code=401, detail="Token expired")
+    def __init__(self, memory: Memory, secret: str):
+        self.memory = memory
+        self.secret = secret
     
-    return token_data
-
-
-def require_admin(token_data: dict):
-    """Require admin privileges."""
-    if token_data.get("user") != "admin":
-        raise HTTPException(status_code=403, detail="Admin required")
-
-
-# Models
-class MemoryAdd(BaseModel):
-    text: str
-    tags: Optional[List[str]] = None
-    metadata: Optional[dict] = None
-
-
-# Routes
-@app.get("/")
-def root():
-    return {"name": "Agent Memory API (Authenticated)", "version": "1.0.0"}
-
-
-@app.get("/health")
-def health():
-    return {"status": "healthy", "count": memory.count()}
-
-
-@app.post("/memory", dependencies=[])
-def add_memory(item: MemoryAdd, authorization: str = Header(None)):
-    """Add a memory (requires admin or write token)."""
-    token_data = verify_token(authorization)
+    def sign(self, data: str) -> str:
+        """Sign data"""
+        return hmac.new(
+            self.secret.encode(),
+            data.encode(),
+            hashlib.sha256
+        ).hexdigest()
     
-    if token_data.get("readonly"):
-        raise HTTPException(status_code=403, detail="Read-only token")
+    def verify(self, data: str, signature: str) -> bool:
+        """Verify signature"""
+        return hmac.compare_digest(self.sign(data), signature)
     
-    if item.tags:
-        memory_id = memory.add_with_tags(item.text, tags=item.tags, metadata=item.metadata)
-    else:
-        memory_id = memory.add(item.text, metadata=item.metadata)
+    def add_signed(self, content: str, signature: str, **kwargs) -> str:
+        """Add with signature verification"""
+        if not self.verify(content, signature):
+            raise ValueError("Invalid signature")
+        
+        return self.memory.add(content, **kwargs)
+
+
+def demo():
+    """Demo auth"""
+    memory = Memory(storage="json", path="./auth_demo.json")
+    auth = AuthMemory(memory)
+    secure = SecureMemory(memory, "my_secret_key")
     
-    return {"id": memory_id, "status": "added"}
-
-
-@app.get("/memory")
-def get_memories(limit: int = 10, authorization: str = Header(None)):
-    """Get recent memories."""
-    verify_token(authorization)
-    return memory.get_recent(limit=limit)
-
-
-@app.post("/memory/search")
-def search(query: str, top_k: int = 5, authorization: str = Header(None)):
-    """Search memories."""
-    verify_token(authorization)
-    results = memory.search(query, top_k=top_k)
-    return {"results": results, "count": len(results)}
-
-
-@app.get("/memory/context")
-def get_context(max_tokens: int = 2000, authorization: str = Header(None)):
-    """Get context."""
-    verify_token(authorization)
-    context = memory.get_context(max_tokens=max_tokens)
-    return {"context": context}
-
-
-@app.delete("/memory/{memory_id}")
-def delete_memory(memory_id: str, authorization: str = Header(None)):
-    """Delete a memory."""
-    token_data = verify_token(authorization)
+    print("=== Auth Memory Demo ===\n")
     
-    if token_data.get("readonly"):
-        raise HTTPException(status_code=403, detail="Read-only token")
+    # Create API key
+    key = auth.create_key("alice")
+    print(f"Created key for alice: {key[:10]}...")
     
-    success = memory.delete(memory_id)
-    if success:
-        return {"status": "deleted"}
-    raise HTTPException(status_code=404, detail="Memory not found")
+    # Verify
+    user = auth.verify_key(key)
+    print(f"Verified: {user}")
+    
+    # Bad key
+    user = auth.verify_key("invalid_key")
+    print(f"Bad key: {user}")
+    
+    # Signed request
+    content = "Important memory"
+    signature = secure.sign(content)
+    
+    mem_id = secure.add_signed(content, signature)
+    print(f"\nAdded signed memory: {mem_id}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./auth_demo.json"):
+        os.remove("./auth_demo.json")
 
 
 if __name__ == "__main__":
-    import uvicorn
-    print("🚀 Starting Agent Memory API with Auth...")
-    print("📝 Test tokens:")
-    print("   Admin: Bearer token123")
-    print("   Read-only: Bearer readonly")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    demo()

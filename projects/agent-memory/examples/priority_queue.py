@@ -1,122 +1,115 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Priority Queue
-=============================
-Use memory with priority queue semantics.
-
-Usage:
-    from priority_queue import PriorityMemory
-    
-    memory = PriorityMemory()
-    memory.add("Critical task", priority=5)
-    memory.add("Low priority", priority=1)
-    
-    # Get highest priority first
-    important = memory.get_by_priority(4)
+Memory Priority Queue
+Process memories by priority
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Dict, Any
 from agent_memory import Memory
+from collections import defaultdict
 
 
-class PriorityMemory(Memory):
-    """Memory with priority queue features."""
+class PriorityQueue:
+    """Memory organized by priority"""
     
-    def get_priority_queue(self, min_priority: int = 1) -> List[dict]:
-        """Get memories sorted by priority (highest first)."""
-        all_memories = self.get_recent(limit=self.count())
+    def __init__(self, memory: Memory):
+        self.memory = memory
+    
+    def get_by_priority(self, min_priority: int = 1, max_priority: int = 5) -> list:
+        """Get memories in priority range"""
+        all_mem = self.memory.get_all()
+        result = []
         
-        # Filter by priority
-        filtered = [m for m in all_memories if m.get("priority", 0) >= min_priority]
+        for mem in all_mem:
+            priority = mem.get("metadata", {}).get("priority", 0)
+            if min_priority <= priority <= max_priority:
+                result.append(mem)
         
-        # Sort by priority (descending)
-        filtered.sort(key=lambda x: x.get("priority", 0), reverse=True)
-        
-        return filtered
+        # Sort by priority descending
+        result.sort(key=lambda m: m.get("metadata", {}).get("priority", 0), reverse=True)
+        return result
     
-    def get_next_task(self) -> dict:
-        """Get the highest priority memory as next task."""
-        queue = self.get_priority_queue(min_priority=1)
-        return queue[0] if queue else None
+    def get_next(self) -> dict:
+        """Get highest priority memory"""
+        by_priority = self.get_by_priority(1, 5)
+        return by_priority[0] if by_priority else None
     
-    def complete_task(self, memory_id: str) -> bool:
-        """Mark a task as complete and remove it."""
-        return self.delete(memory_id)
-    
-    def reschedule(self, memory_id: str, new_priority: int) -> bool:
-        """Change priority of a memory."""
-        # Get the memory
-        recent = self.get_recent(limit=self.count())
-        for mem in recent:
-            if mem["id"] == memory_id:
-                # Update - delete and re-add with new priority
-                text = mem["text"]
-                metadata = mem.get("metadata", {})
-                metadata["priority"] = new_priority
-                
-                self.delete(memory_id)
-                self.add(text, metadata=metadata)
-                return True
-        return False
+    def reprioritize(self, mem_id: str, new_priority: int):
+        """Change priority"""
+        mem = self.memory.get(mem_id)
+        if mem:
+            metadata = mem.get("metadata", {})
+            metadata["priority"] = new_priority
+            self.memory.update(mem_id, metadata=metadata)
 
 
-# Demo
+class WeightedMemory:
+    """Memory with weighted retrieval"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
+    
+    def get_weighted(self, weights: dict = None) -> list:
+        """Get memories with weighted scoring
+        
+        weights: {"recency": 0.3, "priority": 0.5, "tags": 0.2}
+        """
+        weights = weights or {"recency": 0.3, "priority": 0.5, "tags": 0.2}
+        
+        all_mem = self.memory.get_all()
+        scored = []
+        
+        for mem in all_mem:
+            score = 0
+            
+            # Priority weight
+            priority = mem.get("metadata", {}).get("priority", 0)
+            score += (priority / 5.0) * weights.get("priority", 0)
+            
+            # Tag weight
+            tags = mem.get("tags", [])
+            score += len(tags) * 0.1 * weights.get("tags", 0)
+            
+            scored.append((score, mem))
+        
+        # Sort by score
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [m for _, m in scored]
+
+
+def demo():
+    """Demo priority queue"""
+    memory = Memory(storage="json", path="./priority_demo.json")
+    pq = PriorityQueue(memory)
+    
+    print("=== Priority Queue Demo ===\n")
+    
+    # Add with priorities
+    memory.add("Low priority task", metadata={"priority": 1})
+    memory.add("Medium task", metadata={"priority": 3})
+    memory.add("High priority!", metadata={"priority": 5})
+    memory.add("Another medium", metadata={"priority": 4})
+    
+    # Get by priority
+    high = pq.get_by_priority(4, 5)
+    print(f"High priority ({len(high)}):")
+    for m in high:
+        p = m.get("metadata", {}).get("priority")
+        print(f"  [{p}] {m.get('content', '')[:30]}")
+    
+    # Get next to process
+    next_mem = pq.get_next()
+    print(f"\nNext to process: {next_mem.get('content', '')[:30]}")
+    
+    # Weighted retrieval
+    wm = WeightedMemory(memory)
+    weighted = wm.get_weighted({"priority": 0.7, "recency": 0.2, "tags": 0.1})
+    print(f"\nWeighted (top 3):")
+    for m in weighted[:3]:
+        print(f"  {m.get('content', '')[:30]}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./priority_demo.json"):
+        os.remove("./priority_demo.json")
+
+
 if __name__ == "__main__":
-    import tempfile
-    
-    demo_path = os.path.join(tempfile.gettempdir(), "priority_queue_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Priority Queue Demo")
-    print("=" * 50)
-    
-    # Create priority memory
-    memory = PriorityMemory(storage="json", path=demo_path)
-    
-    # Add tasks with priorities
-    print("\n1. Adding tasks with priorities...")
-    memory.add("Fix critical bug in production", metadata={"priority": 5})
-    memory.add("Write unit tests", metadata={"priority": 2})
-    memory.add("Update documentation", metadata={"priority": 1})
-    memory.add("Review pull requests", metadata={"priority": 3})
-    memory.add("Deploy to staging", metadata={"priority": 4})
-    
-    # Get priority queue
-    print("\n2. Priority queue (all tasks):")
-    queue = memory.get_priority_queue()
-    for i, task in enumerate(queue, 1):
-        p = task.get("priority", 0)
-        print(f"   {i}. [P{p}] {task['text']}")
-    
-    # Get next task
-    print("\n3. Next task to do:")
-    next_task = memory.get_next_task()
-    print(f"   [P{next_task.get('priority', 0)}] {next_task['text']}")
-    
-    # Get high priority only
-    print("\n4. High priority tasks (P4+):")
-    high = memory.get_priority_queue(min_priority=4)
-    for task in high:
-        print(f"   [P{task.get('priority', 0)}] {task['text']}")
-    
-    # Complete the top task
-    print("\n5. Completing top task...")
-    memory.complete_task(next_task["id"])
-    print("   Done!")
-    
-    # Show remaining
-    print("\n6. Remaining tasks:")
-    queue = memory.get_priority_queue()
-    for i, task in enumerate(queue, 1):
-        p = task.get("priority", 0)
-        print(f"   {i}. [P{p}] {task['text']}")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    demo()

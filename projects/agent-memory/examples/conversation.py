@@ -1,124 +1,108 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Conversation Context
-==================================
-Build conversation context for chatbots.
-
-Usage:
-    from conversation import ConversationContext
-    
-    ctx = ConversationContext()
-    ctx.add_user_message("Hello")
-    ctx.add_bot_message("Hi!")
-    context = ctx.get_context()
+Memory Conversation Context
+Build context from conversation history
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Dict, Optional
 from agent_memory import Memory
 
 
 class ConversationContext:
-    """Conversation context manager."""
+    """Build context from conversations"""
     
-    def __init__(self, storage: str = "json", path: str = "./memory.json", max_turns: int = 10):
-        self.memory = Memory(storage=storage, path=path)
-        self.max_turns = max_turns
+    def __init__(self, memory: Memory):
+        self.memory = memory
     
-    def add_user_message(self, message: str, metadata: dict = None):
-        """Add user message."""
-        metadata = metadata or {}
-        metadata["role"] = "user"
-        metadata["type"] = "message"
+    def build(self, max_tokens: int = 2000, include_system: bool = True) -> str:
+        """Build context string"""
+        parts = []
         
-        self.memory.add(f"User: {message}", metadata=metadata)
-    
-    def add_bot_message(self, message: str, metadata: dict = None):
-        """Add bot message."""
-        metadata = metadata or {}
-        metadata["role"] = "bot"
-        metadata["type"] = "message"
+        if include_system:
+            parts.append("## Conversation Context\n")
         
-        self.memory.add(f"Bot: {message}", metadata=metadata)
-    
-    def get_conversation(self, limit: int = None) -> List[Dict]:
-        """Get conversation history."""
-        limit = limit or self.max_turns * 2
+        memories = self.memory.get_all()
         
-        recent = self.memory.get_recent(limit=limit)
+        for mem in memories:
+            content = mem.get("content", "")
+            role = mem.get("metadata", {}).get("role", "user")
+            
+            # Format based on role
+            if role == "system":
+                parts.append(f"System: {content}")
+            elif role == "assistant":
+                parts.append(f"Assistant: {content}")
+            else:
+                parts.append(f"User: {content}")
         
-        # Filter to just messages
-        messages = [m for m in recent if m.get("metadata", {}).get("type") == "message"]
+        # Truncate to token limit (rough estimate)
+        context = "\n".join(parts)
         
-        # Reverse to get chronological order
-        messages.reverse()
-        
-        return messages
-    
-    def get_context(self, max_tokens: int = 1000) -> str:
-        """Get context string."""
-        conversation = self.get_conversation()
-        
-        lines = []
-        for msg in conversation:
-            text = msg["text"]
-            role = msg.get("metadata", {}).get("role", "unknown")
-            lines.append(f"{role.upper()}: {text}")
-        
-        context = "\n".join(lines)
-        
-        # Truncate if needed
-        if len(context) > max_tokens * 4:  # Rough estimate
+        if len(context) > max_tokens * 4:  # Rough: 4 chars/token
             context = context[-max_tokens * 4:]
         
         return context
     
-    def clear_conversation(self):
-        """Clear conversation history."""
-        recent = self.memory.get_recent(limit=self.memory.count())
+    def add_message(self, content: str, role: str = "user"):
+        """Add message to conversation"""
+        self.memory.add(content, metadata={"role": role})
+    
+    def get_recent(self, count: int = 10) -> list:
+        """Get recent messages"""
+        all_mem = self.memory.get_all()
+        return all_mem[-count:]
+
+
+class PersonaMemory:
+    """Memory with persona configuration"""
+    
+    def __init__(self, memory: Memory, persona: dict):
+        self.memory = memory
+        self.persona = persona
+    
+    def get_context_prompt(self) -> str:
+        """Get context prompt for LLM"""
+        parts = [
+            "## Persona",
+            f"Name: {self.persona.get('name', 'AI')}",
+            f"Description: {self.persona.get('description', '')}",
+            "",
+            "## Knowledge",
+        ]
         
-        for msg in recent:
-            if msg.get("metadata", {}).get("type") == "message":
-                self.memory.delete(msg["id"])
+        # Add memories as knowledge
+        for mem in self.memory.get_all():
+            parts.append(f"- {mem.get('content', '')}")
+        
+        return "\n".join(parts)
 
 
-# Demo
+def demo():
+    """Demo conversation context"""
+    memory = Memory(storage="json", path="./conv_demo.json")
+    ctx = ConversationContext(memory)
+    
+    print("=== Conversation Context Demo ===\n")
+    
+    # Add conversation
+    ctx.add_message("Hello, I'm John", "user")
+    ctx.add_message("Hi John! How can I help?", "assistant")
+    ctx.add_message("I need help with Python", "user")
+    ctx.add_message("Sure, what specifically?", "assistant")
+    ctx.add_message("How do I use lists?", "user")
+    
+    # Build context
+    context = ctx.build()
+    print("Context:\n")
+    print(context)
+    
+    print("\n--- Recent ---")
+    for m in ctx.get_recent(3):
+        role = m.get("metadata", {}).get("role", "user")
+        print(f"{role}: {m.get('content')}")
+    
+    # Cleanup
+    import os
+    if os.path.exists("./conv_demo.json"):
+        os.remove("./conv_demo.json")
+
+
 if __name__ == "__main__":
-    import tempfile
-    
-    demo_path = os.path.join(tempfile.gettempdir(), "conversation_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
-    
-    print("🤖 Agent Memory - Conversation Context Demo")
-    print("=" * 50)
-    
-    ctx = ConversationContext(storage="json", path=demo_path)
-    
-    # Simulate conversation
-    print("\n1. Simulating conversation...")
-    ctx.add_user_message("Hi, I'm looking for a restaurant")
-    ctx.add_bot_message("Sure! What type of cuisine do you prefer?")
-    ctx.add_user_message("I like Italian food")
-    ctx.add_bot_message("Great! There's a nice Italian restaurant nearby. Would you like the address?")
-    ctx.add_user_message("Yes, please!")
-    ctx.add_bot_message("It's at 123 Main Street. Would you like to make a reservation?")
-    
-    # Get conversation
-    print("\n2. Conversation history:")
-    conversation = ctx.get_conversation()
-    for msg in conversation:
-        print(f"   {msg['text']}")
-    
-    # Get context
-    print("\n3. Context for LLM:")
-    context = ctx.get_context()
-    print(f"   {context[:200]}...")
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    demo()

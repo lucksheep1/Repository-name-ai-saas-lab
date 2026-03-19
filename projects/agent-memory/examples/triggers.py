@@ -1,158 +1,126 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Automation Triggers
-==================================
-Trigger actions based on memory events.
-
-Usage:
-    from triggers import TriggerMemory
-    
-    memory = TriggerMemory()
-    memory.when("tag:urgent").send_webhook("https://hooks.example.com/alert")
-    memory.when("tag:bug").create_issue("https://github.com/...")
+Memory Triggers
+Event-driven memory triggers
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import time
-from typing import Callable, Dict, List
 from agent_memory import Memory
+from typing import Callable, Dict, List
 
 
 class Trigger:
-    """Trigger condition."""
-    def __init__(self, condition: str, action: Callable):
+    """Memory trigger"""
+    
+    def __init__(self, name: str, condition: Callable, action: Callable):
+        self.name = name
         self.condition = condition
         self.action = action
     
-    def match(self, text: str, tags: List[str]) -> bool:
-        """Check if trigger matches."""
-        if self.condition.startswith("tag:"):
-            required_tag = self.condition[4:]
-            return required_tag in tags
-        elif self.condition.startswith("text:"):
-            required_text = self.condition[5:]
-            return required_text.lower() in text.lower()
-        return False
-
-
-class TriggerMemory(Memory):
-    """Memory with automation triggers."""
+    def evaluate(self, mem: dict) -> bool:
+        """Evaluate trigger condition"""
+        try:
+            return self.condition(mem)
+        except:
+            return False
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def execute(self, mem: dict):
+        """Execute trigger action"""
+        try:
+            self.action(mem)
+        except Exception as e:
+            print(f"Trigger error: {e}")
+
+
+class TriggerManager:
+    """Manage memory triggers"""
+    
+    def __init__(self, memory: Memory):
+        self.memory = memory
         self.triggers: List[Trigger] = []
     
-    def when(self, condition: str) -> 'TriggerBuilder':
-        """Create a trigger builder."""
-        return TriggerBuilder(self, condition)
-    
-    def add_trigger(self, condition: str, action: Callable):
-        """Add a trigger."""
-        trigger = Trigger(condition, action)
+    def register(self, trigger: Trigger):
+        """Register trigger"""
         self.triggers.append(trigger)
     
-    def _fire_triggers(self, text: str, tags: List[str], metadata: dict):
-        """Fire matching triggers."""
+    def check(self, mem: dict):
+        """Check all triggers for memory"""
         for trigger in self.triggers:
-            if trigger.match(text, tags):
-                try:
-                    trigger.action({
-                        "text": text,
-                        "tags": tags,
-                        "metadata": metadata,
-                        "timestamp": time.time()
-                    })
-                except Exception as e:
-                    print(f"Trigger error: {e}")
+            if trigger.evaluate(mem):
+                trigger.execute(mem)
+
+
+# Pre-built triggers
+def urgent_trigger(mem: dict) -> bool:
+    """Trigger on urgent memories"""
+    tags = mem.get("tags", [])
+    return "urgent" in tags or mem.get("metadata", {}).get("priority", 0) >= 4
+
+
+def log_trigger(mem: dict):
+    """Log trigger action"""
+    print(f"📢 URGENT: {mem.get('content', '')[:50]}")
+
+
+def tag_trigger(tag: str) -> Trigger:
+    """Create tag-based trigger"""
+    def condition(m: dict) -> bool:
+        return tag in m.get("tags", [])
     
-    def add_with_tags(self, text: str, tags: List[str], metadata: dict = None) -> str:
-        """Add memory and fire triggers."""
-        memory_id = super().add_with_tags(text, tags, metadata)
-        self._fire_triggers(text, tags, metadata or {})
-        return memory_id
+    def action(m: dict):
+        print(f"🏷️ Tagged '{tag}': {m.get('content', '')[:50]}")
     
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None) -> str:
-        """Add memory and fire triggers."""
-        memory_id = super().add(text, metadata, ttl_days)
-        
-        # Get tags from added memory
-        recent = self.get_recent(limit=1)
-        if recent:
-            tags = recent[0].get("tags", [])
-            self._fire_triggers(text, tags, metadata or {})
-        
-        return memory_id
+    return Trigger(f"tag_{tag}", condition, action)
 
 
-class TriggerBuilder:
-    """Builder for triggers."""
-    def __init__(self, memory: TriggerMemory, condition: str):
-        self.memory = memory
-        self.condition = condition
+def priority_trigger(min_priority: int) -> Trigger:
+    """Create priority-based trigger"""
+    def condition(m: dict) -> bool:
+        return m.get("metadata", {}).get("priority", 0) >= min_priority
     
-    def do(self, action: Callable):
-        """Register action."""
-        self.memory.add_trigger(self.condition, action)
-        return self.memory
-
-
-# Demo actions
-def webhook_alert(data):
-    """Webhook alert action."""
-    print(f"   📡 WEBHOOK: {data['text'][:30]}...")
-
-
-def log_to_console(data):
-    """Log to console action."""
-    print(f"   📝 LOG: {data['text']}")
-
-
-def create_issue(data):
-    """Create issue action."""
-    print(f"   🔧 ISSUE: Would create issue for '{data['text'][:30]}'")
-
-
-# Demo
-if __name__ == "__main__":
-    import tempfile
+    def action(m: dict):
+        print(f"⭐ High priority: {m.get('content', '')[:50]}")
     
-    demo_path = os.path.join(tempfile.gettempdir(), "trigger_demo.json")
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    return Trigger(f"priority_{min_priority}", condition, action)
+
+
+def keyword_trigger(keyword: str) -> Trigger:
+    """Create keyword-based trigger"""
+    keyword_lower = keyword.lower()
     
-    print("🤖 Agent Memory - Triggers Demo")
-    print("=" * 50)
+    def condition(m: dict) -> bool:
+        return keyword_lower in m.get("content", "").lower()
     
-    memory = TriggerMemory(storage="json", path=demo_path)
+    def action(m: dict):
+        print(f"🔑 Keyword '{keyword}': {m.get('content', '')[:50]}")
     
-    # Set up triggers
-    print("\n1. Setting up triggers...")
-    memory.when("tag:urgent").do(webhook_alert)
-    memory.when("tag:bug").do(create_issue)
-    memory.when("text:important").do(log_to_console)
-    print("   - tag:urgent -> webhook")
-    print("   - tag:bug -> create issue")
-    print("   - text:important -> log")
+    return Trigger(f"keyword_{keyword}", condition, action)
+
+
+def demo():
+    """Demo triggers"""
+    memory = Memory(storage="json", path="./trigger_demo.json")
+    manager = TriggerManager(memory)
+    
+    print("=== Memory Triggers Demo ===\n")
+    
+    # Register triggers
+    manager.register(tag_trigger("bug"))
+    manager.register(priority_trigger(4))
+    manager.register(keyword_trigger("error"))
     
     # Add memories (triggers will fire)
-    print("\n2. Adding memories...")
+    memory.add("Normal conversation")
+    memory.add("Important meeting", priority=4)
+    memory.add("Bug in code", tags=["bug"])
+    memory.add("Error occurred", tags=["error"])
     
-    print("   Adding: Fix urgent bug!")
-    memory.add_with_tags("Fix urgent bug!", tags=["bug", "urgent"])
+    print("\nAll memories:")
+    for m in memory.get_all():
+        print(f"  {m.get('content')[:40]}")
     
-    print("   Adding: Regular task")
-    memory.add("Regular task")
-    
-    print("   Adding: Important information")
-    memory.add("Important information")
-    
-    print("   Adding: Another urgent thing")
-    memory.add_with_tags("Another urgent thing", tags=["urgent"])
-    
-    print("\n✅ Demo complete!")
-    
-    if os.path.exists(demo_path):
-        os.remove(demo_path)
+    # Cleanup
+    import os
+    if os.path.exists("./trigger_demo.json"):
+        os.remove("./trigger_demo.json")
+
+
+if __name__ == "__main__":
+    demo()

@@ -56,8 +56,8 @@ async def list_memories(limit: int = 10):
 @app.post("/memories/search")
 async def search_memories(search: MemorySearch):
     """Search memories."""
-    results = memory.search(search.query    return {"results)
-": results[:search.limit]}
+    results = memory.search(search.query, limit=search.limit)
+    return {"results": results[:search.limit]}
 
 
 @app.get("/memories/tags/{tag}")

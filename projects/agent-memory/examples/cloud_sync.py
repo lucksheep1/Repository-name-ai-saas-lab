@@ -1,104 +1,105 @@
-#!/usr/bin/env python3
 """
-Agent Memory - Sync to Cloud
-============================
-Sync memory to cloud storage (S3, GCS, etc.)
-
-Usage:
-    from cloud_sync import CloudSyncMemory
-    
-    memory = CloudSyncMemory(storage="json", path="./memory.json", sync_to_s3=True)
+Memory Sync - Cloud Synchronization
+Sync memories across multiple instances
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import json
-import time
-from typing import Optional
 from agent_memory import Memory
+import time
+import threading
 
 
-class CloudSyncMemory(Memory):
-    """Memory with cloud sync."""
+class MemorySync:
+    """Sync memories across instances"""
     
-    def __init__(self, *args, sync_enabled: bool = False, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.sync_enabled = sync_enabled
-        self.last_sync = None
+    def __init__(self, memories: list):
+        self.memories = memories  # List of Memory instances
+        self.last_sync = {}
+        self.running = False
     
-    def sync_to_file(self, filepath: str):
-        """Export and save to file (simulates cloud upload)."""
-        self.export(filepath)
-        self.last_sync = time.time()
-        print(f"Synced to: {filepath}")
+    def sync_to(self, target: Memory) -> int:
+        """Sync local memories to target"""
+        synced = 0
+        
+        for mem in self.memories[0].get_all():
+            # Check if exists in target
+            existing = target.search(mem.get("content", "")[:50])
+            
+            if not existing:
+                target.add(
+                    content=mem.get("content", ""),
+                    tags=mem.get("tags", []),
+                    metadata={**mem.get("metadata", {}), "_synced": True}
+                )
+                synced += 1
+        
+        return synced
     
-    def sync_from_file(self, filepath: str):
-        """Import from file (simulates cloud download)."""
-        self.import_(filepath)
-        self.last_sync = time.time()
-        print(f"Synced from: {filepath}")
+    def pull_from(self, source: Memory) -> int:
+        """Pull from source"""
+        synced = 0
+        
+        for mem in source.get_all():
+            # Simple: add all
+            self.memories[0].add(
+                content=mem.get("content", ""),
+                tags=mem.get("tags", []),
+                metadata={**mem.get("metadata", {}), "_synced": True}
+            )
+            synced += 1
+        
+        return synced
     
-    def add(self, text: str, metadata: dict = None, ttl_days: int = None) -> str:
-        """Add and optionally sync."""
-        result = super().add(text, metadata, ttl_days)
-        if self.sync_enabled:
-            # Auto-sync on add (simplified - in production use queue)
-            pass
-        return result
+    def sync_loop(self, interval: float = 60):
+        """Background sync loop"""
+        self.running = True
+        
+        while self.running:
+            try:
+                # Sync all memories to each other
+                for i, mem in enumerate(self.memories):
+                    for j, other in enumerate(self.memories):
+                        if i != j:
+                            self.sync_to(other)
+            except Exception as e:
+                print(f"Sync error: {e}")
+            
+            time.sleep(interval)
     
-    def get_sync_status(self) -> dict:
-        """Get sync status."""
-        return {
-            "enabled": self.sync_enabled,
-            "last_sync": self.last_sync
-        }
+    def start_daemon(self, interval: float = 60):
+        """Start background sync"""
+        thread = threading.Thread(target=self.sync_loop, args=(interval,), daemon=True)
+        thread.start()
+    
+    def stop(self):
+        """Stop sync"""
+        self.running = False
 
 
-# Demo
-if __name__ == "__main__":
-    import tempfile
+def demo():
+    """Demo sync"""
+    mem1 = Memory(storage="json", path="./sync1.json")
+    mem2 = Memory(storage="json", path="./sync2.json")
     
-    demo_path = os.path.join(tempfile.gettempdir(), "sync_demo.json")
-    cloud_path = os.path.join(tempfile.gettempdir(), "cloud_backup.json")
+    # Add to mem1
+    mem1.add("Memory on device 1")
+    mem1.add("Another memory")
     
-    for p in [demo_path, cloud_path]:
-        if os.path.exists(p):
-            os.remove(p)
-    
-    print("🤖 Agent Memory - Cloud Sync Demo")
-    print("=" * 50)
-    
-    # Create memory
-    memory = CloudSyncMemory(storage="json", path=demo_path, sync_enabled=True)
-    
-    # Add memories
-    print("\n1. Adding memories...")
-    memory.add("Remember to sync")
-    memory.add("Cloud backup important")
-    memory.add("Don't forget")
-    
-    print(f"   Total: {memory.count()}")
+    print("=== Memory Sync Demo ===\n")
+    print(f"mem1: {len(mem1.get_all())} memories")
+    print(f"mem2: {len(mem2.get_all())} memories")
     
     # Sync
-    print("\n2. Syncing to cloud...")
-    memory.sync_to_file(cloud_path)
-    print(f"   Status: {memory.get_sync_status()}")
+    sync = MemorySync([mem1, mem2])
+    synced = sync.sync_to(mem2)
+    print(f"\nSynced {synced} memories to mem2")
     
-    # Clear and restore
-    print("\n3. Clearing local memory...")
-    memory.clear()
-    print(f"   Total: {memory.count()}")
-    
-    # Restore
-    print("\n4. Restoring from cloud...")
-    memory.sync_from_file(cloud_path)
-    print(f"   Total: {memory.count()}")
-    
-    print("\n✅ Demo complete!")
+    print(f"mem2 now: {len(mem2.get_all())} memories")
     
     # Cleanup
-    for p in [demo_path, cloud_path]:
-        if os.path.exists(p):
-            os.remove(p)
+    import os
+    for f in ["./sync1.json", "./sync2.json"]:
+        if os.path.exists(f):
+            os.remove(f)
+
+
+if __name__ == "__main__":
+    demo()
