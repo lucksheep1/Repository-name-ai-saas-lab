@@ -7,7 +7,7 @@ import csv
 
 def demo():
     import io
-    data = "name,age\nJohn,25\nJane,30"
+    data = "name,age\nAlice,25\nBob,30"
     reader = csv.DictReader(io.StringIO(data))
     for row in reader:
         print(row["name"])
