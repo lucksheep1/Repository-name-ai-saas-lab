@@ -7,8 +7,8 @@ import configparser
 
 def demo():
     c = configparser.ConfigParser()
-    c["DEFAULT"] = {"key": "value"}
-    c["section1"] = {"option": "data"}
+    c["DEFAULT"] = {"ServerAliveInterval": "45"}
+    c["ssh"] = {"Host": "example.com"}
     for section in c.sections():
         print(section)
 
