@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 
 
 def demo():
-    dt = datetime(2024, 1, 1) + timedelta(days=100)
-    print(dt)
+    dt1 = datetime(2024, 1, 1)
+    dt2 = dt1 + timedelta(days=30)
+    print(dt2)
 
 
 if __name__ == "__main__":
