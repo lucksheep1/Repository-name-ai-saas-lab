@@ -2,14 +2,13 @@
 Memory http_example9
 http_example9
 """
-import http.client
+import http.server
 
 
 def demo():
-    conn = http.client.HTTPConnection("example.com", 80)
-    conn.request("GET", "/")
-    print(conn.getresponse().status)
-    conn.close()
+    server = http.server.HTTPServer(("localhost", 0), http.server.SimpleHTTPRequestHandler)
+    print(server.server_address[1])
+    server.server_close()
 
 
 if __name__ == "__main__":
