@@ -6,9 +6,8 @@ import linecache
 
 
 def demo():
-    import sys
-    sys.path.insert(0, ".")
-    print(linecache.getlines("test.py"))
+    lines = linecache.getlines("/etc/hostname")
+    print(len(lines))
 
 
 if __name__ == "__main__":
