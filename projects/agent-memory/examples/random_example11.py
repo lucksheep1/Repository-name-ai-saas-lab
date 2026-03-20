@@ -6,7 +6,7 @@ import random
 
 
 def demo():
-    print(random.shuffle([1, 2, 3, 4, 5]) or "shuffled")
+    print(random.shuffle([1, 2, 3, 4, 5]))
 
 
 if __name__ == "__main__":
