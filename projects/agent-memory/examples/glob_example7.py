@@ -6,8 +6,7 @@ import glob
 
 
 def demo():
-    import os
-    print(glob.glob(os.path.join(os.getcwd(), "*.py")))
+    print(glob.glob("*", root_dir="."))
 
 
 if __name__ == "__main__":
