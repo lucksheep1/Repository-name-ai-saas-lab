@@ -6,7 +6,7 @@ import statistics
 
 
 def demo():
-    print(statistics.median([1, 2, 3, 4, 5, 6, 7, 8, 9]))
+    print(statistics.median([1, 3, 5, 7, 9]))
 
 
 if __name__ == "__main__":
