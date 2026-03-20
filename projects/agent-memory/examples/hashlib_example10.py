@@ -6,7 +6,8 @@ import hashlib
 
 
 def demo():
-    print(hashlib.sha512(b"test").hexdigest())
+    h = hashlib.sha512(b"test")
+    print(h.hexdigest()[:16])
 
 
 if __name__ == "__main__":
