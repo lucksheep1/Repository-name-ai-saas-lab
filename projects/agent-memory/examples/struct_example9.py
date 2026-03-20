@@ -6,8 +6,8 @@ import struct
 
 
 def demo():
-    data = struct.pack("cii", 1, b"ab", 3)
-    print(len(data))
+    data = struct.pack("ccc", b"a", b"b", b"c")
+    print(struct.unpack("ccc", data))
 
 
 if __name__ == "__main__":
