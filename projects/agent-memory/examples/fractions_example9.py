@@ -6,7 +6,8 @@ from fractions import Fraction
 
 
 def demo():
-    print(Fraction(3, 4) * Fraction(1, 2))
+    f = Fraction(2, 3)
+    print(f.numerator, f.denominator)
 
 
 if __name__ == "__main__":
