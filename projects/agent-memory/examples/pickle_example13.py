@@ -5,11 +5,16 @@ pickle_example13
 import pickle
 
 
+class Data:
+    def __init__(self, value):
+        self.value = value
+
+
 def demo():
-    data = {"key": "value", "list": [1, 2, 3], "nested": {"a": 1}}
-    pickled = pickle.dumps(data)
-    unpickled = pickle.loads(pickled)
-    print(len(unpickled))
+    d = Data(100)
+    pickled = pickle.dumps(d)
+    restored = pickle.loads(pickled)
+    print(restored.value)
 
 
 if __name__ == "__main__":
