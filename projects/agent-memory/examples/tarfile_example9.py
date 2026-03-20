@@ -6,7 +6,7 @@ import tarfile
 
 
 def demo():
-    with tarfile.open("test.tar", "w:gz") as tar:
+    with tarfile.open("test.tar.gz", "w:gz") as tar:
         import io
         info = tarfile.TarInfo(name="test.txt")
         info.size = 6
