@@ -6,7 +6,8 @@ import base64
 
 
 def demo():
-    print(base64.b64decode(b"dGVzdA=="))
+    data = base64.b64encode(b"hello")
+    print(base64.b64decode(data))
 
 
 if __name__ == "__main__":
