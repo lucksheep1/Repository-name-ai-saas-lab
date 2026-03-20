@@ -6,8 +6,11 @@ import io
 
 
 def demo():
-    s = io.StringIO("Hello World")
-    print(s.read(5))
+    s = io.StringIO()
+    s.write("Line 1\n")
+    s.write("Line 2\n")
+    s.seek(0)
+    print(s.read())
 
 
 if __name__ == "__main__":
