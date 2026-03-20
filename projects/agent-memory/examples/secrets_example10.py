@@ -6,7 +6,8 @@ import secrets
 
 
 def demo():
-    print(secrets.choice([1, 2, 3, 4, 5]))
+    token = secrets.token_hex(16)
+    print(len(token))
 
 
 if __name__ == "__main__":
