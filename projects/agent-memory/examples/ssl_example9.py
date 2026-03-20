@@ -6,8 +6,8 @@ import ssl
 
 
 def demo():
-    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    print(ctx)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    print(context.protocol)
 
 
 if __name__ == "__main__":
