@@ -7,7 +7,7 @@ import tempfile
 
 def demo():
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
-        f.write("test content")
+        f.write("test")
         print(f.name)
 
 
