@@ -6,11 +6,8 @@ import gzip
 
 
 def demo():
-    import io
-    bio = io.BytesIO()
-    with gzip.GzipFile(fileobj=bio, mode="w") as g:
-        g.write(b"compress this")
-    print(bio.getvalue()[:10])
+    with gzip.open("file.txt.gz", "wt") as f:
+        f.write("Hello World!")
 
 
 if __name__ == "__main__":
