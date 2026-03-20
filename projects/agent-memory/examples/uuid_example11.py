@@ -6,7 +6,7 @@ import uuid
 
 
 def demo():
-    print(uuid.NAMESPACE_DNS)
+    print(uuid.uuid4().hex[:8])
 
 
 if __name__ == "__main__":
