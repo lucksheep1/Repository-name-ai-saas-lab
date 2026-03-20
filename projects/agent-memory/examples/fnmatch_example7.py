@@ -6,8 +6,7 @@ import fnmatch
 
 
 def demo():
-    files = ["test.py", "test.txt", "main.py", "data.csv"]
-    print([f for f in files if fnmatch.fnmatch(f, "*.py")])
+    print(fnmatch.filter(["file1.txt", "file2.py", "data.csv"], "*.txt"))
 
 
 if __name__ == "__main__":
