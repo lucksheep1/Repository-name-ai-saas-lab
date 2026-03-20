@@ -2,13 +2,11 @@
 Memory urllib_example9
 urllib_example9
 """
-import urllib.parse
+import urllib.request
 
 
 def demo():
-    params = {"key": "value", "foo": "bar"}
-    query = urllib.parse.urlencode(params)
-    print(query)
+    print(urllib.request.__name__)
 
 
 if __name__ == "__main__":
