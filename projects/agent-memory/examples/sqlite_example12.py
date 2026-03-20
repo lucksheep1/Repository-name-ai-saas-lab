@@ -7,10 +7,11 @@ import sqlite3
 
 def demo():
     conn = sqlite3.connect(":memory:")
-    conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY, value TEXT)")
-    conn.execute("INSERT INTO test (value) VALUES (?)", ("test",))
-    result = conn.execute("SELECT * FROM test").fetchone()
-    print(result)
+    conn.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)")
+    conn.execute("INSERT INTO users (name) VALUES (?)", ("Alice",))
+    conn.execute("INSERT INTO users (name) VALUES (?)", ("Bob",))
+    for row in conn.execute("SELECT * FROM users"):
+        print(row)
     conn.close()
 
 
