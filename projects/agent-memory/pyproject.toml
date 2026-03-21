@@ -31,4 +31,4 @@ Homepage = "https://github.com/lucksheep1/Repository-name-ai-saas-lab"
 Issues = "https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues"
 
 [tool.setuptools]
-py-modules = ["agent_memory"]
+py-modules = ["agent_memory", "cli"]
