@@ -523,6 +523,10 @@ class Memory:
         if self.storage == "sqlite":
             self.conn.execute("DELETE FROM memories")
             self.conn.commit()
+        elif self.storage == "redis" and self._redis:
+            keys = self._redis.keys("memory:*")
+            if keys:
+                self._redis.delete(*keys)
         else:
             self._save()
     
