@@ -101,35 +101,35 @@ memory.export_markdown("memory.md")
 ## CLI
 
 ```bash
-# Initialize memory with SQLite and 30-day TTL
-agent-memory init --storage sqlite --path ./memory.db --ttl-days 30
+# Initialize memory
+agent-memory init
 
-# Add memory with TTL
-agent-memory add --text "User likes dark mode"
+# Add a memory (TTL: 7d, 1h, 30m, etc.)
+AGENT_MEMORY_TTL=7d agent-memory add "User prefers dark mode"
 
-# Search
-agent-memory search --text "preferences"
+# Add encrypted memory
+AGENT_MEMORY_KEY=mykey agent-memory add "api_key_xxx" --encrypt
 
-# Get context
-agent-memory context
+# Search memories
+agent-memory search "preferences"
 
-# Get recent
-agent-memory recent --top-k 10
+# List all memories
+agent-memory list
 
-# Get statistics
+# Show statistics
 agent-memory stats
 
-# List all tags
-agent-memory tags
+# Delete a memory
+agent-memory delete <memory_id>
 
-# Get by tag
-agent-memory by-tag --tag bug
+# Clear all memories
+agent-memory clear
+```
 
-# Get by priority
-agent-memory by-priority --priority 4
-
-# Export to JSON
-agent-memory export --file backup.json
+Environment variables:
+- `AGENT_MEMORY_PATH` — path to memory file (default: ./memory.json)
+- `AGENT_MEMORY_TTL` — default TTL for all memories (e.g., "7d")
+- `AGENT_MEMORY_KEY` — encryption key for sensitive data
 
 # Export to Markdown
 agent-memory export --file memory.md --format markdown
