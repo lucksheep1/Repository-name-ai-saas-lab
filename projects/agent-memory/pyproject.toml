@@ -24,7 +24,7 @@ redis = ["redis>=4.0"]
 all = ["numpy", "scikit-learn", "faiss-cpu", "cryptography>=38.0", "redis>=4.0"]
 
 [project.scripts]
-agent-memory = "agent_memory:main"
+agent-memory = "cli:main"
 
 [project.urls]
 Homepage = "https://github.com/lucksheep1/Repository-name-ai-saas-lab"
