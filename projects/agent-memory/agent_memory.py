@@ -238,11 +238,6 @@ class Memory:
             self.memories = json.load(f)
     
     def _save(self):
-        """Save memories to file."""
-        with open(self.path, 'w') as f:
-            json.dump(self.memories, f, indent=2)
-    
-    def _save(self):
         """Save memories to file or SQLite."""
         if self.storage == "sqlite":
             self._save_sqlite()
@@ -316,9 +311,12 @@ class Memory:
         return memory_id
     
     def get(self, memory_id: str) -> Optional[Dict]:
-        """Retrieve a memory by ID, decrypting if needed."""
+        """Retrieve a memory by ID, decrypting if needed. Returns None if expired."""
         for m in self.memories:
             if m["id"] == memory_id:
+                expires_at = m.get("expires_at")
+                if expires_at and datetime.fromisoformat(expires_at) <= datetime.now():
+                    return None
                 result = m.copy()
                 # Decrypt if needed
                 if result.get("metadata", {}).get("encrypted") and self._cipher:
