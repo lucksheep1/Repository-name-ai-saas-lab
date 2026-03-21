@@ -273,7 +273,29 @@
 - 收集首批真实用户
 
 ---
-*Updated: 2026-03-22 04:00*
+
+## Scout Insight (04:36 AM) - 2026-03-22
+
+### 外部信号采集 (GitHub API)
+
+**竞品分析:**
+- GitHub: 3382 repos 提及 "memory+LLM" (太宽泛)
+- 直接竞品: 无轻量级 "agent-memory" pip 包
+- PyPI: `agent-memory` 包名 **未注册** (404 Not Found)
+- vLLM 是 top result 但那是 LLM inference serving，不是 agent memory
+
+**竞争格局:**
+- LangChain memory: 44 open issues, 复杂, heavy
+- Phidata: 27 HN points, 功能全但更重
+- 其他: knowledge-graph based memory 探索中
+
+**关键洞察:**
+- `agent-memory` pip 包名可用
+- 无直接轻量级 pip 竞争对手
+- PyPI 发布 = 立即竞争优势
+
+---
+*Updated: 2026-03-22 04:36*
 
 ---
 
