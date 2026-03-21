@@ -18,7 +18,7 @@ dependencies = []
 
 [project.optional-dependencies]
 vector = ["numpy", "scikit-learn"]
-faiss = ["faiss-cpu", "numpy"]
+faiss = ["faiss-cpu"]
 encryption = ["cryptography>=38.0"]
 redis = ["redis>=4.0"]
 all = ["numpy", "scikit-learn", "faiss-cpu", "cryptography>=38.0", "redis>=4.0"]
