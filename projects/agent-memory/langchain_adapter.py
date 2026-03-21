@@ -69,12 +69,27 @@ if HAS_LANGCHAIN:
             path: str = "./memory.json",
             memory_key: str = "chat_history",
             return_messages: bool = True,
-            ttl_days: Optional[int] = None,
+            ttl: Optional[str] = None,
+            encryption_key: Optional[str] = None,
+            redis_url: Optional[str] = None,
             **kwargs
         ):
-            """Initialize LangChain memory adapter."""
+            """Initialize LangChain memory adapter.
+            
+            Args:
+                storage: Backend type (json, sqlite, redis)
+                path: File path for json/sqlite storage
+                memory_key: Key name for chat history
+                return_messages: Return as messages or string
+                ttl: Optional TTL string (e.g., "7d", "1h")
+                encryption_key: Optional encryption key
+                redis_url: Optional Redis URL for distributed memory
+            """
             super().__init__(memory_key=memory_key, return_messages=return_messages)
-            self._memory = Memory(storage=storage, path=path, ttl_days=ttl_days)
+            self._memory = Memory(
+                storage=storage, path=path,
+                ttl=ttl, encryption_key=encryption_key, redis_url=redis_url
+            )
             self.return_messages = return_messages
         
         @property
@@ -148,63 +163,33 @@ def get_chat_memory(
     return LangChainMemory(storage=storage, path=path, **kwargs)
 
 
-# Example usage
 if __name__ == "__main__":
     if HAS_LANGCHAIN:
-        # Quick demo
         memory = LangChainMemory(
             storage="json",
             path="/tmp/lc_demo.json",
             return_messages=True
         )
-        
-        # Simulate conversation
         memory.save_context(
             {"question": "My name is Bob"},
             {"text": "Nice to meet you, Bob!"}
         )
-        
         memory.save_context(
             {"question": "What's my name?"},
             {"text": "Your name is Bob!"}
         )
-        
-        # Load context
         context = memory.load_memory_variables({})
         print("Chat History:")
         for msg in context.get("chat_history", []):
             print(f"  {type(msg).__name__}: {msg.content}")
-        
         print("\n✅ LangChain adapter working!")
     else:
-        # Basic demo without LangChain
         print("⚠️ LangChain not installed. Running basic demo...")
         memory = Memory(storage="json", path="/tmp/lc_demo.json")
-        
         memory.add("User: My name is Bob", metadata={"role": "user"})
         memory.add("AI: Nice to meet you, Bob!", metadata={"role": "ai"})
         memory.add("User: What's my name?", metadata={"role": "user"})
         memory.add("AI: Your name is Bob!", metadata={"role": "ai"})
-        
-        context = memory.get_context(max_tokens=500)
-        print("\nContext:")
-        print(context)
-        print("\n✅ Basic demo complete!")
-else:
-    # Stub when LangChain not available
-    LangChainMemory = None
-    get_chat_memory = None
-    
-    # Still run demo with basic memory
-    if __name__ == "__main__":
-        print("⚠️ LangChain not installed. Running basic demo...")
-        memory = Memory(storage="json", path="/tmp/lc_demo.json")
-        
-        memory.add("User: My name is Bob", metadata={"role": "user"})
-        memory.add("AI: Nice to meet you, Bob!", metadata={"role": "ai"})
-        memory.add("User: What's my name?", metadata={"role": "user"})
-        memory.add("AI: Your name is Bob!", metadata={"role": "ai"})
-        
         context = memory.get_context(max_tokens=500)
         print("\nContext:")
         print(context)
