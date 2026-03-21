@@ -37,4 +37,10 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
+## APIs
+
+- **Brave Search API**: BSAryFk9YNhfoKBVGmXGll0dAYS1vGF
+
+---
+
 Add whatever helps you do your job. This is your cheat sheet.
