@@ -181,6 +181,8 @@ class Memory:
             self.db_path = self.path.replace('.json', '.db')
             self._init_sqlite()
             self._load_sqlite()
+        elif storage == "redis" and self._redis:
+            self._load_redis()
         elif storage == "json" and os.path.exists(path):
             self._load()
     
@@ -243,12 +245,43 @@ class Memory:
         self._prune_expired()
     
     def _save(self):
-        """Save memories to file or SQLite."""
+        """Save memories to file, SQLite, or Redis."""
         if self.storage == "sqlite":
             self._save_sqlite()
+        elif self.storage == "redis" and self._redis:
+            self._save_redis()
         else:
             with open(self.path, 'w') as f:
                 json.dump(self.memories, f, indent=2)
+    
+    def _save_redis(self):
+        """Save all memories to Redis."""
+        if not self._redis:
+            return
+        pipe = self._redis.pipeline()
+        for m in self.memories:
+            key = f"memory:{m['id']}"
+            ttl_seconds = None
+            if m.get("expires_at"):
+                expiry = datetime.fromisoformat(m["expires_at"])
+                ttl_seconds = int((expiry - datetime.now()).total_seconds())
+                if ttl_seconds <= 0:
+                    continue  # Skip expired
+            pipe.set(key, json.dumps(m), ex=ttl_seconds)
+        pipe.execute()
+    
+    def _load_redis(self):
+        """Load all memories from Redis."""
+        if not self._redis:
+            return
+        keys = self._redis.keys("memory:*")
+        self.memories = []
+        for key in keys:
+            data = self._redis.get(key)
+            if data:
+                m = json.loads(data)
+                if not self._is_expired(m):
+                    self.memories.append(m)
     
     def _is_expired(self, m: Dict) -> bool:
         """Return True if memory record m has passed its expiry time."""
@@ -323,18 +356,19 @@ class Memory:
         # Store in Redis if available
         if self._redis:
             import json as _json
-            self._redis.setex(
-                f"memory:{memory_id}",
-                int(effective_ttl_days * 86400) if effective_ttl_days else 86400 * 30,
-                _json.dumps({"text": stored_text, "timestamp": memory["timestamp"], "metadata": metadata})
-            )
+            ttl_seconds = int(effective_ttl_days * 86400) if effective_ttl_days else 86400 * 30
+            redis_data = {"id": memory_id, "text": stored_text, "timestamp": memory["timestamp"], "metadata": metadata}
+            if effective_ttl_days:
+                redis_data["expires_at"] = memory["expires_at"]
+            self._redis.setex(f"memory:{memory_id}", ttl_seconds, _json.dumps(redis_data))
         
         self.memories.append(memory)
         self._save()
         return memory_id
     
     def get(self, memory_id: str) -> Optional[Dict]:
-        """Retrieve a memory by ID, decrypting if needed. Returns None if expired."""
+        """Retrieve a memory by ID, decrypting if needed. Checks Redis for Redis backend."""
+        # First try local list
         for m in self.memories:
             if m["id"] == memory_id:
                 expires_at = m.get("expires_at")
@@ -345,10 +379,28 @@ class Memory:
                 if result.get("metadata", {}).get("encrypted") and self._cipher:
                     result["text"] = self._cipher.decrypt(result["text"].encode()).decode()
                 return result
+        # Fallback: check Redis directly
+        if self._redis:
+            import json as _json
+            data = self._redis.get(f"memory:{memory_id}")
+            if data:
+                m = _json.loads(data)
+                if not self._is_expired(m):
+                    result = m.copy()
+                    if result.get("metadata", {}).get("encrypted") and self._cipher:
+                        result["text"] = self._cipher.decrypt(result["text"].encode()).decode()
+                    return result
         return None
     
     def ttl_remaining(self, memory_id: str) -> Optional[float]:
         """Get remaining TTL in seconds for a memory, or None if no expiry."""
+        # Check Redis first
+        if self._redis:
+            ttl = self._redis.ttl(f"memory:{memory_id}")
+            if ttl > 0:
+                return float(ttl)
+            return None
+        # Fallback to local list
         for m in self.memories:
             if m["id"] == memory_id:
                 expires_at = m.get("expires_at")
@@ -356,7 +408,8 @@ class Memory:
                     return None
                 expiry = datetime.fromisoformat(expires_at)
                 remaining = (expiry - datetime.now()).total_seconds()
-                return max(0, remaining)
+                return max(0.0, remaining)
+        return None
         return None
     
     def add_batch(self, texts: List[str], metadata: Optional[Dict] = None) -> List[str]:
