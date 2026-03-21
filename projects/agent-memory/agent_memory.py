@@ -54,6 +54,7 @@ class Memory:
         
         # SQLite backend
         if storage == "sqlite":
+            self.db_path = self.path.replace('.json', '.db')
             self._init_sqlite()
             self._load_sqlite()
         elif storage == "json" and os.path.exists(path):
@@ -61,8 +62,8 @@ class Memory:
     
     def _init_sqlite(self):
         """Initialize SQLite database."""
-        conn = sqlite3.connect(self.path.replace('.json', '.db'))
-        conn.execute("""
+        self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        self.conn.execute("""
             CREATE TABLE IF NOT EXISTS memories (
                 id TEXT PRIMARY KEY,
                 text TEXT NOT NULL,
@@ -73,15 +74,13 @@ class Memory:
                 expires_at TEXT
             )
         """)
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON memories(timestamp)")
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_expires ON memories(expires_at)")
-        conn.commit()
-        conn.close()
+        self.conn.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON memories(timestamp)")
+        self.conn.execute("CREATE INDEX IF NOT EXISTS idx_expires ON memories(expires_at)")
+        self.conn.commit()
     
     def _load_sqlite(self):
         """Load memories from SQLite."""
-        conn = sqlite3.connect(self.path.replace('.json', '.db'))
-        cursor = conn.execute(
+        cursor = self.conn.execute(
             "SELECT id, text, timestamp, tags, priority, metadata FROM memories WHERE expires_at IS NULL OR expires_at > ?",
             (datetime.now().isoformat(),)
         )
@@ -95,22 +94,19 @@ class Memory:
                 "priority": row[4] or 0,
                 "metadata": json.loads(row[5]) if row[5] else {}
             })
-        conn.close()
     
     def _save_sqlite(self):
         """Save memories to SQLite."""
-        conn = sqlite3.connect(self.path.replace('.json', '.db'))
         for m in self.memories:
             expires_at = None
             if self.ttl_days:
                 expires_at = (datetime.now() + timedelta(days=self.ttl_days)).isoformat()
-            conn.execute("""
+            self.conn.execute("""
                 INSERT OR REPLACE INTO memories (id, text, timestamp, tags, priority, metadata, expires_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (m["id"], m["text"], m["timestamp"], json.dumps(m.get("tags", [])),
                   m.get("priority", 0), json.dumps(m.get("metadata", {})), expires_at))
-        conn.commit()
-        conn.close()
+        self.conn.commit()
     
     def _load(self):
         """Load memories from file."""
