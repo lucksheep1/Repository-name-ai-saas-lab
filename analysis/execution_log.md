@@ -170,4 +170,86 @@
 **External Action:** GitHub LangChain Issues 公开数据采集成功
 
 ---
-*Updated: 2026-03-21 12:00*
+
+## Cycle 10 (00:00 AM) - 2026-03-22
+
+### Phase 1: Scout - 外部信号采集 ✅
+
+**External Actions (GitHub API public, no auth required):**
+- LangChain Issue #36126 (Mar 20, 2026): "perf: HuggingFaceEmbeddings causes excessive device-to-cpu transfers per batch"
+  - Labels: external, performance
+  - 1 comment, open
+  - Signal: Memory/embedding performance is a pain point
+- LangChain Issue #34930 (Jan 30, 2026): "Memory leaks in plain LLM calls"
+  - Labels: bug, core, external, openai
+  - 5 comments, open
+  - Signal: Memory leaks confirmed as real bug
+- LangChain memory issues: **44 open issues** total mentioning "memory"
+- Phidata (HN): "Build AI Agents with memory, knowledge, tools and reasoning" — 27 points
+  - Signal: Direct competitor with market validation
+
+### Phase 2: Scanner - 机会识别
+
+- LangChain 44 memory issues → validates agent-memory differentiation
+- Phidata competitor confirms market demand
+- v3.1 String TTL + Encryption directly addresses pain points
+
+### Phase 3: Builder - v3.1 完成
+
+- v3.1 功能完整实现
+- Redis 后端完整测试通过
+- test_all_backends.py 验证脚本
+- demo_30s.py v3.1 演示
+- v3.1 release note
+
+### Phase 4: Analyst - 商业评估
+
+- 决策: Scale (Promising)
+- 外部信号: 44 LangChain memory issues + Phidata competitor validates market
+- Pain 9 | Frequency 9 | Differentiation 8
+
+### Phase 5: Evolution - 自进化
+
+**外部动作成功:** GitHub API 公开数据采集
+**本轮洞察:**
+1. LangChain memory pain 持续: #36126 (Mar 20), #34930 (Jan 30) 等 44 个 open issues
+2. Phidata 直接竞争对手 — 27 HN points — 证明市场存在
+3. v3.1 功能对齐 LangChain 痛点: TTL (自动过期防泄漏)、加密(敏感数据)
+
+**下一步:**
+- 准备 v3.1 PyPI 发布
+- 收集真实用户反馈
+
+---
+*Updated: 2026-03-22 00:00*
+
+---
+
+## External Engineering Verification — 2026-03-21 21:36
+
+**Operator:** Takeover lead (owner session)
+**Scope:** agent-memory v3.1 code quality verification — local only, no external publish
+
+### Bugs found and fixed
+1. **Duplicate _save method** (dead code): First definition (json-only) was silently overridden by second definition. Removed dead definition. Commit: 5ace447.
+2. **get() TTL expiry not checked** (behavioral bug): JSON/in-memory backend returned expired entries from get(). SQLite backend correctly filtered at SQL level; JSON backend had no equivalent check. Fixed by adding expiry guard at top of get(). Commit: 5ace447.
+
+### Test suite added
+File: projects/agent-memory/test_v31.py — 24 tests, all passing.
+
+| Test section | Tests | Result |
+|---|---|---|
+| parse_ttl (7d/1d/2w/1h/30m/60s/plain/int/None) | 9 | 9 PASS |
+| _UNSET sentinel vs explicit None | 2 | 2 PASS |
+| TTL expiry (visible before, None after, ttl_remaining) | 3 | 3 PASS |
+| Encrypt/decrypt round-trip + ciphertext check + flag | 3 | 3 PASS |
+| SQLite add/get + cross-instance persistence | 2 | 2 PASS |
+| Redis graceful fallback (bad URL, import-level) | 1 | 1 PASS |
+| Redis live backend (connect, key written, TTL=300s, get) | 4 | 4 PASS |
+
+### Redis validation
+- redis package: installed (v4.3.4) via python3-redis apt
+- redis-server: active on 127.0.0.1:6379 (was already present)
+- Live test: Memory(redis_url="redis://127.0.0.1:6379") connects, writes key with correct 300s TTL, local get() returns correct value alongside Redis
+
+**External action:** None. No PyPI publish. No GitHub API. Local-only verification.
