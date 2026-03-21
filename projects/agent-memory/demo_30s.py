@@ -1,66 +1,68 @@
 #!/usr/bin/env python3
 """
-Agent Memory - 30 Second Demo
-=============================
-Copy, paste, run - that's it!
+Agent Memory v3.1 - 30 Second Demo
+===================================
+v3.1: String TTL + Encryption + Redis
 
-This demo shows the simplest possible memory usage.
+Copy, paste, run - that's it!
 """
 
 import sys
 import os
 
-# Add current directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from agent_memory import Memory
 
 def run_demo():
     print("=" * 50)
-    print("⚡ Agent Memory - 30 Second Demo")
+    print("⚡ Agent Memory v3.1 - 30 Second Demo")
     print("=" * 50)
     
-    # Use temp file for demo
     demo_path = "/tmp/agent_memory_demo.json"
     if os.path.exists(demo_path):
         os.remove(demo_path)
     
-    # Create memory with JSON storage
-    memory = Memory(storage="json", path=demo_path)
+    # v3.1: String TTL + Encryption
+    memory = Memory(storage="json", path=demo_path, ttl="7d", encryption_key="demo_key_32bytes_xxxxxxx")
     
-    # Add some sample memories
+    # 1. Basic memory
     print("\n1. Adding memories...")
-    memory.add("User prefers dark mode", metadata={"source": "demo"})
-    memory.add("User is building an AI agent", metadata={"source": "demo"})
-    memory.add("User needs simple memory management", metadata={"source": "demo"})
+    memory.add("User prefers dark mode")
+    memory.add("Building an AI agent startup")
     
-    # Get context
-    print("2. Getting context...")
-    context = memory.get_context(max_tokens=500)
+    # 2. String TTL - auto-expire after 1 hour
+    temp_id = memory.add("Temporary session data", ttl="1h")
+    print(f"   Added with ttl=1h (id: {temp_id})")
     
-    print("\n" + "=" * 50)
-    print("CONTEXT FOR YOUR AGENT:")
-    print("=" * 50)
-    print(context)
-    print("=" * 50)
+    # 3. Encryption for sensitive data
+    memory.add("sk-xxxx-secret-key", encrypt=True)
+    print("   Added encrypted secret key")
     
-    # Search demo
-    print("\n3. Searching memories...")
+    # 4. Search
+    print("\n2. Searching memories...")
     results = memory.search("AI agent")
-    print(f"Found {len(results)} matching memories")
+    print(f"   Found {len(results)} matching memories")
     
-    print("\n✅ Demo complete!")
+    # 5. TTL query
+    print("\n3. TTL remaining:")
+    rem = memory.ttl_remaining(temp_id)
+    print(f"   {temp_id}: {rem:.0f}s until expiry")
+    
+    # 6. Context retrieval
+    print("\n4. Context retrieval:")
+    context = memory.get_context(max_tokens=300)
+    print(f"   Retrieved context ({len(context)} chars)")
+    
     print("\n" + "=" * 50)
-    print("📢 FEEDBACK TIME!")
+    print("📢 v3.1 Features:")
+    print("   • String TTL: '1h', '30m', '7d', '2w'")
+    print("   • Encryption: Memory.add(text, encrypt=True)")
+    print("   • Redis backend: Memory(storage='redis', redis_url='...')")
     print("=" * 50)
-    print("Is LangChain memory too heavy for you?")
-    print("Do you need agent memory right now?")
-    print("Would you try a demo if it took 30 seconds?")
-    print("\n👉 Give feedback:")
-    print("   https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues")
-    print("=" * 50)
+    print("\n👉 GitHub: github.com/lucksheep1/Repository-name-ai-saas-lab")
+    print("   Give feedback: Open an issue!")
     
-    # Cleanup
     if os.path.exists(demo_path):
         os.remove(demo_path)
 
