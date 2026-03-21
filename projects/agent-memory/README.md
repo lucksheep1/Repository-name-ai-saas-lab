@@ -9,11 +9,11 @@ m = Memory(storage="json")
 m.add("User likes dark mode")
 ```
 
-> 📢 **[Give Feedback →](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)** | 📦 **[v3.0 Release](docs/releases/v3.0.md)**
+> 📢 **[Give Feedback →](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)** | 📦 **[v3.1 Release](docs/releases/v3.1.md)**
 
 ---
 
-Lightweight memory for AI agents. No LangChain bloat. SQLite + TTL support.
+Lightweight memory for AI agents. No LangChain bloat. **v3.1: String TTL + Encryption + Redis!**
 
 ## Problem
 
@@ -28,7 +28,9 @@ Agents need to remember context across conversations, but existing solutions are
 A simple, standalone Python library for agent memory:
 - **Lightweight**: ~200 lines, minimal dependencies
 - **Flexible**: Multiple storage backends (JSON, FAISS, SQLite)
-- **TTL Support**: Automatic memory decay/expiration
+- **TTL Support**: String format ("7d", "1h", "30m", "2w") — automatic memory decay
+- **Encryption**: Optional Fernet encryption for sensitive data
+- **Redis Backend**: Distributed memory for multi-agent systems
 - **Auto-summary**: Compresses old memories
 - **Easy integration**: Any Python project
 
@@ -42,6 +44,12 @@ pip install agent-memory
 
 # For FAISS support (optional)
 pip install faiss-cpu
+
+# For Redis backend (optional)
+pip install redis
+
+# For encryption (optional)
+pip install cryptography
 ```
 
 ## Usage
@@ -50,10 +58,16 @@ pip install faiss-cpu
 from agent_memory import Memory
 
 # Initialize memory with SQLite (recommended for production)
-memory = Memory(storage="sqlite", path="./memory.db", ttl_days=30)
+memory = Memory(storage="sqlite", path="./memory.db", ttl="7d")
 
-# Add a memory with TTL (days until expiration)
-memory.add("User prefers dark mode", ttl_days=7)
+# Add a memory with string TTL (auto-expires in 1 hour)
+memory.add("User prefers dark mode", ttl="1h")
+
+# Add with encryption (sensitive data)
+memory.add("api_key_xxx", encrypt=True)
+
+# Add with Redis backend (multi-agent)
+memory = Memory(storage="redis", redis_url="redis://localhost:6379", ttl="30m")
 
 # Add with tags
 memory.add_with_tags("Bug in login", tags=["bug", "urgent"])

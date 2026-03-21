@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
-Agent Memory Manager v3 - Lightweight memory for AI agents.
-Enhanced with FAISS, SQLite support, and TTL decay.
+Agent Memory Manager v3.1 - Lightweight memory for AI agents.
+
+v3.1 Features:
+- String TTL format ("7d", "1h", "30m", "2w")
+- Encryption support (Fernet)
+- Redis backend
+- FAISS, SQLite, JSON storage backends
 """
 import json
 import os
@@ -29,17 +34,109 @@ try:
 except ImportError:
     HAS_FAISS = False
 
+try:
+    from cryptography.fernet import Fernet
+    HAS_CRYPTO = True
+except ImportError:
+    HAS_CRYPTO = False
+
+try:
+    import redis
+    HAS_REDIS = True
+except ImportError:
+    HAS_REDIS = False
+
+
+def parse_ttl(ttl_str: Optional[str]) -> Optional[float]:
+    """
+    Parse TTL string format to days (float).
+    
+    Supported formats:
+        - "30s"  -> 30 seconds  = 0.00035 days
+        - "5m"   -> 5 minutes   = 0.0035 days
+        - "1h"   -> 1 hour      = 0.0417 days
+        - "1d"   -> 1 day       = 1.0 days
+        - "7d"   -> 7 days      = 7.0 days
+        - "2w"   -> 2 weeks     = 14.0 days
+    
+    Args:
+        ttl_str: TTL string like "7d", "1h", "30m", "2w"
+    
+    Returns:
+        TTL in days as float, or None if ttl_str is None/invalid
+    
+    Examples:
+        >>> parse_ttl("7d")
+        7.0
+        >>> parse_ttl("1h")
+        0.0417
+        >>> parse_ttl("30m")
+        0.0208
+        >>> parse_ttl("2w")
+        14.0
+    """
+    if ttl_str is None:
+        return None
+    
+    if isinstance(ttl_str, (int, float)):
+        return float(ttl_str)
+    
+    ttl_str = str(ttl_str).strip().lower()
+    
+    if ttl_str.endswith("s"):
+        return float(ttl_str[:-1]) / 86400
+    elif ttl_str.endswith("m") and not ttl_str.endswith("am") and not ttl_str.endswith("pm"):
+        return float(ttl_str[:-1]) / 1440
+    elif ttl_str.endswith("h"):
+        return float(ttl_str[:-1]) / 24
+    elif ttl_str.endswith("d"):
+        return float(ttl_str[:-1])
+    elif ttl_str.endswith("w"):
+        return float(ttl_str[:-1]) * 7
+    else:
+        # Plain number: treat as days
+        return float(ttl_str)
+
 
 class Memory:
     """Lightweight memory manager for AI agents."""
     
     def __init__(self, storage: str = "json", path: str = "./memory.json", 
-                 vector_dim: int = 512, ttl_days: Optional[int] = None):
+                 vector_dim: int = 512, ttl: Optional[str] = None,
+                 encryption_key: Optional[str] = None,
+                 redis_url: Optional[str] = None):
         self.storage = storage
         self.path = path
         self.vector_dim = vector_dim
-        self.ttl_days = ttl_days
+        self.ttl_days = parse_ttl(ttl) if ttl else None
+        self.encryption_key = encryption_key
+        self.redis_url = redis_url
+        self._cipher = None
         self.memories: List[Dict] = []
+        
+        # Encryption setup
+        if encryption_key and HAS_CRYPTO:
+            key_bytes = encryption_key.encode() if isinstance(encryption_key, str) else encryption_key
+            if len(key_bytes) < 32:
+                key_bytes = key_bytes.ljust(32, b'\0')
+            self._cipher = Fernet(Fernet.generate_key() if len(key_bytes) < 32 else key_bytes[:32])
+        elif encryption_key and not HAS_CRYPTO:
+            import warnings
+            warnings.warn("cryptography library not installed. Encryption unavailable. Run: pip install cryptography")
+        
+        # Redis setup
+        self._redis = None
+        if redis_url and HAS_REDIS:
+            try:
+                self._redis = redis.from_url(redis_url, decode_responses=True)
+                self._redis.ping()
+            except Exception as e:
+                import warnings
+                warnings.warn(f"Redis connection failed: {e}. Falling back to local storage.")
+                self._redis = None
+        elif redis_url and not HAS_REDIS:
+            import warnings
+            warnings.warn("redis library not installed. Redis unavailable. Run: pip install redis")
         
         # TF-IDF based
         if HAS_SKLEARN:
@@ -126,24 +223,92 @@ class Memory:
             with open(self.path, 'w') as f:
                 json.dump(self.memories, f, indent=2)
     
-    def add(self, text: str, metadata: Optional[Dict] = None, ttl_days: Optional[int] = None) -> str:
-        """Add a new memory with optional TTL."""
+    def add(self, text: str, metadata: Optional[Dict] = None, ttl: Optional[str] = None, 
+            encrypt: bool = False) -> str:
+        """Add a new memory with optional TTL and encryption.
+        
+        Args:
+            text: Memory content text
+            metadata: Optional metadata dict
+            ttl: Optional TTL string (e.g., "7d", "1h", "30m", "2w")
+            encrypt: If True, encrypt the text before storing
+        
+        Returns:
+            Memory ID string
+        
+        Examples:
+            >>> m = Memory()
+            >>> m.add("session data", ttl="1h")
+            >>> m.add("api key", encrypt=True)
+        """
         memory_id = str(uuid.uuid4())[:8]
-        effective_ttl = ttl_days if ttl_days is not None else self.ttl_days
+        
+        # Determine effective TTL
+        effective_ttl_days = None
+        if ttl is not None:
+            effective_ttl_days = parse_ttl(ttl)
+        elif self.ttl_days is not None:
+            effective_ttl_days = self.ttl_days
+        
         metadata = metadata or {}
+        
+        # Encrypt text if requested
+        stored_text = text
+        if encrypt or metadata.get("encrypt"):
+            if self._cipher:
+                stored_text = self._cipher.encrypt(text.encode()).decode()
+                metadata["encrypted"] = True
+            else:
+                import warnings
+                warnings.warn("Encryption requested but no key configured. Storing plaintext.")
+        
         memory = {
             "id": memory_id,
-            "text": text,
+            "text": stored_text,
             "timestamp": datetime.now().isoformat(),
             "metadata": metadata,
             "priority": metadata.get("priority", 0),
             "tags": metadata.get("tags", [])
         }
-        if effective_ttl:
-            memory["expires_at"] = (datetime.now() + timedelta(days=effective_ttl)).isoformat()
+        
+        if effective_ttl_days:
+            memory["expires_at"] = (datetime.now() + timedelta(days=effective_ttl_days)).isoformat()
+        
+        # Store in Redis if available
+        if self._redis:
+            import json as _json
+            self._redis.setex(
+                f"memory:{memory_id}",
+                int(effective_ttl_days * 86400) if effective_ttl_days else 86400 * 30,
+                _json.dumps({"text": stored_text, "timestamp": memory["timestamp"], "metadata": metadata})
+            )
+        
         self.memories.append(memory)
         self._save()
         return memory_id
+    
+    def get(self, memory_id: str) -> Optional[Dict]:
+        """Retrieve a memory by ID, decrypting if needed."""
+        for m in self.memories:
+            if m["id"] == memory_id:
+                result = m.copy()
+                # Decrypt if needed
+                if result.get("metadata", {}).get("encrypted") and self._cipher:
+                    result["text"] = self._cipher.decrypt(result["text"].encode()).decode()
+                return result
+        return None
+    
+    def ttl_remaining(self, memory_id: str) -> Optional[float]:
+        """Get remaining TTL in seconds for a memory, or None if no expiry."""
+        for m in self.memories:
+            if m["id"] == memory_id:
+                expires_at = m.get("expires_at")
+                if not expires_at:
+                    return None
+                expiry = datetime.fromisoformat(expires_at)
+                remaining = (expiry - datetime.now()).total_seconds()
+                return max(0, remaining)
+        return None
     
     def add_batch(self, texts: List[str], metadata: Optional[Dict] = None) -> List[str]:
         """Add multiple memories at once."""
