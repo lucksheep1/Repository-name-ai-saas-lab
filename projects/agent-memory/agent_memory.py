@@ -55,6 +55,10 @@ except ImportError:
     HAS_CRYPTO_KDF = False
 
 
+# Sentinel for unset parameters
+_UNSET = object()
+
+
 def parse_ttl(ttl_str: Optional[str]) -> Optional[float]:
     """
     Parse TTL string format to days (float).
@@ -246,14 +250,15 @@ class Memory:
             with open(self.path, 'w') as f:
                 json.dump(self.memories, f, indent=2)
     
-    def add(self, text: str, metadata: Optional[Dict] = None, ttl: Optional[str] = None, 
+    def add(self, text: str, metadata: Optional[Dict] = None, ttl: object = _UNSET, 
             encrypt: bool = False) -> str:
         """Add a new memory with optional TTL and encryption.
         
         Args:
             text: Memory content text
             metadata: Optional metadata dict
-            ttl: Optional TTL string (e.g., "7d", "1h", "30m", "2w")
+            ttl: Optional TTL string (e.g., "7d", "1h", "30m", "2w"). 
+                 Pass ttl=None to explicitly disable TTL even if Memory has default.
             encrypt: If True, encrypt the text before storing
         
         Returns:
@@ -263,15 +268,15 @@ class Memory:
             >>> m = Memory()
             >>> m.add("session data", ttl="1h")
             >>> m.add("api key", encrypt=True)
+            >>> m.add("permanent note", ttl=None)  # explicitly no TTL
         """
         memory_id = str(uuid.uuid4())[:8]
         
-        # Determine effective TTL
-        effective_ttl_days = None
-        if ttl is not None:
-            effective_ttl_days = parse_ttl(ttl)
-        elif self.ttl_days is not None:
+        # Determine effective TTL: explicit None = disable, unset = use default
+        if ttl is _UNSET:
             effective_ttl_days = self.ttl_days
+        else:
+            effective_ttl_days = parse_ttl(ttl) if ttl is not None else None
         
         metadata = metadata or {}
         
