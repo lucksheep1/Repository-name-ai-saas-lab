@@ -4,22 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-memory"
-version = "0.1.0"
+version = "3.1.0"
 description = "Lightweight memory management for AI agents"
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
     {name = "AI SaaS Lab", email = "lab@example.com"}
 ]
-keywords = "ai, agent, memory, context, rag"
+keywords = ["ai", "agent", "memory", "context", "rag"]
 license = {text = "MIT"}
-dependencies = [
-    "numpy",
-    "scikit-learn",
-]
+# Core library has no required third-party dependencies — all backends are optional.
+dependencies = []
 
 [project.optional-dependencies]
-faiss = ["faiss-cpu"]
+vector = ["numpy", "scikit-learn"]
+faiss = ["faiss-cpu", "numpy"]
+encryption = ["cryptography>=38.0"]
+redis = ["redis>=4.0"]
+all = ["numpy", "scikit-learn", "faiss-cpu", "cryptography>=38.0", "redis>=4.0"]
 
 [project.scripts]
 agent-memory = "agent_memory:main"
@@ -29,4 +31,4 @@ Homepage = "https://github.com/lucksheep1/Repository-name-ai-saas-lab"
 Issues = "https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues"
 
 [tool.setuptools]
-packages = ["."]
+py-modules = ["agent_memory"]

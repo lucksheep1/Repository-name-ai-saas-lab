@@ -4,9 +4,9 @@ Agent Memory Manager v3.1 - Lightweight memory for AI agents.
 
 v3.1 Features:
 - String TTL format ("7d", "1h", "30m", "2w")
-- Encryption support (Fernet)
-- Redis backend
-- FAISS, SQLite, JSON storage backends
+- Encryption support (Fernet AES via PBKDF2HMAC key derivation)
+- Redis write-through TTL cache (not a primary backend; local storage is authoritative)
+- Storage backends: JSON (default), SQLite, FAISS
 """
 import json
 import os
@@ -205,26 +205,30 @@ class Memory:
     def _load_sqlite(self):
         """Load memories from SQLite."""
         cursor = self.conn.execute(
-            "SELECT id, text, timestamp, tags, priority, metadata FROM memories WHERE expires_at IS NULL OR expires_at > ?",
+            "SELECT id, text, timestamp, tags, priority, metadata, expires_at FROM memories WHERE expires_at IS NULL OR expires_at > ?",
             (datetime.now().isoformat(),)
         )
         self.memories = []
         for row in cursor.fetchall():
-            self.memories.append({
+            m = {
                 "id": row[0],
                 "text": row[1],
                 "timestamp": row[2],
                 "tags": json.loads(row[3]) if row[3] else [],
                 "priority": row[4] or 0,
                 "metadata": json.loads(row[5]) if row[5] else {}
-            })
+            }
+            if row[6]:
+                m["expires_at"] = row[6]
+            self.memories.append(m)
+        # Prune any records that expired between last save and now (race window)
+        self.memories = [m for m in self.memories if not self._is_expired(m)]
     
     def _save_sqlite(self):
         """Save memories to SQLite."""
         for m in self.memories:
-            expires_at = None
-            if self.ttl_days:
-                expires_at = (datetime.now() + timedelta(days=self.ttl_days)).isoformat()
+            # Use the per-record expires_at already set by add(); do not recalculate.
+            expires_at = m.get("expires_at")
             self.conn.execute("""
                 INSERT OR REPLACE INTO memories (id, text, timestamp, tags, priority, metadata, expires_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -233,9 +237,10 @@ class Memory:
         self.conn.commit()
     
     def _load(self):
-        """Load memories from file."""
+        """Load memories from file, pruning any expired records."""
         with open(self.path, 'r') as f:
             self.memories = json.load(f)
+        self._prune_expired()
     
     def _save(self):
         """Save memories to file or SQLite."""
@@ -245,6 +250,24 @@ class Memory:
             with open(self.path, 'w') as f:
                 json.dump(self.memories, f, indent=2)
     
+    def _is_expired(self, m: Dict) -> bool:
+        """Return True if memory record m has passed its expiry time."""
+        expires_at = m.get("expires_at")
+        if not expires_at:
+            return False
+        return datetime.fromisoformat(expires_at) <= datetime.now()
+
+    def _active_memories(self) -> List[Dict]:
+        """Return only non-expired records from self.memories."""
+        return [m for m in self.memories if not self._is_expired(m)]
+
+    def _prune_expired(self):
+        """Remove expired records from self.memories and persist. Call at load time."""
+        before = len(self.memories)
+        self.memories = self._active_memories()
+        if len(self.memories) < before:
+            self._save()
+
     def add(self, text: str, metadata: Optional[Dict] = None, ttl: object = _UNSET, 
             encrypt: bool = False) -> str:
         """Add a new memory with optional TTL and encryption.
@@ -346,11 +369,12 @@ class Memory:
     
     def search(self, query: str, top_k: int = 5) -> List[Dict]:
         """Search memories by similarity."""
-        if not self.memories:
+        active = self._active_memories()
+        if not active:
             return []
         
         if HAS_SKLEARN:
-            texts = [m["text"] for m in self.memories]
+            texts = [m["text"] for m in active]
             try:
                 tfidf_matrix = self.vectorizer.fit_transform(texts + [query])
                 query_vec = tfidf_matrix[-1]
@@ -359,7 +383,6 @@ class Memory:
                 if HAS_NUMPY:
                     top_indices = np.argsort(similarities)[-top_k:][::-1]
                 else:
-                    # Pure Python fallback
                     indexed_sims = list(enumerate(similarities))
                     indexed_sims.sort(key=lambda x: x[1], reverse=True)
                     top_indices = [x[0] for x in indexed_sims[:top_k]]
@@ -367,33 +390,34 @@ class Memory:
                 results = []
                 for idx in top_indices:
                     if similarities[idx] > 0:
-                        result = self.memories[idx].copy()
+                        result = active[idx].copy()
                         result["score"] = float(similarities[idx])
                         results.append(result)
                 return results
             except ValueError:
                 pass
         
-        # Fallback: return recent memories
-        return self.memories[:top_k]
+        # Fallback: return recent active memories
+        return active[:top_k]
     
     def get_recent(self, limit: int = 10) -> List[Dict]:
-        """Get recent memories."""
+        """Get recent non-expired memories."""
         sorted_memories = sorted(
-            self.memories, 
-            key=lambda x: x.get("timestamp", ""), 
+            self._active_memories(),
+            key=lambda x: x.get("timestamp", ""),
             reverse=True
         )
         return sorted_memories[:limit]
     
     def get_context(self, max_tokens: int = 2000, max_memories: int = 10) -> str:
         """Get condensed context for agent."""
-        if not self.memories:
+        active = self._active_memories()
+        if not active:
             return ""
         
         sorted_memories = sorted(
-            self.memories, 
-            key=lambda x: x.get("timestamp", ""), 
+            active,
+            key=lambda x: x.get("timestamp", ""),
             reverse=True
         )
         
@@ -427,23 +451,31 @@ class Memory:
         return summary
     
     def delete(self, memory_id: str) -> bool:
-        """Delete a memory by ID."""
+        """Delete a memory by ID from local storage and Redis cache."""
         for i, m in enumerate(self.memories):
             if m["id"] == memory_id:
                 del self.memories[i]
                 self._save()
+                if self._redis:
+                    try:
+                        self._redis.delete(f"memory:{memory_id}")
+                    except Exception:
+                        pass
                 return True
         return False
     
     def clear(self):
-        """Clear all memories."""
+        """Clear all memories from RAM and persistent storage."""
         self.memories = []
-        if self.storage == "json":
+        if self.storage == "sqlite":
+            self.conn.execute("DELETE FROM memories")
+            self.conn.commit()
+        else:
             self._save()
     
     def count(self) -> int:
-        """Get number of memories."""
-        return len(self.memories)
+        """Get number of non-expired memories."""
+        return len(self._active_memories())
     
     def export(self, filepath: str):
         """Export memories to a file."""
@@ -461,23 +493,16 @@ class Memory:
                     f.write(f"**Tags:** {', '.join(m['tags'])}\n\n")
                 f.write("---\n\n")
     
-    def add_with_tags(self, text: str, tags: List[str], metadata: Optional[Dict] = None) -> str:
-        """Add a memory with tags."""
-        memory_id = str(uuid.uuid4())[:8]
-        memory = {
-            "id": memory_id,
-            "text": text,
-            "timestamp": datetime.now().isoformat(),
-            "tags": tags,
-            "metadata": metadata or {}
-        }
-        self.memories.append(memory)
-        self._save()
-        return memory_id
+    def add_with_tags(self, text: str, tags: List[str], metadata: Optional[Dict] = None,
+                      ttl: object = _UNSET, encrypt: bool = False) -> str:
+        """Add a memory with tags. Delegates to add() so TTL and encryption apply."""
+        meta = dict(metadata or {})
+        meta["tags"] = tags
+        return self.add(text, metadata=meta, ttl=ttl, encrypt=encrypt)
     
     def get_by_tag(self, tag: str) -> List[Dict]:
-        """Get memories by tag."""
-        return [m for m in self.memories if tag in m.get('tags', [])]
+        """Get non-expired memories by tag."""
+        return [m for m in self._active_memories() if tag in m.get('tags', [])]
     
     def import_(self, filepath: str):
         """Import memories from a file."""
@@ -495,8 +520,8 @@ class Memory:
         return False
     
     def get_by_priority(self, min_priority: int = 3) -> List[Dict]:
-        """Get memories by minimum priority."""
-        return [m for m in self.memories if m.get("priority", 0) >= min_priority]
+        """Get non-expired memories by minimum priority."""
+        return [m for m in self._active_memories() if m.get("priority", 0) >= min_priority]
     
     def merge(self, other_memories: List[Dict]):
         """Merge memories from another source (avoid duplicates)."""
@@ -507,38 +532,48 @@ class Memory:
         self._save()
     
     def get_timeline(self, limit: int = 20) -> List[Dict]:
-        """Get memories as a timeline."""
-        sorted_memories = sorted(self.memories, 
-                                key=lambda x: x.get("timestamp", ""), 
-                                reverse=True)
+        """Get non-expired memories as a timeline."""
+        sorted_memories = sorted(self._active_memories(),
+                                 key=lambda x: x.get("timestamp", ""),
+                                 reverse=True)
         return sorted_memories[:limit]
 
 
 # CLI interface
-if __name__ == "__main__":
+def main():
+    """Entry point for the agent-memory CLI (agent-memory command)."""
     import argparse
     
-    parser = argparse.ArgumentParser(description="Agent Memory CLI v3")
+    parser = argparse.ArgumentParser(description="Agent Memory CLI v3.1")
     parser.add_argument("command", choices=["add", "search", "clear", "context", "recent", "summarize", "delete", "stats", "tags", "by-tag", "by-priority", "export", "import", "timeline"])
     parser.add_argument("--text", help="Text for add/search")
     parser.add_argument("--path", default="./memory.json", help="Memory file path")
     parser.add_argument("--top-k", type=int, default=5, help="Top K results")
     parser.add_argument("--storage", default="json", choices=["json", "faiss", "sqlite"], help="Storage backend")
-    parser.add_argument("--ttl-days", type=int, help="Default TTL in days for memories")
+    parser.add_argument("--ttl", help="Default TTL for memories, e.g. '7d', '1h', '30m'")
+    parser.add_argument("--encryption-key", help="Encryption key (string password or base64 Fernet key)")
+    parser.add_argument("--redis-url", help="Redis URL for write-through cache, e.g. redis://localhost:6379")
     parser.add_argument("--id", help="Memory ID for delete")
     parser.add_argument("--tag", help="Tag for by-tag command")
     parser.add_argument("--priority", type=int, help="Priority for by-priority command")
     parser.add_argument("--file", help="File for export/import")
     parser.add_argument("--format", default="json", choices=["json", "markdown"], help="Export format")
+    parser.add_argument("--encrypt", action="store_true", help="Encrypt this entry (requires --encryption-key)")
     
     args = parser.parse_args()
-    memory = Memory(storage=args.storage, path=args.path, ttl_days=args.ttl_days)
+    memory = Memory(
+        storage=args.storage,
+        path=args.path,
+        ttl=args.ttl,
+        encryption_key=args.encryption_key,
+        redis_url=args.redis_url,
+    )
     
     if args.command == "add":
         if not args.text:
             print("Error: --text required for add")
             exit(1)
-        memory_id = memory.add(args.text)
+        memory_id = memory.add(args.text, encrypt=getattr(args, "encrypt", False))
         print(f"Added memory: {memory_id}")
     
     elif args.command == "search":
@@ -634,3 +669,6 @@ if __name__ == "__main__":
         timeline = memory.get_timeline(args.top_k)
         for t in timeline:
             print(f"[{t['timestamp'][:16]}] {t['text'][:60]}...")
+
+if __name__ == "__main__":
+    main()

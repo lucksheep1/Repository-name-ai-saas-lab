@@ -245,6 +245,200 @@ else:
         finally:
             _shutil.rmtree(tmpdir)
 
+
+# ── SQLite per-record TTL persistence (Step 1) ──────────────────────────────
+print("\n=== SQLite per-record TTL persistence ===")
+
+tmpdir = tempfile.mkdtemp()
+db = os.path.join(tmpdir, "ttl_persist.db")
+try:
+    m = Memory(storage="sqlite", path=db, ttl="7d")
+    mid_short = m.add("short lived", ttl="2s")
+    mid_none  = m.add("no ttl",     ttl=None)
+    mid_3d    = m.add("3 day",      ttl="3d")
+
+    m2 = Memory(storage="sqlite", path=db, ttl="7d")
+
+    # short: survives reload (not expired yet)
+    if m2.get(mid_short) is not None:
+        ok("short TTL record present after reload")
+    else:
+        fail("short TTL record present after reload")
+
+    # explicit None: no expires_at after reload
+    rec_none = m2.get(mid_none)
+    if rec_none and rec_none.get("expires_at") is None:
+        ok("ttl=None record has no expires_at after reload")
+    else:
+        fail("ttl=None record has no expires_at after reload", f"got {rec_none}")
+
+    # 3d: ~3d remaining, not 7d
+    rec_3d = m2.get(mid_3d)
+    if rec_3d:
+        from datetime import datetime as _dt
+        days_left = (_dt.fromisoformat(rec_3d["expires_at"]) - _dt.now()).total_seconds() / 86400
+        if 2.9 < days_left < 3.1:
+            ok(f"3d per-record TTL preserved after reload ({days_left:.2f}d)")
+        else:
+            fail("3d per-record TTL preserved after reload", f"got {days_left:.2f}d")
+    else:
+        fail("3d record missing after reload")
+
+    # Wait for short to expire
+    time.sleep(3)
+    m3 = Memory(storage="sqlite", path=db, ttl="7d")
+    if m3.get(mid_short) is None:
+        ok("expired record absent after reload past TTL")
+    else:
+        fail("expired record absent after reload past TTL")
+finally:
+    shutil.rmtree(tmpdir)
+
+# ── Expiry filtering in list methods (Step 2) ────────────────────────────────
+print("\n=== Expiry filtering in list methods ===")
+
+tmpdir = tempfile.mkdtemp()
+path = os.path.join(tmpdir, "list.json")
+try:
+    m = Memory(path=path)
+    mid_exp  = m.add("expires", ttl="1s")
+    mid_perm = m.add("permanent", ttl=None)
+    time.sleep(2)
+
+    if m.count() == 1:
+        ok("count() excludes expired entries")
+    else:
+        fail("count() excludes expired entries", f"got {m.count()}")
+
+    recent = m.get_recent()
+    if len(recent) == 1 and recent[0]["text"] == "permanent":
+        ok("get_recent() excludes expired entries")
+    else:
+        fail("get_recent() excludes expired entries", f"got {recent}")
+
+    timeline = m.get_timeline()
+    if len(timeline) == 1:
+        ok("get_timeline() excludes expired entries")
+    else:
+        fail("get_timeline() excludes expired entries", f"got {timeline}")
+
+    ctx = m.get_context()
+    if "expires" not in ctx and "permanent" in ctx:
+        ok("get_context() excludes expired entries")
+    else:
+        fail("get_context() excludes expired entries", f"got {ctx!r}")
+finally:
+    shutil.rmtree(tmpdir)
+
+# ── clear() for SQLite (Step 3) ──────────────────────────────────────────────
+print("\n=== clear() for SQLite ===")
+
+tmpdir = tempfile.mkdtemp()
+db = os.path.join(tmpdir, "clear.db")
+try:
+    m = Memory(storage="sqlite", path=db)
+    m.add("entry 1")
+    m.add("entry 2")
+    m.clear()
+    m2 = Memory(storage="sqlite", path=db)
+    if m2.count() == 0:
+        ok("clear() empties SQLite — count=0 after reload")
+    else:
+        fail("clear() empties SQLite", f"count={m2.count()}")
+finally:
+    shutil.rmtree(tmpdir)
+
+# ── add_with_tags() uses shared add() path (Step 4) ──────────────────────────
+print("\n=== add_with_tags() via shared add() ===")
+
+tmpdir = tempfile.mkdtemp()
+path = os.path.join(tmpdir, "tags.json")
+try:
+    m = Memory(path=path, ttl="7d")
+
+    mid = m.add_with_tags("tagged entry", ["tech", "news"])
+    rec = m.get(mid)
+    if rec and rec.get("expires_at") is not None:
+        ok("add_with_tags() applies class default TTL")
+    else:
+        fail("add_with_tags() applies class default TTL", f"rec={rec}")
+
+    if rec and set(rec.get("tags", [])) == {"tech", "news"}:
+        ok("add_with_tags() preserves tags")
+    else:
+        fail("add_with_tags() preserves tags", f"tags={rec.get('tags') if rec else 'missing'}")
+
+    mid2 = m.add_with_tags("expires fast", ["temp"], ttl="1s")
+    time.sleep(2)
+    if m.get(mid2) is None:
+        ok("add_with_tags() with explicit ttl='1s' expires correctly")
+    else:
+        fail("add_with_tags() with explicit ttl='1s' expires correctly")
+finally:
+    shutil.rmtree(tmpdir)
+
+# ── CLI parameter correctness (Step 5) ──────────────────────────────────────
+print("\n=== CLI parameter correctness ===")
+
+import subprocess, sys as _sys
+cli = "/root/.openclaw/workspace/projects/agent-memory/agent_memory.py"
+
+# --ttl works
+r = subprocess.run([_sys.executable, cli, "add", "--text", "cli ttl test", "--ttl", "3d"],
+                   capture_output=True, text=True, cwd="/tmp")
+if r.returncode == 0 and "Added memory" in r.stdout:
+    ok("CLI --ttl accepted without error")
+else:
+    fail("CLI --ttl accepted without error", r.stderr[:200])
+
+# old --ttl-days rejected
+r2 = subprocess.run([_sys.executable, cli, "add", "--text", "x", "--ttl-days", "7"],
+                    capture_output=True, text=True, cwd="/tmp")
+if r2.returncode != 0:
+    ok("CLI --ttl-days correctly rejected (removed)")
+else:
+    fail("CLI --ttl-days correctly rejected", "it still accepted the arg")
+
+# --encryption-key accepted
+r3 = subprocess.run([_sys.executable, cli, "add", "--text", "enc test",
+                     "--encryption-key", "mykey", "--encrypt"],
+                    capture_output=True, text=True, cwd="/tmp")
+if r3.returncode == 0 and "Added memory" in r3.stdout:
+    ok("CLI --encryption-key and --encrypt accepted")
+else:
+    fail("CLI --encryption-key and --encrypt accepted", r3.stderr[:200])
+
+# ── Redis delete coherence (Step 6) ─────────────────────────────────────────
+print("\n=== Redis delete coherence ===")
+
+if not HAS_REDIS:
+    print("  SKIP  redis not installed")
+else:
+    import redis as _redis_mod, json as _json, shutil as _shutil
+    try:
+        r = _redis_mod.from_url("redis://127.0.0.1:6379", decode_responses=True)
+        r.ping()
+        server_up = True
+    except Exception:
+        server_up = False
+
+    if not server_up:
+        print("  SKIP  redis-server not reachable")
+    else:
+        tmpdir = tempfile.mkdtemp()
+        try:
+            m = Memory(path=os.path.join(tmpdir, "mem.json"),
+                       redis_url="redis://127.0.0.1:6379")
+            mid = m.add("to delete")
+            key = f"memory:{mid}"
+            assert r.exists(key), "key missing after add()"
+            m.delete(mid)
+            if not r.exists(key):
+                ok("delete() removes key from Redis")
+            else:
+                fail("delete() removes key from Redis", "key still present")
+        finally:
+            _shutil.rmtree(tmpdir)
 # ── Summary ──────────────────────────────────────────────────────────────────
 print(f"\n{'='*40}")
 print(f"Results: {PASS} passed, {FAIL} failed")

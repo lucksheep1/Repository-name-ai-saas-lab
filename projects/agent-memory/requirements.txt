@@ -1,2 +1,13 @@
+# Core: no required dependencies (stdlib only for JSON+SQLite+TTL+encryption via optional)
+# Install optional groups as needed:
+#   pip install agent-memory[encryption]  -- Fernet AES encryption
+#   pip install agent-memory[redis]       -- Redis write-through cache
+#   pip install agent-memory[vector]      -- TF-IDF semantic search
+#   pip install agent-memory[faiss]       -- FAISS vector search
+#   pip install agent-memory[all]         -- everything
+
+# For development / running tests:
+cryptography>=38.0
+redis>=4.0
 numpy
 scikit-learn
