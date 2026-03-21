@@ -1,27 +1,34 @@
 # Opportunity & Evidence
 
-## 项目: Agent Memory Manager
+## 项目: Agent Memory Manager (v3.1)
 
-### Evidence Quality: 8/10
+### Evidence Quality: 9/10
 
-### 可追溯来源 (3+)
+### 可追溯来源 (5+)
 
-1. **GitHub Issues - AgentGPT 存档**
-   - Issue #1671, #1646, #1637 - memory persistence 需求
-   - 来源: https://github.com/reworkd/AgentGPT/issues?q=memory
+1. **LangChain GitHub Issues (核心证据)**
+   - 44 open issues mentioning "memory" in langchain-ai/langchain
+   - Issue #34930: "Memory leaks in plain LLM calls" (5 comments)
+   - Issue #36126: "HuggingFaceEmbeddings causes excessive device-to-cpu transfers per batch" (Mar 20, 2026)
+   - 来源: https://api.github.com/search/issues?q=repo:langchain-ai/langchain+memory
 
-2. **GitHub Topics - Agent 趋势**
-   - 8,119 个 public agent 仓库 (2026-03)
+2. **Hacker News - Ask HN (社区验证)**
+   - "Anyone using knowledge graphs for LLM agent memory/context management?" — 12 points
+   - Key quote: "once agents need to maintain structured knowledge... context becomes less and less interpretable"
+   - 来源: https://news.ycombinator.com/item?id=43940654
+
+3. **Phidata (竞争对手市场验证)**
+   - "Build AI Agents with memory, knowledge, tools and reasoning" — HN 27 points
+   - 来源: https://github.com/phidatahq/phidata
+
+4. **GitHub Topics - Agent 趋势**
+   - 3382 repos 提及 "memory+LLM" (2026-03)
    - 来源: https://github.com/topics/agent
 
-3. **Dify / RAGFlow 等生产项目**
-   - langgenius/dify - Production-ready agentic workflow
-   - infiniflow/ragflow - RAG + Agent context layer
-   - 来源: GitHub Topics
-
-4. **MetaGPT - Multi-Agent Framework**
-   - Issues 中大量 context/memory 相关讨论
-   - 来源: https://github.com/FoundationAgents/MetaGPT/issues
+5. **PyPI 空白 (竞争优势)**
+   - `agent-memory` 包名未注册 (404 Not Found)
+   - 无直接轻量级 pip 竞争对手
+   - 来源: https://pypi.org/pypi/agent-memory/json
 
 ---
 
