@@ -46,6 +46,14 @@ try:
 except ImportError:
     HAS_REDIS = False
 
+try:
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+    from cryptography.hazmat.backends import default_backend
+    HAS_CRYPTO_KDF = True
+except ImportError:
+    HAS_CRYPTO_KDF = False
+
 
 def parse_ttl(ttl_str: Optional[str]) -> Optional[float]:
     """
@@ -116,10 +124,25 @@ class Memory:
         
         # Encryption setup
         if encryption_key and HAS_CRYPTO:
-            key_bytes = encryption_key.encode() if isinstance(encryption_key, str) else encryption_key
-            if len(key_bytes) < 32:
-                key_bytes = key_bytes.ljust(32, b'\0')
-            self._cipher = Fernet(Fernet.generate_key() if len(key_bytes) < 32 else key_bytes[:32])
+            import base64
+            try:
+                # Try as base64-encoded key first
+                self._cipher = Fernet(encryption_key.encode() if isinstance(encryption_key, str) else encryption_key)
+            except Exception:
+                # Derive a valid Fernet key from a password string using PBKDF2
+                if not HAS_CRYPTO_KDF:
+                    import warnings
+                    warnings.warn("cryptography kdf not available. Using simple key derivation.")
+                    # Simple fallback: hash the key to 32 bytes
+                    import hashlib
+                    h = hashlib.sha256((encryption_key if isinstance(encryption_key, str) else encryption_key.decode()).encode()).digest()
+                    self._cipher = Fernet(base64.urlsafe_b64encode(h))
+                else:
+                    password = encryption_key.encode() if isinstance(encryption_key, str) else encryption_key
+                    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=b'agent_memory_v3_salt', iterations=100000, backend=default_backend())
+                    derived_key = kdf.derive(password)
+                    fernet_key = base64.urlsafe_b64encode(derived_key)
+                    self._cipher = Fernet(fernet_key)
         elif encryption_key and not HAS_CRYPTO:
             import warnings
             warnings.warn("cryptography library not installed. Encryption unavailable. Run: pip install cryptography")
