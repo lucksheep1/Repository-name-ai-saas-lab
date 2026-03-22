@@ -1,64 +1,56 @@
-# Feature Specification: Redis Backend
+# Feature: Redis Backend
 
-## Overview
-Add Redis storage backend to agent-memory for distributed caching and session management.
+## Status: ✅ Implemented in v3.1.0
 
-## Motivation
-- LangChain users requesting Redis memory backends
-- Need for distributed, persistent memory across multiple instances
-- Session data requires TTL and encryption
+## Quick Start
 
-## Proposed Solution
-
-### Interface
 ```python
 from agent_memory import Memory
 
 # Redis backend
-memory = Memory(
+m = Memory(
     storage="redis",
-    host="localhost",
-    port=6379,
-    ttl=3600,  # 1 hour default
-    encrypt=True  # optional encryption
+    redis_url="redis://localhost:6379",
+    ttl="30m"
 )
 
-# Operations remain the same
-memory.add("key", {"data": "value"})
-result = memory.get("key")
+m.add("session data", ttl="1h")
+m.add("cache", ttl="5m", encrypt=True)
 ```
 
-### Features
-1. **TTL Support**: Automatic key expiration
-2. **Encryption**: AES-256 encryption for sensitive data
-3. **Connection Pooling**: Efficient Redis connections
-4. **Fallback**: Graceful degradation when Redis unavailable
+## Features
 
-### Configuration
-```python
-memory = Memory(
-    storage="redis",
-    host=os.getenv("REDIS_HOST", "localhost"),
-    port=int(os.getenv("REDIS_PORT", 6379)),
-    password=os.getenv("REDIS_PASSWORD"),
-    db=int(os.getenv("REDIS_DB", 0)),
-    ttl=3600,
-    encrypt=os.getenv("MEMORY_ENCRYPT", "false").lower() == "true",
-    key_prefix="agent_memory:",
-    socket_timeout=5,
-    socket_connect_timeout=5,
-)
+- **Native TTL**: Redis `SETEX` for automatic expiration
+- **Encryption**: Optional Fernet encryption
+- **Graceful Fallback**: Works without Redis available
+- **Same API**: All operations work identically to JSON/SQLite backends
+
+## Environment Variables
+
+```bash
+# Optional environment configuration via cli.py
+AGENT_MEMORY_PATH=./memory.json  # path for json/sqlite fallback
 ```
 
-## Implementation Timeline
-- **v3.1.0**: Core Redis backend with TTL
-- **v3.1.1**: Encryption support
-- **v3.1.2**: Connection pooling optimization
+## CLI with Redis
 
-## Success Metrics
-- Redis backend supports 10,000+ ops/sec
-- TTL accuracy within 1 second
-- Zero memory leaks in 24hr test
+```bash
+# Redis URL passed via code (env var not yet supported in CLI)
+agent-memory init --storage redis
+```
+
+## Architecture
+
+- Local `memories` list maintained for search/scan operations
+- Redis used as primary storage for TTL persistence
+- `_save_redis()` / `_load_redis()` methods handle sync
+- `ttl_remaining()` queries Redis `TTL` directly
+
+## Dependencies
+
+```bash
+pip install redis>=4.0
+```
 
 ---
-*Created by AI SaaS Lab - 2026-03-20*
+*Implemented by AI SaaS Lab - 2026-03-21*
