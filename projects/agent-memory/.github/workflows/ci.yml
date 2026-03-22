@@ -23,14 +23,19 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -e .
-          pip install pytest pytest-cov
+          cd projects/agent-memory
+          pip install -e ".[all]"
+          pip install pytest pytest-cov redis
       
       - name: Run tests
-        run: pytest --cov=agent_memory --cov-report=xml
+        run: |
+          cd projects/agent-memory
+          python test_all_backends.py
       
       - name: Run demo
-        run: python3 demo_30s.py
+        run: |
+          cd projects/agent-memory
+          python demo_30s.py
 
   lint:
     runs-on: ubuntu-latest
@@ -46,4 +51,6 @@ jobs:
         run: pip install ruff
       
       - name: Lint code
-        run: ruff check agent_memory.py
+        run: |
+          cd projects/agent-memory
+          ruff check agent_memory.py cli.py

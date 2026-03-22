@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis
+        port: 6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      
+      - name: Install dependencies
+        run: |
+          cd projects/agent-memory
+          pip install -e ".[all]" pytest
+          pip install redis
+      
+      - name: Run tests
+        run: |
+          cd projects/agent-memory
+          python test_all_backends.py
+      
+      - name: Run CLI smoke test
+        run: |
+          cd projects/agent-memory
+          python cli.py --help
+          python cli.py stats
