@@ -38,6 +38,7 @@ jobs:
         run: |
           cd projects/agent-memory
           python test_all_backends.py
+          python test_v31.py
       
       - name: Run CLI smoke test
         run: |
