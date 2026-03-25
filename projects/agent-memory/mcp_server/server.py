@@ -126,6 +126,38 @@ class AgentMemoryMCPServer:
                     "name": "memory_stats",
                     "description": "Get memory statistics",
                     "inputSchema": {"type": "object", "properties": {}}
+                },
+                {
+                    "name": "memory_delete",
+                    "description": "Delete a memory by ID",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "memory_id": {"type": "string", "description": "Memory ID to delete"}
+                        },
+                        "required": ["memory_id"]
+                    }
+                },
+                {
+                    "name": "memory_timeline",
+                    "description": "Get memories as timeline",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "limit": {"type": "integer", "description": "Max memories", "default": 20}
+                        }
+                    }
+                },
+                {
+                    "name": "memory_export",
+                    "description": "Export memories to JSON file",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "filepath": {"type": "string", "description": "Output file path"}
+                        },
+                        "required": ["filepath"]
+                    }
                 }
             ]
         }
@@ -180,6 +212,18 @@ class AgentMemoryMCPServer:
                     "recent": len(self.memory.get_recent(limit=100))
                 }
                 return {"content": [{"type": "text", "text": json.dumps(stats, indent=2)}]}
+            
+            elif name == "memory_delete":
+                success = self.memory.delete(arguments["memory_id"])
+                return {"content": [{"type": "text", "text": f"Deleted: {success}"}]}
+            
+            elif name == "memory_timeline":
+                results = self.memory.get_timeline(limit=arguments.get("limit", 20))
+                return {"content": [{"type": "text", "text": json.dumps(results, indent=2)}]}
+            
+            elif name == "memory_export":
+                self.memory.export(arguments["filepath"])
+                return {"content": [{"type": "text", "text": f"Exported to {arguments['filepath']}"}]}
             
             else:
                 return {"error": {"code": -32602, "message": f"Unknown tool: {name}"}}
