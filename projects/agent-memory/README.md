@@ -1,6 +1,7 @@
 # ⚡ Agent Memory - 3 Lines to Remember Anything
 
 [![CI](https://github.com/lucksheep1/Repository-name-ai-saas-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/lucksheep1/Repository-name-ai-saas-lab/actions)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://lucksheep1.github.io/Repository-name-ai-saas-lab/)
 [![PyPI Version](https://img.shields.io/pypi/v/agent-memory)](https://pypi.org/project/agent-memory/)
 
 ```python
