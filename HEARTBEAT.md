@@ -22,9 +22,11 @@
 ### 今日产出 (2026-03-25)
 - [x] AM 汇报 (08:36) ✅
 - [x] Web Dashboard (11:30) ✅
-- [x] MCP Server (11:36) ✅ - v3.2
-- [x] Knowledge Graph Layer (11:57) ✅ - v4.0 预览
-- [x] MCP+KG 集成 (12:02) ✅ - 14 tools
+- [x] MCP Server v3.2 (11:36) ✅
+- [x] Knowledge Graph Layer v4.0 (11:57) ✅
+- [x] MCP + KG 集成 (12:02) ✅ - 14 tools
+- [x] KG path finding (12:08) ✅ - 15 tools
+- [x] kg-view.html 可视化 ✅
 - [ ] PM 汇报 (20:30-21:30)
 
 ---

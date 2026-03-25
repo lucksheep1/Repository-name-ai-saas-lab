@@ -26,11 +26,11 @@ all = ["numpy", "scikit-learn", "faiss-cpu", "cryptography>=38.0", "redis>=4.0"]
 
 [project.scripts]
 agent-memory = "cli:main"
-agent-memory-mcp = "mcp_server.server:main"
+agent-memory-mcp = "mcp_server:main"
 
 [project.urls]
 Homepage = "https://github.com/lucksheep1/Repository-name-ai-saas-lab"
 Issues = "https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues"
 
 [tool.setuptools]
-py-modules = ["agent_memory", "cli"]
+py-modules = ["agent_memory", "cli", "mcp_server"]

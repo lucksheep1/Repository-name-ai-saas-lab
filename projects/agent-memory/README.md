@@ -35,6 +35,17 @@ A simple, standalone Python library for agent memory:
 - **Auto-summary**: Compresses old memories
 - **Easy integration**: Any Python project
 
+## MCP Server (v3.2)
+
+Connect to any MCP-compatible client (Cursor, Windsurf, Claude Code, OpenClaw):
+
+```bash
+pip install agent-memory mcp
+python -m agent_memory.mcp_server
+```
+
+**MCP Tools:** `memory_search`, `memory_add`, `memory_get`, `memory_clear`
+
 ## Installation
 
 ```bash
