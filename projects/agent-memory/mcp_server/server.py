@@ -136,12 +136,20 @@ class AgentMemoryMCPServer:
         
         try:
             if name == "memory_add":
-                result = self.memory.add(
-                    text=arguments["text"],
-                    ttl=arguments.get("ttl"),
-                    tags=arguments.get("tags", []),
-                    encrypt=arguments.get("encrypt", False)
-                )
+                tags = arguments.get("tags", [])
+                if tags:
+                    result = self.memory.add_with_tags(
+                        text=arguments["text"],
+                        tags=tags,
+                        ttl=arguments.get("ttl"),
+                        encrypt=arguments.get("encrypt", False)
+                    )
+                else:
+                    result = self.memory.add(
+                        text=arguments["text"],
+                        ttl=arguments.get("ttl"),
+                        encrypt=arguments.get("encrypt", False)
+                    )
                 return {"content": [{"type": "text", "text": f"Memory added: {result}"}]}
             
             elif name == "memory_search":
