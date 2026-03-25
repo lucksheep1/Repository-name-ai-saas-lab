@@ -10,11 +10,11 @@ m = Memory(storage="json")
 m.add("User likes dark mode")
 ```
 
-> 📢 **[Give Feedback →](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)** | 📦 **[v3.1 Release](docs/releases/v3.1.md)**
+> 📢 **[Give Feedback →](https://github.com/lucksheep1/Repository-name-ai-saas-lab/issues)** | 📦 **[v3.2 Release](docs/releases/v3.2.md)** | 📦 **[v3.1](docs/releases/v3.1.md)**
 
 ---
 
-Lightweight memory for AI agents. No LangChain bloat. **v3.1: String TTL + Encryption + Redis!**
+Lightweight memory for AI agents. No LangChain bloat. **v3.2: MCP Server Integration!**
 
 ## Problem
 
@@ -210,6 +210,18 @@ Get number of memories.
 
 - Simple embedding (TF-IDF based)
 - No LLM summary yet (coming soon)
+
+## v3.2 Features (2026-03-25)
+
+- ✅ MCP Server - JSON-RPC based server for AI IDE integration
+- ✅ Works with Claude Code, Cursor, Windsurf
+- ✅ 6 tools exposed via MCP protocol
+
+## v3.1 Features (2026-03-21)
+
+- ✅ String TTL ("7d", "1h", "30m")
+- ✅ Fernet encryption
+- ✅ Redis backend
 
 ## v3.0 Features (2026-03-17)
 

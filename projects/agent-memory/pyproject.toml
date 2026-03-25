@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-memory"
-version = "3.1.0"
+version = "3.2.0"
 description = "Lightweight memory management for AI agents"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -21,6 +21,7 @@ vector = ["numpy", "scikit-learn"]
 faiss = ["faiss-cpu"]
 encryption = ["cryptography>=38.0"]
 redis = ["redis>=4.0"]
+mcp = []  # MCP server (no extra deps needed)
 all = ["numpy", "scikit-learn", "faiss-cpu", "cryptography>=38.0", "redis>=4.0"]
 
 [project.scripts]

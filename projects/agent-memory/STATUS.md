@@ -4,7 +4,7 @@
 
 **创建时间:** 2026-03-06
 
-**版本:** v3.1 (2026-03-21 String TTL + Encryption + Redis)
+**版本:** v3.2 (2026-03-25 MCP Server + Web Dashboard)
 
 **理由:**
 - Score: 48/50 (达到门槛)
