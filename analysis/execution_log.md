@@ -1113,7 +1113,59 @@
 **Scout 新目标方向:** 不切换
 
 ---
-*Updated: 2026-03-25 08:00*
+
+## Cycle 32 (规则更新) - 2026-03-25
+
+### 规则变更
+- PyPI 发布路径已永久取消（方向取消，非凭证阻塞）
+- GitHub Pages 已上线: https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html
+- 当前唯一活跃外部方向: GitHub Pages
+
+### Phase 1: Scout - 外部信号采集 ✅
+
+**External Actions (GitHub API + web_fetch):**
+
+1. **GitHub Pages 确认在线:**
+   - `https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html` → **200 OK**
+   - Demo 内容: v3.1 特性展示 (SQLite/TTL/加密/Redis)
+   - **无外部信号**: 0 stars, 0 forks, 0 issues
+
+2. **新域探索 (选项 C): AI Agent Testing/Benchmarking**
+
+   **发现 1: rubric-eval (Kareem-Rashed)**
+   - URL: https://github.com/Kareem-Rashed/rubric-eval
+   - Description: "Independent framework to test, benchmark, and evaluate LLMs & AI agents locally"
+   - 问题: 开发者无法在本地系统性测试和评估 AI agent 行为
+   - 现有方案: 手动测试，无标准化框架
+   - 机会: 轻量级本地评测框架
+
+   **发现 2-3: 3 new repos in AI agent testing (created > Mar 20)**
+   - 信号: 评测工具需求正在形成
+   - 痛点: AI agent 的行为验证困难，缺乏标准化 benchmark
+
+   **发现来源:** GitHub API query `AI+agent+testing+benchmark+created:>2026-03-20`
+   - External Content ID: `097e450ce8bbb0ec`
+
+### Phase 2: Scanner - 新域机会矩阵
+
+| 发现 | 竞品 | 痛点 | Gap | MVP 可行性 |
+|------|------|------|-----|-----------|
+| rubric-eval | 手动测试 | 无本地评测框架 | 极简 CLI | ✅ |
+| agent benchmark | 极少 | 缺标准化 | 蓝海 | ✅ |
+
+### Phase 3-5: 决策
+
+- **GitHub Pages 维持** — 当前唯一外部方向
+- **rubric-eval 方向观察** — 本地评测框架是蓝海
+- **继续 agent-memory** — v3.1 已部署，等待外部反馈
+
+**Scout 新目标方向: rubric-eval 域 = AI Agent 本地评测框架**
+- 独立于 memory 的新方向
+- 目标用户: AI agent 开发者
+- MVP 可行性: ✅ (CLI 工具，<500 行)
+
+---
+*Updated: 2026-03-25 12:00*
 
 ---
 
