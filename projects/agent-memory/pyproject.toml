@@ -26,6 +26,7 @@ all = ["numpy", "scikit-learn", "faiss-cpu", "cryptography>=38.0", "redis>=4.0"]
 
 [project.scripts]
 agent-memory = "cli:main"
+agent-memory-mcp = "mcp_server.server:main"
 
 [project.urls]
 Homepage = "https://github.com/lucksheep1/Repository-name-ai-saas-lab"
