@@ -23,6 +23,7 @@
 - [x] AM 汇报 (08:36) ✅ - 发送至飞书
 - [x] Web Dashboard (11:30) ✅
 - [x] MCP Server (11:36) ✅ - v3.2 新功能
+- [x] MCP 修复 + 扩展 (11:47) ✅ - 9 tools, Claude Desktop 集成文档
 - [ ] PM 汇报 (20:30-21:30)
 
 ---
