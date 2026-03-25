@@ -137,6 +137,42 @@ class KnowledgeGraph:
         
         return neighbors
     
+    def find_path(self, from_entity: str, to_entity: str, max_depth: int = 3) -> List[Dict]:
+        """Find path between two entities using BFS.
+        
+        Returns list of relations forming the path.
+        """
+        if from_entity == to_entity:
+            return [{"path": [from_entity], "relations": []}]
+        
+        visited = {from_entity}
+        queue = [(from_entity, [])]
+        
+        while queue:
+            current, path = queue.pop(0)
+            
+            if len(path) >= max_depth:
+                continue
+            
+            # Get neighbors
+            neighbors = self.get_neighbors(current)
+            for n in neighbors:
+                neighbor_entity = n["entity"]
+                # Extract name from text
+                name = neighbor_entity["text"].split("ENTITY: ")[1].split(" (type:")[0] if "ENTITY:" in neighbor_entity["text"] else ""
+                
+                if name == to_entity:
+                    # Found!
+                    full_path = path + [{"from": current, "to": name, "relation": n["relation"].get("metadata", {}).get("relation_type")}]
+                    return [{"path": [from_entity] + [n["relation"].get("metadata", {}).get("to", name) for n in [n]], "relations": full_path}]
+                
+                if name not in visited:
+                    visited.add(name)
+                    new_path = path + [{"from": current, "to": name, "relation": n["relation"].get("metadata", {}).get("relation_type")}]
+                    queue.append((name, new_path))
+        
+        return [{"path": [], "relations": [], "error": "No path found"}]
+    
     def export_graph(self) -> Dict:
         """Export the entire graph as JSON."""
         entities = [e for e in self.memory.get_by_tag("_entity")]

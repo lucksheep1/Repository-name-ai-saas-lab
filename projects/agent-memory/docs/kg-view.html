@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Memory - Knowledge Graph</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { margin: 0; font-family: -apple-system, sans-serif; background: #0f0f23; color: #fff; }
+        #app { height: 100vh; display: flex; flex-direction: column; }
+        header { padding: 20px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-bottom: 1px solid #333; }
+        h1 { margin: 0; font-size: 1.5rem; }
+        .subtitle { color: #9ca3af; font-size: 0.9rem; margin-top: 5px; }
+        #network { flex: 1; background: #0f0f23; }
+        .controls { padding: 15px; background: #1f2937; display: flex; gap: 10px; flex-wrap: wrap; }
+        button { padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background: #2563eb; }
+        button.secondary { background: #374151; }
+        .stats { display: flex; gap: 30px; padding: 10px 20px; background: #1a1a2e; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.5rem; color: #22c55e; }
+        .stat-label { color: #9ca3af; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🧠 Knowledge Graph</h1>
+            <div class="subtitle">Agent Memory v4.0 - Entity & Relation Visualization</div>
+        </header>
+        <div class="stats">
+            <div class="stat"><div class="stat-value" id="nodeCount">0</div><div class="stat-label">Entities</div></div>
+            <div class="stat"><div class="stat-value" id="edgeCount">0</div><div class="stat-label">Relations</div></div>
+        </div>
+        <div class="controls">
+            <button onclick="loadGraph()">🔄 Refresh</button>
+            <button class="secondary" onclick="exportGraph()">📤 Export</button>
+            <button class="secondary" onclick="fitGraph()">🎯 Fit</button>
+        </div>
+        <div id="network"></div>
+    </div>
+    <script>
+        let network = null;
+        
+        async function loadGraph() {
+            try {
+                const resp = await fetch('./api/kg');
+                const data = await resp.json();
+                
+                const nodes = (data.nodes || []).map((n, i) => ({
+                    id: i,
+                    label: n.id,
+                    title: `${n.type}\n${(n.observations || []).join(', ')}`,
+                    group: n.type,
+                    color: { background: '#3b82f6', border: '#2563eb' }
+                }));
+                
+                const edges = (data.edges || []).map(e => ({
+                    from: nodes.find(n => n.label === e.from)?.id || 0,
+                    to: nodes.find(n => n.label === e.to)?.id || 0,
+                    label: e.type,
+                    arrows: 'to'
+                }));
+                
+                document.getElementById('nodeCount').textContent = nodes.length;
+                document.getElementById('edgeCount').textContent = edges.length;
+                
+                const container = document.getElementById('network');
+                const options = {
+                    nodes: { shape: 'box', font: { color: '#fff' } },
+                    edges: { color: '#555', font: { color: '#9ca3af' } },
+                    physics: { stabilization: true },
+                    interaction: { hover: true, navigationButtons: true }
+                };
+                
+                network = new vis.Network(container, { nodes, edges }, options);
+            } catch(e) {
+                console.error('Load error:', e);
+            }
+        }
+        
+        function exportGraph() {
+            const nodes = network.body.data.nodes.get();
+            const edges = network.body.data.edges.get();
+            const data = { nodes: nodes.map(n => ({ id: n.label, type: n.group })), edges: edges.map(e => ({ from: nodes.find(n => n.id === e.from)?.label, to: nodes.find(n => n.id === e.to)?.label, type: e.label })) };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'graph.json'; a.click();
+        }
+        
+        function fitGraph() { network && network.fit(); }
+        
+        loadGraph();
+    </script>
+</body>
+</html>

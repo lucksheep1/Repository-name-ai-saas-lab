@@ -197,6 +197,23 @@ def api_export():
         return jsonify({'error': 'No memory found'})
     return jsonify(m.get_recent(limit=1000))
 
+# Knowledge Graph API (if available)
+try:
+    import kg as kg_module
+    HAS_KG_DASHBOARD = True
+except ImportError:
+    HAS_KG_DASHBOARD = False
+
+@app.route('/api/kg')
+def api_kg():
+    if not HAS_KG_DASHBOARD:
+        return jsonify({'nodes': [], 'edges': []})
+    m = get_memory()
+    if m is None:
+        return jsonify({'nodes': [], 'edges': []})
+    kg = kg_module.KnowledgeGraph(m)
+    return jsonify(kg.export_graph())
+
 if __name__ == '__main__':
     print("Starting Agent Memory Dashboard on http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=True)

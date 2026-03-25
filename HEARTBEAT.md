@@ -20,10 +20,11 @@
 - ✅ 一个明确的 feedback hook
 
 ### 今日产出 (2026-03-25)
-- [x] AM 汇报 (08:36) ✅ - 发送至飞书
+- [x] AM 汇报 (08:36) ✅
 - [x] Web Dashboard (11:30) ✅
-- [x] MCP Server (11:36) ✅ - v3.2 新功能
-- [x] MCP 修复 + 扩展 (11:47) ✅ - 9 tools, Claude Desktop 集成文档
+- [x] MCP Server (11:36) ✅ - v3.2
+- [x] Knowledge Graph Layer (11:57) ✅ - v4.0 预览
+- [x] MCP+KG 集成 (12:02) ✅ - 14 tools
 - [ ] PM 汇报 (20:30-21:30)
 
 ---

@@ -236,6 +236,19 @@ class AgentMemoryMCPServer:
                     "name": "kg_export",
                     "description": "Export entire graph as JSON",
                     "inputSchema": {"type": "object", "properties": {}}
+                },
+                {
+                    "name": "kg_find_path",
+                    "description": "Find path between two entities",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "from_entity": {"type": "string", "description": "Start entity"},
+                            "to_entity": {"type": "string", "description": "Target entity"},
+                            "max_depth": {"type": "integer", "description": "Max hops", "default": 3}
+                        },
+                        "required": ["from_entity", "to_entity"]
+                    }
                 }
             ]
             tools.extend(kg_tools)
@@ -338,6 +351,14 @@ class AgentMemoryMCPServer:
             
             elif name == "kg_export" and HAS_KG:
                 result = self.kg.export_graph()
+                return {"content": [{"type": "text", "text": json.dumps(result, indent=2)}]}
+            
+            elif name == "kg_find_path" and HAS_KG:
+                result = self.kg.find_path(
+                    from_entity=arguments["from_entity"],
+                    to_entity=arguments["to_entity"],
+                    max_depth=arguments.get("max_depth", 3)
+                )
                 return {"content": [{"type": "text", "text": json.dumps(result, indent=2)}]}
             
             else:
