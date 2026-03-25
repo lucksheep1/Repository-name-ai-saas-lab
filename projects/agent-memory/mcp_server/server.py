@@ -23,12 +23,31 @@ except ImportError:
     print("Error: agent_memory not installed", file=sys.stderr)
     sys.exit(1)
 
+# Import KnowledgeGraph for MCP exposure
+import sys
+import os
+kg_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'kg.py')
+if os.path.exists(kg_path):
+    sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+    try:
+        from kg import KnowledgeGraph
+        HAS_KG = True
+    except ImportError:
+        HAS_KG = False
+else:
+    HAS_KG = False
+
 class AgentMemoryMCPServer:
     """MCP Server for Agent Memory."""
     
     def __init__(self):
         self.memory = Memory(storage="json", path="./memory.json")
         self._initialized = True
+        # Initialize Knowledge Graph if available
+        if HAS_KG:
+            self.kg = KnowledgeGraph(self.memory)
+        else:
+            self.kg = None
     
     def handle_request(self, method, params=None):
         """Handle MCP request."""
@@ -62,105 +81,166 @@ class AgentMemoryMCPServer:
         }
     
     def _list_tools(self, params):
-        return {
-            "tools": [
-                {
-                    "name": "memory_add",
-                    "description": "Add a new memory to the agent's memory store",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "text": {"type": "string", "description": "Memory text content"},
-                            "ttl": {"type": "string", "description": "TTL in string format (e.g., '7d', '1h')"},
-                            "tags": {"type": "array", "items": {"type": "string"}, "description": "Tags for the memory"},
-                            "encrypt": {"type": "boolean", "description": "Encrypt this memory"}
-                        },
-                        "required": ["text"]
-                    }
-                },
-                {
-                    "name": "memory_search",
-                    "description": "Search memories by query",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "query": {"type": "string", "description": "Search query"},
-                            "top_k": {"type": "integer", "description": "Max results", "default": 5}
-                        },
-                        "required": ["query"]
-                    }
-                },
-                {
-                    "name": "memory_get_recent",
-                    "description": "Get recent memories",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "limit": {"type": "integer", "description": "Max memories", "default": 10}
-                        }
-                    }
-                },
-                {
-                    "name": "memory_get_by_tag",
-                    "description": "Get memories by tag",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "tag": {"type": "string", "description": "Tag to filter by"}
-                        },
-                        "required": ["tag"]
-                    }
-                },
-                {
-                    "name": "memory_get_context",
-                    "description": "Get condensed context for agent",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "max_tokens": {"type": "integer", "default": 2000},
-                            "max_memories": {"type": "integer", "default": 10}
-                        }
-                    }
-                },
-                {
-                    "name": "memory_stats",
-                    "description": "Get memory statistics",
-                    "inputSchema": {"type": "object", "properties": {}}
-                },
-                {
-                    "name": "memory_delete",
-                    "description": "Delete a memory by ID",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "memory_id": {"type": "string", "description": "Memory ID to delete"}
-                        },
-                        "required": ["memory_id"]
-                    }
-                },
-                {
-                    "name": "memory_timeline",
-                    "description": "Get memories as timeline",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "limit": {"type": "integer", "description": "Max memories", "default": 20}
-                        }
-                    }
-                },
-                {
-                    "name": "memory_export",
-                    "description": "Export memories to JSON file",
-                    "inputSchema": {
-                        "type": "object",
-                        "properties": {
-                            "filepath": {"type": "string", "description": "Output file path"}
-                        },
-                        "required": ["filepath"]
+        # Base memory tools
+        tools = [
+            {
+                "name": "memory_add",
+                "description": "Add a new memory to the agent's memory store",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "text": {"type": "string", "description": "Memory text content"},
+                        "ttl": {"type": "string", "description": "TTL in string format (e.g., '7d', '1h')"},
+                        "tags": {"type": "array", "items": {"type": "string"}, "description": "Tags for the memory"},
+                        "encrypt": {"type": "boolean", "description": "Encrypt this memory"}
+                    },
+                    "required": ["text"]
+                }
+            },
+            {
+                "name": "memory_search",
+                "description": "Search memories by query",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string", "description": "Search query"},
+                        "top_k": {"type": "integer", "description": "Max results", "default": 5}
+                    },
+                    "required": ["query"]
+                }
+            },
+            {
+                "name": "memory_get_recent",
+                "description": "Get recent memories",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "limit": {"type": "integer", "description": "Max memories", "default": 10}
                     }
                 }
+            },
+            {
+                "name": "memory_get_by_tag",
+                "description": "Get memories by tag",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "tag": {"type": "string", "description": "Tag to filter by"}
+                    },
+                    "required": ["tag"]
+                }
+            },
+            {
+                "name": "memory_get_context",
+                "description": "Get condensed context for agent",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "max_tokens": {"type": "integer", "default": 2000},
+                        "max_memories": {"type": "integer", "default": 10}
+                    }
+                }
+            },
+            {
+                "name": "memory_stats",
+                "description": "Get memory statistics",
+                "inputSchema": {"type": "object", "properties": {}}
+            },
+            {
+                "name": "memory_delete",
+                "description": "Delete a memory by ID",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "memory_id": {"type": "string", "description": "Memory ID to delete"}
+                    },
+                    "required": ["memory_id"]
+                }
+            },
+            {
+                "name": "memory_timeline",
+                "description": "Get memories as timeline",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "limit": {"type": "integer", "description": "Max memories", "default": 20}
+                    }
+                }
+            },
+            {
+                "name": "memory_export",
+                "description": "Export memories to JSON file",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "filepath": {"type": "string", "description": "Output file path"}
+                    },
+                    "required": ["filepath"]
+                }
+            }
+        ]
+        
+        # Add Knowledge Graph tools if available
+        if HAS_KG:
+            kg_tools = [
+                {
+                    "name": "kg_add_entity",
+                    "description": "Add entity to knowledge graph",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string", "description": "Entity name"},
+                            "entity_type": {"type": "string", "description": "Type (person, project, etc)"},
+                            "observations": {"type": "array", "items": {"type": "string"}, "description": "List of observations"}
+                        },
+                        "required": ["name", "entity_type"]
+                    }
+                },
+                {
+                    "name": "kg_add_relation",
+                    "description": "Add relation between entities",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "from_entity": {"type": "string", "description": "Source entity"},
+                            "to_entity": {"type": "string", "description": "Target entity"},
+                            "relation_type": {"type": "string", "description": "Relation type (uses, maintains, etc)"}
+                        },
+                        "required": ["from_entity", "to_entity", "relation_type"]
+                    }
+                },
+                {
+                    "name": "kg_query",
+                    "description": "Query knowledge graph",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "entity_name": {"type": "string", "description": "Filter by entity name"},
+                            "entity_type": {"type": "string", "description": "Filter by entity type"}
+                        }
+                    }
+                },
+                {
+                    "name": "kg_neighbors",
+                    "description": "Get entities connected to an entity",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "entity_name": {"type": "string", "description": "Entity to find neighbors for"},
+                            "relation_type": {"type": "string", "description": "Filter by relation type"}
+                        },
+                        "required": ["entity_name"]
+                    }
+                },
+                {
+                    "name": "kg_export",
+                    "description": "Export entire graph as JSON",
+                    "inputSchema": {"type": "object", "properties": {}}
+                }
             ]
-        }
+            tools.extend(kg_tools)
+        
+        return {"tools": tools}
     
     def _call_tool(self, params):
         name = params.get("name")
@@ -224,6 +304,41 @@ class AgentMemoryMCPServer:
             elif name == "memory_export":
                 self.memory.export(arguments["filepath"])
                 return {"content": [{"type": "text", "text": f"Exported to {arguments['filepath']}"}]}
+            
+            # Knowledge Graph tools
+            elif name == "kg_add_entity" and HAS_KG:
+                result = self.kg.add_entity(
+                    name=arguments["name"],
+                    entity_type=arguments["entity_type"],
+                    observations=arguments.get("observations", [])
+                )
+                return {"content": [{"type": "text", "text": f"Entity added: {result}"}]}
+            
+            elif name == "kg_add_relation" and HAS_KG:
+                result = self.kg.add_relation(
+                    from_entity=arguments["from_entity"],
+                    to_entity=arguments["to_entity"],
+                    relation_type=arguments["relation_type"]
+                )
+                return {"content": [{"type": "text", "text": f"Relation added: {result}"}]}
+            
+            elif name == "kg_query" and HAS_KG:
+                result = self.kg.query(
+                    entity_name=arguments.get("entity_name"),
+                    entity_type=arguments.get("entity_type")
+                )
+                return {"content": [{"type": "text", "text": json.dumps(result, indent=2)}]}
+            
+            elif name == "kg_neighbors" and HAS_KG:
+                result = self.kg.get_neighbors(
+                    entity_name=arguments["entity_name"],
+                    relation_type=arguments.get("relation_type")
+                )
+                return {"content": [{"type": "text", "text": json.dumps(result, indent=2)}]}
+            
+            elif name == "kg_export" and HAS_KG:
+                result = self.kg.export_graph()
+                return {"content": [{"type": "text", "text": json.dumps(result, indent=2)}]}
             
             else:
                 return {"error": {"code": -32602, "message": f"Unknown tool: {name}"}}
