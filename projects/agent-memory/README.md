@@ -46,9 +46,26 @@ python -m agent_memory.mcp_server
 
 **MCP Tools:** `memory_search`, `memory_add`, `memory_get`, `memory_clear`
 
-## Backup & Restore
+## HTTP API Server
 
-Backup all memories to a file, restore on another machine:
+Start a local HTTP server for agent-memory:
+
+```bash
+python http_server.py --storage json --path ./memory.json --port 8080
+```
+
+**Endpoints:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| GET | `/stats` | Memory statistics |
+| GET | `/memories` | List all memories |
+| POST | `/memories` | Add memory `{"text":"..."}` |
+| GET | `/memories/search?q=query` | Search memories |
+| GET | `/memories/context?max_tokens=2000` | Get conversation context |
+| DELETE | `/memories` | Clear all memories |
+
+## Backup & Restore
 
 ```bash
 python memory_backup.py backup --storage json --path ./memory.json --output backup.json
