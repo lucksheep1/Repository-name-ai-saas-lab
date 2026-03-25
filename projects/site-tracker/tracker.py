@@ -15,20 +15,22 @@ import os
 import sys
 import sqlite3
 import time
+import ssl
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 import urllib.request
 import urllib.error
-import ssl
 
 # Config
 DB_PATH = Path(__file__).parent / "tracker.db"
 DEFAULT_TIMEOUT = 15
 USER_AGENT = "Mozilla/5.0 (compatible; SiteTracker/1.0)"
 
+
 class TrackerDB:
-    """Simple SQLite persistence for tracked opportunities."""
+    """Simple SQLite persistence with dedup and noise filtering."""
     
     def __init__(self, db_path: Path = DB_PATH):
         self.db_path = db_path
@@ -45,6 +47,9 @@ class TrackerDB:
                 description TEXT,
                 category TEXT,
                 discovered_at TEXT NOT NULL,
+                first_seen_at TEXT,
+                last_seen_at TEXT,
+                appearance_count INTEGER DEFAULT 1,
                 raw_data TEXT
             )
         """)
@@ -61,11 +66,10 @@ class TrackerDB:
         conn.commit()
         conn.close()
     
-    def save_opportunities(self, source: str, items: List[Dict]):
+    def save_opportunities(self, source: str, items: List[Dict], enable_dedup: bool = True):
         conn = sqlite3.connect(self.db_path)
         now = datetime.utcnow().isoformat()
         
-        run_id = None
         # Start run
         cursor = conn.execute(
             "INSERT INTO runs (source, started_at) VALUES (?, ?)",
@@ -73,28 +77,102 @@ class TrackerDB:
         )
         run_id = cursor.lastrowid
         
+        saved_count = 0
         for item in items:
+            # Skip noise
+            if self._is_noise(item):
+                continue
+            
+            url = item.get("url", "")
+            title = item.get("title", "")
+            
+            # URL dedup
+            if enable_dedup and url and url.startswith("http"):
+                existing = conn.execute(
+                    "SELECT id, appearance_count FROM opportunities WHERE url = ?",
+                    (url,)
+                ).fetchone()
+                
+                if existing:
+                    conn.execute("""
+                        UPDATE opportunities 
+                        SET last_seen_at = ?, appearance_count = appearance_count + 1
+                        WHERE id = ?
+                    """, (now, existing[0]))
+                    continue
+            
+            # Title dedup (normalized)
+            if enable_dedup and title:
+                norm_title = self._normalize_title(title)
+                if norm_title:
+                    existing = conn.execute(
+                        "SELECT id FROM opportunities WHERE LOWER(title) = LOWER(?)",
+                        (title,)
+                    ).fetchone()
+                    
+                    if existing:
+                        conn.execute("""
+                            UPDATE opportunities 
+                            SET last_seen_at = ?, appearance_count = appearance_count + 1
+                            WHERE id = ?
+                        """, (now, existing[0]))
+                        continue
+            
+            # Insert new
             conn.execute("""
                 INSERT INTO opportunities 
-                (source, title, url, description, category, discovered_at, raw_data)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                (source, title, url, description, category, discovered_at, first_seen_at, last_seen_at, raw_data)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 source,
-                item.get("title", ""),
-                item.get("url", ""),
+                title,
+                url,
                 item.get("description", ""),
                 item.get("category", ""),
                 now,
+                now,
+                now,
                 json.dumps(item)
             ))
+            saved_count += 1
         
         conn.execute(
             "UPDATE runs SET completed_at = ?, items_found = ? WHERE id = ?",
-            (now, len(items), run_id)
+            (now, saved_count, run_id)
         )
         conn.commit()
         conn.close()
-        return len(items)
+        return saved_count
+    
+    def _normalize_title(self, title: str) -> str:
+        """Normalize title for dedup."""
+        return re.sub(r'[^a-z0-9]', '', title.lower())
+    
+    def _is_noise(self, item: Dict) -> bool:
+        """Filter obvious noise."""
+        title = item.get("title", "")
+        url = item.get("url", "")
+        
+        if len(title) < 3:
+            return True
+        
+        noise_patterns = [
+            "+ Launch", "+ New", "+ Add", "human", "Click", 
+            "Button", "Sign up", "Login", "Submit", "aria-", 
+            "crossOrigin", "data-"
+        ]
+        
+        for pattern in noise_patterns:
+            if pattern.lower() in title.lower():
+                return True
+        
+        if url and not url.startswith("http"):
+            return True
+        
+        if "tally.so" in url:
+            return True
+        
+        return False
     
     def get_recent(self, source: str = None, limit: int = 50) -> List[Dict]:
         conn = sqlite3.connect(self.db_path)
@@ -150,7 +228,6 @@ class BaseSite:
         return fetch_page(self.url)
     
     def extract(self, html: str) -> List[Dict]:
-        """Override in subclass."""
         return []
     
     def run(self) -> List[Dict]:
@@ -166,52 +243,57 @@ class BaseSite:
 
 
 class GitHubTrending(BaseSite):
-    """GitHub Trending - Python repos."""
+    """GitHub Trending - Python repos via API."""
     name = "GitHub Trending (Python)"
-    url = "https://github.com/trending/python?since=daily"
+    url = "https://api.github.com/search/repositories?q=created:>2024-01-01+language:python&sort=stars&order=desc&per_page=20"
+    
+    def fetch(self) -> Optional[str]:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        
+        req = urllib.request.Request(
+            self.url,
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"}
+        )
+        
+        try:
+            with urllib.request.urlopen(req, timeout=15, context=ctx) as resp:
+                return resp.read().decode("utf-8", errors="ignore")
+        except Exception as e:
+            print(f"  API error: {e}", file=sys.stderr)
+            return None
     
     def extract(self, html: str) -> List[Dict]:
         items = []
         
-        # Simple regex-based extraction (no external deps)
-        import re
+        if not html:
+            return items
         
-        # Find repo links: <a href="/owner/repo">...
-        repo_pattern = r'<a\s+href="(/[^/]+/[^"]+)"[^>]*>.*?</a>\s*</article>'
-        
-        # Simpler: find all repo links in the page
-        link_pattern = r'href="(/[^/]+/[^/]+/[^"]+)"'
-        matches = re.findall(link_pattern, html)
-        
-        seen = set()
-        for match in matches[:20]:  # Limit to 20
-            if match.startswith('/') and '/' in match[1:]:
-                parts = match.strip('/').split('/')
-                if len(parts) >= 2:
-                    owner, repo = parts[0], parts[1]
-                    full_name = f"{owner}/{repo}"
-                    if full_name not in seen and '?' not in match:
-                        seen.add(full_name)
-                        items.append({
-                            "title": full_name,
-                            "url": f"https://github.com{match}",
-                            "description": "GitHub Trending Python repo",
-                            "category": "code"
-                        })
+        try:
+            data = json.loads(html)
+            
+            for repo in data.get("items", [])[:20]:
+                items.append({
+                    "title": repo.get("full_name", ""),
+                    "url": repo.get("html_url", ""),
+                    "description": (repo.get("description") or "")[:150],
+                    "category": "code"
+                })
+        except Exception as e:
+            print(f"  Parse error: {e}", file=sys.stderr)
         
         return items
 
 
 class HackerNewsShow(BaseSite):
-    """Hacker News Show HN."""
-    name = "Hacker News Show"
+    """Hacker News."""
+    name = "Hacker News"
     url = "https://news.ycombinator.com/"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
-        # Find story links: <a href="url" class="titlelink">Title</a>
         pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*class="titlelink"[^>]*>([^<]+)</a>'
         matches = re.findall(pattern, html)
         
@@ -232,10 +314,8 @@ class BetaListSite(BaseSite):
     url = "https://betalist.com"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
-        # Find startup entries
         pattern = r'<a[^>]*href="(/startup/[^"]+)"[^>]*>([^<]+)</a>'
         matches = re.findall(pattern, html)
         
@@ -256,20 +336,21 @@ class ExplodingTopics(BaseSite):
     url = "https://explodingtopics.com"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
-        # Look for topic links
         pattern = r'<a[^>]*href="(https?://explodingtopics\.com/[^"]+)"[^>]*>([^<]+)</a>'
         matches = re.findall(pattern, html)
         
+        seen = set()
         for url, title in matches[:15]:
-            items.append({
-                "title": title.strip(),
-                "url": url,
-                "description": "Exploding Topics",
-                "category": "trend"
-            })
+            if title.strip() not in seen:
+                seen.add(title.strip())
+                items.append({
+                    "title": title.strip(),
+                    "url": url,
+                    "description": "Exploding Topics",
+                    "category": "trend"
+                })
         
         return items
 
@@ -280,20 +361,21 @@ class FutureTools(BaseSite):
     url = "https://futuretools.io"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
-        # Find tool cards
         pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*class="[^"]*tool[^"]*"[^>]*>([^<]+)</a>'
         matches = re.findall(pattern, html)
         
+        seen = set()
         for url, title in matches[:15]:
-            items.append({
-                "title": title.strip(),
-                "url": url,
-                "description": "AI Tool",
-                "category": "tool"
-            })
+            if title.strip() not in seen:
+                seen.add(title.strip())
+                items.append({
+                    "title": title.strip(),
+                    "url": url,
+                    "description": "AI Tool",
+                    "category": "tool"
+                })
         
         return items
 
@@ -304,20 +386,21 @@ class AlternativeTo(BaseSite):
     url = "https://alternativeto.net"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
-        # Find alternatives
         pattern = r'<a[^>]*href="(https?://alternativeto\.net/[^"]+)"[^>]*>([^<]+)</a>'
         matches = re.findall(pattern, html)
         
+        seen = set()
         for url, title in matches[:15]:
-            items.append({
-                "title": title.strip(),
-                "url": url,
-                "description": "Alternative software",
-                "category": "tool"
-            })
+            if title.strip() not in seen:
+                seen.add(title.strip())
+                items.append({
+                    "title": title.strip(),
+                    "url": url,
+                    "description": "Alternative software",
+                    "category": "tool"
+                })
         
         return items
 
@@ -328,17 +411,15 @@ class TinyStartups(BaseSite):
     url = "https://www.tinystartups.com"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
-        # Find startup links
         pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*>([^<]+)</a>'
         matches = re.findall(pattern, html)
         
         seen = set()
         for url, title in matches[:15]:
             title = title.strip()
-            if title and title not in seen:
+            if title and len(title) > 5 and title not in seen:
                 seen.add(title)
                 items.append({
                     "title": title,
@@ -356,7 +437,6 @@ class OpenAlternative(BaseSite):
     url = "https://openalternative.co"
     
     def extract(self, html: str) -> List[Dict]:
-        import re
         items = []
         
         pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*>([^<]+)</a>'
@@ -377,7 +457,7 @@ class OpenAlternative(BaseSite):
         return items
 
 
-# Registry of available trackers
+# Registry
 TRACKERS = {
     "github": GitHubTrending,
     "hn": HackerNewsShow,
@@ -391,7 +471,6 @@ TRACKERS = {
 
 
 def run_tracker(name: str, db: TrackerDB) -> int:
-    """Run a single tracker."""
     if name not in TRACKERS:
         print(f"Unknown tracker: {name}")
         print(f"Available: {', '.join(TRACKERS.keys())}")
@@ -408,7 +487,6 @@ def run_tracker(name: str, db: TrackerDB) -> int:
 
 
 def run_all(db: TrackerDB) -> int:
-    """Run all trackers."""
     print(f"Running {len(TRACKERS)} trackers...\n")
     
     total = 0
@@ -422,12 +500,11 @@ def run_all(db: TrackerDB) -> int:
             total += count
         print()
     
-    print(f"Total: {total} opportunities found")
+    print(f"Total: {total} opportunities saved")
     return 0
 
 
 def list_sites():
-    """List available sites."""
     print("Available trackers:")
     for name, cls in TRACKERS.items():
         print(f"  {name:15} - {cls.name}")
@@ -435,7 +512,6 @@ def list_sites():
 
 
 def show_recent(db: TrackerDB, source: str = None, limit: int = 20):
-    """Show recent opportunities."""
     items = db.get_recent(source, limit)
     
     if not items:
@@ -448,29 +524,27 @@ def show_recent(db: TrackerDB, source: str = None, limit: int = 20):
         print(f"  {item['title']}")
         print(f"  {item['url']}")
         if item.get('description'):
-            print(f"  {item['description']}")
+            print(f"  {item['description'][:80]}...")
         print()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Site Tracker - Monitor opportunity websites")
+    parser = argparse.ArgumentParser(description="Site Tracker")
     parser.add_argument("command", nargs="?", default="list",
                         choices=["run", "list", "recent"])
-    parser.add_argument("site", nargs="?", help="Site name for run/recent")
-    parser.add_argument("--limit", type=int, default=20, help="Limit for recent command")
+    parser.add_argument("site", nargs="?", help="Site name")
+    parser.add_argument("--limit", type=int, default=20)
     
     args = parser.parse_args()
     db = TrackerDB()
     
     if args.command == "list":
         list_sites()
-    
     elif args.command == "run":
         if args.site:
             sys.exit(run_tracker(args.site, db))
         else:
             sys.exit(run_all(db))
-    
     elif args.command == "recent":
         show_recent(db, args.site, args.limit)
 
