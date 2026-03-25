@@ -46,6 +46,16 @@ python -m agent_memory.mcp_server
 
 **MCP Tools:** `memory_search`, `memory_add`, `memory_get`, `memory_clear`
 
+## Backup & Restore
+
+Backup all memories to a file, restore on another machine:
+
+```bash
+python memory_backup.py backup --storage json --path ./memory.json --output backup.json
+python memory_backup.py restore --storage json --path ./memory.json --input backup.json
+python memory_backup.py stats --storage json --path ./memory.json
+```
+
 ## Installation
 
 ```bash
