@@ -8,39 +8,93 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
+        * { box-sizing: border-box; }
         body { margin: 0; font-family: -apple-system, sans-serif; background: #0f0f23; color: #fff; }
         #app { height: 100vh; display: flex; flex-direction: column; }
-        header { padding: 20px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-bottom: 1px solid #333; }
-        h1 { margin: 0; font-size: 1.5rem; }
-        .subtitle { color: #9ca3af; font-size: 0.9rem; margin-top: 5px; }
+        header { padding: 15px 20px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 1.3rem; }
+        .subtitle { color: #9ca3af; font-size: 0.8rem; margin-top: 3px; }
         #network { flex: 1; background: #0f0f23; }
-        .controls { padding: 15px; background: #1f2937; display: flex; gap: 10px; flex-wrap: wrap; }
-        button { padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+        .controls { padding: 12px 15px; background: #1f2937; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        button { padding: 8px 16px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
         button:hover { background: #2563eb; }
         button.secondary { background: #374151; }
-        .stats { display: flex; gap: 30px; padding: 10px 20px; background: #1a1a2e; }
-        .stat { text-align: center; }
-        .stat-value { font-size: 1.5rem; color: #22c55e; }
-        .stat-label { color: #9ca3af; font-size: 0.8rem; }
+        button.danger { background: #ef4444; }
+        button.success { background: #22c55e; }
+        .stats { display: flex; gap: 20px; padding: 10px 20px; background: #1a1a2e; font-size: 0.9rem; }
+        .stat { display: flex; align-items: center; gap: 8px; }
+        .stat-value { color: #22c55e; font-weight: bold; }
+        .stat-label { color: #9ca3af; }
+        input, select { padding: 8px 12px; background: #374151; border: 1px solid #555; border-radius: 6px; color: #fff; font-size: 0.9rem; }
+        input::placeholder { color: #9ca3af; }
+        .form-group { display: flex; gap: 8px; align-items: center; }
+        .form-group label { color: #9ca3af; font-size: 0.85rem; }
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: #1f2937; padding: 25px; border-radius: 12px; min-width: 350px; max-width: 90%; }
+        .modal h2 { margin-top: 0; }
+        .modal-form { display: flex; flex-direction: column; gap: 12px; }
+        .modal-form input, .modal-form select { width: 100%; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px; }
     </style>
 </head>
 <body>
     <div id="app">
         <header>
-            <h1>🧠 Knowledge Graph</h1>
-            <div class="subtitle">Agent Memory v4.0 - Entity & Relation Visualization</div>
+            <div>
+                <h1>🧠 Knowledge Graph</h1>
+                <div class="subtitle">Agent Memory v4.0 - Entity & Relation Visualization</div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="success" onclick="showAddEntity()">+ Entity</button>
+                <button class="success" onclick="showAddRelation()">+ Relation</button>
+            </div>
         </header>
         <div class="stats">
-            <div class="stat"><div class="stat-value" id="nodeCount">0</div><div class="stat-label">Entities</div></div>
-            <div class="stat"><div class="stat-value" id="edgeCount">0</div><div class="stat-label">Relations</div></div>
+            <div class="stat"><span class="stat-value" id="nodeCount">0</span><span class="stat-label">Entities</span></div>
+            <div class="stat"><span class="stat-value" id="edgeCount">0</span><span class="stat-label">Relations</span></div>
+            <div class="stat"><span class="stat-value" id="toolCount">15</span><span class="stat-label">MCP Tools</span></div>
         </div>
         <div class="controls">
             <button onclick="loadGraph()">🔄 Refresh</button>
             <button class="secondary" onclick="exportGraph()">📤 Export</button>
             <button class="secondary" onclick="fitGraph()">🎯 Fit</button>
+            <button class="secondary" onclick="clearGraph()">🗑️ Clear</button>
         </div>
         <div id="network"></div>
     </div>
+
+    <!-- Add Entity Modal -->
+    <div id="entityModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Add Entity</h2>
+            <div class="modal-form">
+                <input type="text" id="entityName" placeholder="Entity name (e.g., Alice, ProjectX)">
+                <input type="text" id="entityType" placeholder="Type (e.g., person, project, location)">
+                <input type="text" id="entityObs" placeholder="Observations (comma separated)">
+            </div>
+            <div class="modal-buttons">
+                <button class="secondary" onclick="hideModals()">Cancel</button>
+                <button class="success" onclick="addEntity()">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Relation Modal -->
+    <div id="relationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Add Relation</h2>
+            <div class="modal-form">
+                <input type="text" id="fromEntity" placeholder="From entity">
+                <input type="text" id="toEntity" placeholder="To entity">
+                <input type="text" id="relType" placeholder="Relation type (e.g., works_at, uses, knows)">
+            </div>
+            <div class="modal-buttons">
+                <button class="secondary" onclick="hideModals()">Cancel</button>
+                <button class="success" onclick="addRelation()">Add</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let network = null;
         
@@ -84,12 +138,57 @@
         function exportGraph() {
             const nodes = network.body.data.nodes.get();
             const edges = network.body.data.edges.get();
-            const data = { nodes: nodes.map(n => ({ id: n.label, type: n.group })), edges: edges.map(e => ({ from: nodes.find(n => n.id === e.from)?.label, to: nodes.find(n => n.id === e.to)?.label, type: e.label })) };
+            const data = { 
+                nodes: nodes.map(n => ({ id: n.label, type: n.group })), 
+                edges: edges.map(e => ({ 
+                    from: nodes.find(n => n.id === e.from)?.label, 
+                    to: nodes.find(n => n.id === e.to)?.label, 
+                    type: e.label 
+                })) 
+            };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'graph.json'; a.click();
         }
         
         function fitGraph() { network && network.fit(); }
+        
+        function clearGraph() {
+            if (confirm('Clear all data?')) {
+                // Note: Would need API endpoint for this
+                alert('Coming soon! Use MCP tools to delete.');
+            }
+        }
+        
+        function showAddEntity() { document.getElementById('entityModal').style.display = 'flex'; }
+        function showAddRelation() { document.getElementById('relationModal').style.display = 'flex'; }
+        function hideModals() { 
+            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); 
+        }
+        
+        async function addEntity() {
+            const name = document.getElementById('entityName').value;
+            const type = document.getElementById('entityType').value;
+            const obs = document.getElementById('entityObs').value.split(',').map(s => s.trim()).filter(s => s);
+            
+            if (!name || !type) { alert('Name and type required'); return; }
+            
+            // Use MCP tool via fetch (would need proxy)
+            alert(`Entity "${name}" (${type}) ready to add via MCP.\nUse: kg_add_entity tool`);
+            hideModals();
+            loadGraph();
+        }
+        
+        async function addRelation() {
+            const from = document.getElementById('fromEntity').value;
+            const to = document.getElementById('toEntity').value;
+            const type = document.getElementById('relType').value;
+            
+            if (!from || !to || !type) { alert('All fields required'); return; }
+            
+            alert(`Relation "${from}" --[${type}]--> "${to}" ready to add via MCP.\nUse: kg_add_relation tool`);
+            hideModals();
+            loadGraph();
+        }
         
         loadGraph();
     </script>
