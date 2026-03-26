@@ -24,6 +24,7 @@
 - [x] Cycle 39 - 新域 scout (AI Agent DevOps Skills / linux-server-skill) ✅
 - [x] Cycle 40 - dashboard.py (HTML Analytics) ✅
 - [x] PM 汇报 (20:06) ✅ - 发送至飞书
+- [x] Site Tracker 报告 (20:12) ✅ - 发送至飞书
 - [ ] AM 汇报 (03-28 08:30-09:30)
 
 ---
@@ -38,6 +39,11 @@
 - 检查时间：每次 heartbeat 时检查是否在 20:30-21:30 窗口
 - 任务：生成 Founder Update 风格报告
 
+### Site Tracker 报告 (09:00 & 20:00)
+- 检查时间：每天 08:55-09:05 和 19:55-20:05
+- 任务：运行 site-tracker 并发送报告至飞书
+- 命令：`cd projects/site-tracker && ./run.sh`
+
 ---
 
 ## 执行逻辑
@@ -47,15 +53,23 @@
   获取当前时间
   
   // 汇报窗口检查
-  if AM窗口:
+  if AM窗口 (08:30-09:30):
     生成 Founder Update 报告 (5个问题)
     发送至飞书 (message tool)
     Git 提交
   
-  if PM窗口:
+  if Site Tracker AM窗口 (08:55-09:05):
+    运行 site-tracker (cd projects/site-tracker && ./run.sh)
+    发送报告至飞书
+  
+  if PM窗口 (20:30-21:30):
     生成 Founder Update 报告 (5个问题)
     发送至飞书 (message tool)
     Git 提交
+
+  if Site Tracker PM窗口 (19:55-20:05):
+    运行 site-tracker
+    发送报告至飞书
   
   // Founder Mode 迭代
   执行: 押注 → 实验 → 获取反馈 → 判断 → 迭代/切换
