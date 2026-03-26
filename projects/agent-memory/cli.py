@@ -123,6 +123,20 @@ def cmd_stats(args):
     return 0
 
 
+def cmd_context(args):
+    m = get_memory()
+    ctx = m.get_context(max_tokens=args.max_tokens, max_memories=args.max_memories)
+    print(ctx)
+    return 0
+
+
+def cmd_export(args):
+    m = get_memory()
+    m.export(args.output)
+    print(f"✅ Exported {m.count()} memories to {args.output}")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="agent-memory",
@@ -150,6 +164,13 @@ def main():
 
     sub.add_parser("stats", help="Show statistics")
 
+    ctx_parser = sub.add_parser("context", help="Get conversation context for LLM")
+    ctx_parser.add_argument("--max-tokens", type=int, default=2000, dest="max_tokens")
+    ctx_parser.add_argument("--max-memories", type=int, default=10, dest="max_memories")
+
+    exp_parser = sub.add_parser("export", help="Export memories to file")
+    exp_parser.add_argument("output", help="Output file path")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -164,6 +185,8 @@ def main():
         "delete": cmd_delete,
         "clear": cmd_clear,
         "stats": cmd_stats,
+        "context": cmd_context,
+        "export": cmd_export,
     }
 
     return commands[args.command](args)
