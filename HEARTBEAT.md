@@ -22,6 +22,7 @@
 ### 今日产出 (2026-03-26)
 - [x] AM 汇报 (08:36) ✅ - 发送至飞书
 - [x] Cycle 36 - http_server.py (REST API) ✅
+- [x] Cycle 37 - CLI 增强 (context + export) ✅
 - [ ] PM 汇报 (20:30-21:30)
 
 ---
