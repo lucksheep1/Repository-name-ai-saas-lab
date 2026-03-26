@@ -65,6 +65,18 @@ python http_server.py --storage json --path ./memory.json --port 8080
 | GET | `/memories/context?max_tokens=2000` | Get conversation context |
 | DELETE | `/memories` | Clear all memories |
 
+## Analytics Dashboard
+
+
+Generate a visual HTML analytics dashboard:
+
+
+```bash
+python dashboard.py --storage json --path ./memory.json --output dashboard.html
+```
+
+Then open `dashboard.html` in any browser. Shows: total/encrypted/TTL counts, text length stats, TTL distribution chart, top tags, recent memories.
+
 ## Backup & Restore
 
 ```bash
