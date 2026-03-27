@@ -1,0 +1,6 @@
+{
+  "mcp": [
+    "agent-memory",
+    "mcp-discovery"
+  ]
+}
