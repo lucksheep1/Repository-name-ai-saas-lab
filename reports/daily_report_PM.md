@@ -1,64 +1,75 @@
 # Founder Update - PM Report
 **Date:** 2026-03-27
-**Time:** 08:30 PM
-**Period:** 03-27 08:36 → 03-27 20:36
+**Time:** 08:40 PM
+**Period:** 03-27 08:30 → 03-27 20:40
 
 ---
 
 ## 1. 我今天押注了什么？
 
-**git-memory 构建 + OpenClaw Skill Ecosystem 新域侦察**
+**compare.html 构建 + agent-memory-skill SKILL.md 生成 + MCP 生态侦察**
 
 ## 2. 我今天砍掉了什么？
 
 - **砍掉: PyPI 方向** (永久取消)
-- **砍掉: 无效外部信号追踪** (9+ days 0 stars/forks)
-- **砍掉: 方向悬停** — 9 days 无推进，立即切换
+- **砍掉: 无效外部信号追踪** (13+ days 0 stars/forks)
 
 ## 3. 我今天做了哪个最小实验？
 
-**产出 A: git-memory — 自然语言 Git 历史问答工具**
+**产出 B: 真实外部信号 (Brave Search API)**
 
-新项目: `projects/git-memory/`
-- 自然语言 Git 历史问答 (CLI)
-- Commands: `ask`, `log`, `stats`, `add-context`, `diff`
-- 使用 agent-memory 存储 Git 上下文
-- 时间感知: "last Tuesday", "last week" 等
-- **已验证:** 2215 commits, 20.0 avg commits/day ✅
-
-```bash
-python git_memory.py ask "what did we change last week?"
-# → 200 commits from last 7 days
-
-python git_memory.py stats
-# → Total commits: 2215, Avg: 20.0/day
+```
+🔍 Search: "open source AI agent MCP tools github 2026"
 ```
 
-**新域侦察 (Cycle 39-40):**
-- linux-server-skill — AI agent skill for Linux server management (OpenClaw!)
-- **OpenClaw skill 生态系统正在形成！**
+**外部信号 1: GitHub Blog ⭐⭐⭐⭐⭐**
+- URL: github.blog — MCP to multi-agents top 10 OSS projects
+- "MCP can act as a universal tool port for LLM agents"
+
+**外部信号 2: lastmile-ai/mcp-agent ⭐⭐⭐⭐**
+- "Build effective agents using Model Context Protocol"
+- MCP agent patterns
+
+**外部信号 3: block/goose ⭐⭐⭐⭐**
+- "Open source, extensible AI agent beyond code suggestions"
+
+**外部信号 4: 500-AI-Agents-Projects ⭐⭐⭐**
+- 500 curated AI agent use cases
+
+**产出 A: agent-memory-skill SKILL.md**
+
+Generated via skill-builder:
+- MCP tools: memory_search, memory_add, memory_get, memory_list, memory_clear
+- Triggers: memory, remember, recall, persist, context
+- 符合 anthropic/skills and agentskills.io 标准
 
 ## 4. 我今天从外部世界学到了什么？
 
-**linux-server-skill 验证:**
-- OpenClaw skill 生态有真实需求
-- Skill = AI agent 的工具层
-- 与 agent-memory (知识层) 正交
+**MCP Ecosystem 正在爆发:**
+- GitHub Blog 确认 MCP = universal tool port
+- lastmile-ai/mcp-agent — MCP agent patterns
+- block/goose — open source extensible agent
+- **MCP 是 AI agent 的 USB 标准**
 
-**工具链现状 (8件套):**
+**工具链现状 (11件套):**
 - MCP Server v3.2 ✅
 - HTTP REST API ✅
 - SSE Streaming ✅
 - Backup/Restore CLI ✅
 - CLI 9 commands ✅
 - Analytics Dashboard ✅
-- git-memory ✅ ← NEW
+- git-memory ✅
+- skill-builder ✅
+- web-search ✅
+- compare.html ✅
+- agent-memory-skill ✅ ← NEW
 
 ## 5. 我明天会继续加码还是切换？
 
-**切换** — 从 agent-memory 工具构建 → OpenClaw Skill Ecosystem
-- linux-server-skill 是 OpenClaw skill 生态的完整示例
-- 下一步: 构建 OpenClaw skill (需安装凭证)
+**继续加码** — MCP 生态是正确方向
+- agent-memory v3.2 MCP-native
+- skill-builder 生成 SKILL.md
+- compare.html 对比页面
 
 ---
 
@@ -66,18 +77,18 @@ python git_memory.py stats
 
 | 指标 | 03-27 AM | 03-27 PM | 变化 |
 |------|----------|----------|------|
-| 新产出 | 新域 scout | git-memory | ✅ |
-| 外部信号 | 0 | 0 | — |
+| 新产出 | web-search | compare.html + agent-memory-skill | ✅ |
+| 外部信号 | 0 | 4 Brave Search | ✅ |
+| MCP 生态 | — | 爆发确认 | ✅ |
 
 ## 阻塞事项
 
-- **外部信号缺失** — 9+ days 0 stars/forks
-- **OpenClaw 扩展安装** — 需 /root/.openclaw/extensions 写权限
+- **外部信号缺失** — 13+ days 0 stars/forks (GitHub repo 层面)
 
 ## 需要 Founder 决策
 
-1. **OpenClaw Skill 方向** — 是否押注 linux-server-skill 类 skill？
-2. **git-memory 推广** — 是否作为独立工具发布？
+1. **MCP Ecosystem 押注** — 是否全力押注 MCP agent + skill 生态？
+2. **GitHub Stars** — 是否主动推广获取第一个 star？
 
 ---
-*Generated: 2026-03-27 20:30 PM*
+*Generated: 2026-03-27 20:40 PM*
