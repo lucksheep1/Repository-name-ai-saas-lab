@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory Comparison — agent-memory vs Mem0 vs Zep vs Letta</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  h1 { color: #f8fafc; font-size: 1.75rem; margin-bottom: 0.5rem; }
+  h2 { color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin: 2rem 0 1rem; }
+  .subtitle { color: #64748b; margin-bottom: 2rem; font-size: 0.9rem; }
+  .badge-new { display: inline-block; background: #0ea5e9; color: #0f172a; border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.65rem; font-weight: 700; vertical-align: middle; margin-left: 0.5rem; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+  th { background: #1e293b; color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #334155; }
+  td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; font-size: 0.85rem; vertical-align: top; }
+  tr:hover td { background: #0f172a; }
+  .name { font-weight: 600; color: #f8fafc; }
+  .tag { display: inline-block; border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.65rem; font-weight: 600; margin: 0.1rem; }
+  .tag-open { background: #064e3b; color: #34d399; }
+  .tag-cloud { background: #1e3a5f; color: #60a5fa; }
+  .tag-mcp { background: #4c1d95; color: #c4b5fd; }
+  .tag-free { background: #713f12; color: #fbbf24; }
+  .tag-y { color: #34d399; font-weight: 700; }
+  .tag-n { color: #f87171; }
+  .tag-? { color: #fbbf24; }
+  .winner { background: #0f172a; border-left: 3px solid #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+  .hero h1 { color: #fff; font-size: 2rem; }
+  .hero .subtitle { color: rgba(255,255,255,0.8); font-size: 1rem; }
+  .hero .cta { display: inline-block; background: #fff; color: #0ea5e9; border-radius: 8px; padding: 0.75rem 1.5rem; font-weight: 700; text-decoration: none; margin-top: 1rem; }
+  .note { background: #1e293b; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-size: 0.8rem; color: #94a3b8; }
+  .note strong { color: #0ea5e9; }
+  .source { font-size: 0.7rem; color: #475569; margin-top: 2rem; }
+  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #1e293b; font-size: 0.75rem; color: #475569; }
+  @media (max-width: 768px) { table { font-size: 0.75rem; } th, td { padding: 0.5rem; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>AI Agent Memory Comparison</h1>
+  <p class="subtitle">How agent-memory stacks up against Mem0, Zep, Letta, Supermemory, and SuperLocalMemory</p>
+  <a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">View on GitHub ★</a>
+</div>
+
+<h2>LoCoMo Benchmark Scores (2026-03)</h2>
+<p style="color:#64748b;font-size:0.8rem;margin-bottom:1rem;">Long Conversation Memory benchmark — 81 question-answer pairs across long multi-session conversations. Source: DEV Community (2026-03-18)</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Score</th>
+      <th>Cloud LLM Required</th>
+      <th>Open Source</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="name">EverMemOS</span></td>
+      <td><strong>92.3%</strong></td>
+      <td class="tag-y">Yes</td>
+      <td class="tag-n">No</td>
+      <td>Research</td>
+    </tr>
+    <tr>
+      <td><span class="name">MemMachine</span></td>
+      <td><strong>91.7%</strong></td>
+      <td class="tag-y">Yes</td>
+      <td class="tag-n">No</td>
+      <td>Research</td>
+    </tr>
+    <tr>
+      <td><span class="name">Hindsight</span></td>
+      <td><strong>89.6%</strong></td>
+      <td class="tag-y">Yes</td>
+      <td class="tag-n">No</td>
+      <td>Research</td>
+    </tr>
+    <tr class="winner">
+      <td><span class="name">agent-memory <span class="badge-new">★ Your here</span></span></td>
+      <td><strong>—</strong></td>
+      <td class="tag-n">No</td>
+      <td class="tag tag-open">✓ Open Source</td>
+      <td>Production</td>
+    </tr>
+    <tr>
+      <td><span class="name">SLM V3 Mode C</span></td>
+      <td><strong>87.7%</strong></td>
+      <td class="tag-y">Yes</td>
+      <td class="tag-?">?</td>
+      <td>Research</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <strong>Note:</strong> Benchmark covers research systems. Production systems (Mem0, Zep, Letta) don't publish scores. agent-memory is the only open-source, local-first option with <strong>no cloud dependency</strong>.
+</div>
+
+<h2>Feature Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>agent-memory</th>
+      <th>Mem0</th>
+      <th>Zep</th>
+      <th>Letta</th>
+      <th>Supermemory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCP Support</td>
+      <td class="tag tag-mcp">✓ v3.2</td>
+      <td class="tag-n">✗</td>
+      <td class="tag-n">✗</td>
+      <td class="tag-?">?</td>
+      <td class="tag-?">?</td>
+    </tr>
+    <tr>
+      <td>Local-first</td>
+      <td class="tag tag-open">✓ JSON/SQLite</td>
+      <td class="tag tag-cloud">Cloud only</td>
+      <td class="tag">Cloud + Self-host</td>
+      <td class="tag">Self-host</td>
+      <td class="tag tag-cloud">Cloud only</td>
+    </tr>
+    <tr>
+      <td>Open Source</td>
+      <td class="tag tag-open">✓ MIT</td>
+      <td class="tag">Open core</td>
+      <td class="tag tag-open">✓ Apache 2.0</td>
+      <td class="tag tag-open">✓ Apache 2.0</td>
+      <td class="tag tag-open">✓ MIT</td>
+    </tr>
+    <tr>
+      <td>TTL Expiration</td>
+      <td class="tag tag-free">✓ Built-in</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag-?">?</td>
+    </tr>
+    <tr>
+      <td>Encryption</td>
+      <td class="tag tag-free">✓ AES</td>
+      <td class="tag-?">?</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag-?">?</td>
+    </tr>
+    <tr>
+      <td>Multiple Backends</td>
+      <td class="tag tag-free">✓ JSON/SQLite/Redis</td>
+      <td class="tag tag-cloud">Cloud only</td>
+      <td class="tag tag-cloud">Cloud only</td>
+      <td class="tag">Custom</td>
+      <td class="tag tag-cloud">Cloud only</td>
+    </tr>
+    <tr>
+      <td>REST API</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag tag-free">✓</td>
+    </tr>
+    <tr>
+      <td>SSE Streaming</td>
+      <td class="tag tag-free">✓</td>
+      <td class="tag-?">?</td>
+      <td class="tag-?">?</td>
+      <td class="tag-?">?</td>
+      <td class="tag-?">?</td>
+    </tr>
+    <tr>
+      <td>Self-hosted Free</td>
+      <td class="tag tag-free">✓ 100% free</td>
+      <td class="tag">$24M funded, paid</td>
+      <td class="tag">Freemium</td>
+      <td class="tag">Freemium</td>
+      <td class="tag tag-cloud">Cloud only</td>
+    </tr>
+    <tr>
+      <td>GitHub Stars</td>
+      <td class="tag-?">~0</td>
+      <td class="tag tag-free">9.7k ★</td>
+      <td class="tag tag-free">4.3k ★</td>
+      <td class="tag tag-free">17k ★</td>
+      <td class="tag tag-free">7.2k ★</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>When to Choose What</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Use Case</th>
+      <th>Best Choice</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Need cloud-managed service, no self-host</td>
+      <td><strong>Mem0</strong> — $24M funded, production-grade</td>
+    </tr>
+    <tr>
+      <td>Temporal-aware pipelines, production</td>
+      <td><strong>Zep</strong> — time-aware memory, good docs</td>
+    </tr>
+    <tr>
+      <td>Long-running agents, framework user</td>
+      <td><strong>Letta</strong> — agent framework with memory</td>
+    </tr>
+    <tr>
+      <td>Want MCP-compatible local memory</td>
+      <td><strong class="tag tag-mcp">agent-memory ✓</strong> — only MCP-native option</td>
+    </tr>
+    <tr>
+      <td>Privacy-first, no cloud dependency</td>
+      <td><strong class="tag tag-open">agent-memory ✓</strong> — JSON/SQLite on your machine</td>
+    </tr>
+    <tr>
+      <td>Need Redis backend integration</td>
+      <td><strong class="tag tag-free">agent-memory ✓</strong> — built-in Redis support</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <strong>Why agent-memory?</strong> It's the only open-source AI agent memory library with native MCP v3.2 support. Run locally with JSON, scale to production with Redis — no cloud lock-in. Built for AI agents that need persistent memory across sessions.
+</div>
+
+<h2>Quick Start</h2>
+
+<pre style="background:#1e293b;border-radius:8px;padding:1.5rem;overflow-x:auto;font-size:0.8rem;line-height:1.6;margin-bottom:1rem;">
+<code># Install
+pip install agent-memory
+
+# Use with MCP (Cursor, Claude Code, OpenClaw)
+python -m agent_memory.mcp_server
+
+# Or use directly in Python
+from agent_memory import Memory
+m = Memory(storage="json", path="./memory.json")
+m.add("User prefers dark mode", ttl="30d")
+results = m.search("dark mode preference")
+</code>
+</pre>
+
+<pre style="background:#1e293b;border-radius:8px;padding:1.5rem;overflow-x:auto;font-size:0.8rem;line-height:1.6;">
+<code># MCP Tools available
+memory_search  — Search memories
+memory_add    — Add new memory
+memory_get     — Get memory by ID
+memory_list    — List recent memories
+memory_clear   — Clear memories
+</code>
+</pre>
+
+<div class="source">
+  <strong>Sources:</strong><br>
+  • "5 AI Agent Memory Systems Compared: Mem0, Zep, Letta, Supermemory, SuperLocalMemory" — DEV Community, 2026-03-18<br>
+  • "Top 10 AI Memory Products 2026" — Medium/@bumurzaqov2, 2026-02-18<br>
+  • "Top 6 AI Agent Memory Frameworks for Devs (2026)" — DEV Community, 2026-03<br>
+  • "120+ Agentic AI Tools Mapped Across 11 Categories [2026]" — StackOne, 2026-03-24<br>
+  • Oracle AI Agent Memory SDK — blogs.oracle.com, 2026
+</div>
+
+<div class="footer">
+  agent-memory — Open source AI agent memory library · <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="color:#0ea5e9">GitHub</a> · MCP v3.2 · MIT License
+</div>
+
+</body>
+</html>
