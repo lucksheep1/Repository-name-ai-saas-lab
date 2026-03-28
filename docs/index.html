@@ -1,41 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI SaaS Lab — agent-memory</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 3rem; max-width: 600px; width: 90%; text-align: center; }
-        h1 { color: #f8fafc; font-size: 1.75rem; margin-bottom: 0.5rem; }
-        .subtitle { color: #6b7280; font-size: 0.95rem; margin-bottom: 2rem; }
-        .links { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
-        .link { display: block; padding: 0.9rem 1.5rem; background: #1f2937; border-radius: 8px; color: #f9fafb; text-decoration: none; font-weight: 500; transition: background 0.2s; border: 1px solid #374151; }
-        .link:hover { background: #374151; }
-        .link-main { background: linear-gradient(135deg, #0ea5e9, #6366f1); border: none; font-size: 1.05rem; }
-        .link-main:hover { background: linear-gradient(135deg, #0ea5e9, #6366f1); opacity: 0.9; }
-        .link strong { color: #0ea5e9; }
-        .footer { font-size: 0.75rem; color: #475569; margin-top: 1rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="agent-memory — Open source AI agent memory library with MCP v3.2 support. JSON/SQLite/Redis. TTL. AES encryption. MIT license.">
+<title>agent-memory — AI Agent Memory Library</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 800px; margin: 0 auto; }
+  .header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1f2937; }
+  .logo { width: 48px; height: 48px; background: linear-gradient(135deg, #0ea5e9, #6366f1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; }
+  .subtitle { color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; }
+  .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0 1.5rem; }
+  .badge { display: inline-block; background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.7rem; font-weight: 600; color: #94a3b8; }
+  .badge-mcp { background: #2e1065; border-color: #4c1d95; color: #c4b5fd; }
+  .badge-free { background: #064e3b; border-color: #065f46; color: #34d399; }
+  .badge-oss { background: #1e3a5f; border-color: #1e40af; color: #60a5fa; }
+  .section { margin-bottom: 2rem; }
+  .section-title { color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
+  .card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 1rem; text-decoration: none; display: block; transition: border-color 0.2s, background 0.2s; }
+  .card:hover { border-color: #0ea5e9; background: #0f172a; }
+  .card-icon { font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .card-title { font-weight: 700; color: #f8fafc; font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .card-desc { font-size: 0.775rem; color: #6b7280; line-height: 1.4; }
+  .tag { display: inline-block; margin-top: 0.5rem; font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 4px; }
+  .tag-popular { background: #f97316; color: white; }
+  .tag-new { background: #0ea5e9; color: #0f172a; }
+  .tag-guide { background: #064e3b; color: #34d399; }
+  .github-link { display: inline-flex; align-items: center; gap: 0.5rem; background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 0.75rem 1.25rem; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; margin: 0.5rem 0.25rem 0.5rem 0; transition: background 0.2s; }
+  .github-link:hover { background: #374151; }
+  .star { color: #fbbf24; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1f2937; font-size: 0.8rem; color: #475569; }
+  a { color: #0ea5e9; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
-<div class="card">
-    <h1>🔬 AI SaaS Lab</h1>
-    <p class="subtitle">agent-memory — AI Agent Memory Library</p>
-    <div class="links">
-        <a class="link link-main" href="compare.html">
-            📊 <strong>AI Agent Memory Comparison 2026</strong><br>
-            <span style="font-weight:400;font-size:0.85rem;color:#9ca3af">Mem0 vs Letta vs Zep vs agent-memory · Live data</span>
-        </a>
-        <a class="link" href="demo.html">
-            🚀 <strong>Live Demo</strong> — Try the MCP server
-        </a>
-        <a class="link" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">
-            ★ <strong>GitHub</strong> — Star &amp; contribute
-        </a>
-    </div>
-    <p class="footer">MCP v3.2 · JSON/SQLite/Redis · TTL · AES Encryption · MIT License</p>
+<div class="container">
+
+<div class="header">
+  <div class="logo">&#128161;</div>
+  <div>
+    <h1>agent-memory</h1>
+    <p class="subtitle">Open source AI agent memory library &middot; MCP v3.2 &middot; MIT License</p>
+  </div>
+</div>
+
+<div class="badges">
+  <span class="badge badge-mcp">MCP v3.2</span>
+  <span class="badge badge-free">100% Free</span>
+  <span class="badge badge-oss">MIT License</span>
+  <span class="badge">JSON / SQLite / Redis</span>
+  <span class="badge">TTL Expiration</span>
+  <span class="badge">AES Encryption</span>
+</div>
+
+<a class="github-link" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">
+  <span class="star">&#9733;</span> Star on GitHub &middot; 0 stars (just launched)
+</a>
+
+<div class="section">
+  <p class="section-title">Quick Install</p>
+  <div style="background:#0f172a;border-radius:8px;padding:1rem;font-family:monospace;font-size:0.85rem;color:#e2e8f0;line-height:1.8;">
+    pip install agent-memory<br>
+    python -m agent_memory.mcp_server<br>
+    <span style="color:#64748b"># MCP server running. Connect to Cursor, Claude Code, OpenClaw.</span>
+  </div>
+</div>
+
+<div class="section">
+  <p class="section-title">Documentation &amp; Pages</p>
+  <div class="grid">
+
+    <a class="card" href="compare.html">
+      <div class="card-icon">&#128202;</div>
+      <div class="card-title">Comparison</div>
+      <div class="card-desc">agent-memory vs Mem0 vs Letta vs Zep &mdash; feature matrix, pricing, memory footprint</div>
+      <span class="tag tag-popular">Popular</span>
+    </a>
+
+    <a class="card" href="demo.html">
+      <div class="card-icon">&#128640;</div>
+      <div class="card-title">Live Demo</div>
+      <div class="card-desc">Interactive demo &mdash; try all MCP tools in your browser</div>
+    </a>
+
+    <a class="card" href="openmemory-showdown.html">
+      <div class="card-icon">&#9876;</div>
+      <div class="card-title">OpenMemory vs agent-memory</div>
+      <div class="card-desc">Head-to-head: Mem0 OpenMemory MCP vs agent-memory. API key? Cloud?</div>
+      <span class="tag tag-new">New</span>
+    </a>
+
+    <a class="card" href="cursor-memory.html">
+      <div class="card-icon">&#129302;</div>
+      <div class="card-title">Cursor Memory</div>
+      <div class="card-desc">Give Cursor persistent memory. No more re-explaining your codebase.</div>
+      <span class="tag tag-new">New</span>
+    </a>
+
+    <a class="card" href="mcp-agent-memory.html">
+      <div class="card-icon">&#128268;</div>
+      <div class="card-title">MCP Server Guide</div>
+      <div class="card-desc">What is an MCP memory server? Full feature breakdown + Python API</div>
+      <span class="tag tag-new">New</span>
+    </a>
+
+    <a class="card" href="openclaw-memory.html">
+      <div class="card-icon">&#129409;</div>
+      <div class="card-title">For OpenClaw Agents</div>
+      <div class="card-desc">OpenClaw has 250K stars. Now give your OpenClaw agents memory.</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="section">
+  <p class="section-title">GitHub Source</p>
+  <div class="grid">
+    <a class="card" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">
+      <div class="card-icon">&#128230;</div>
+      <div class="card-title">Repository</div>
+      <div class="card-desc">Source code, issues, PRs, roadmap</div>
+    </a>
+  </div>
+</div>
+
+<div class="footer">
+  agent-memory &middot; Open source since 2026 &middot; <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">GitHub</a> &middot; MIT License &middot; No cloud required
+</div>
+
 </div>
 </body>
 </html>
