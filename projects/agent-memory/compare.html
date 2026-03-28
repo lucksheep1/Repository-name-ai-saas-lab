@@ -123,9 +123,16 @@
     <tr class="highlight">
       <td><span class="name-cell">agent-memory <span class="mcp-badge">★ MCP</span></span></td>
       <td><span class="star"><span class="star-icon">★</span> 0</span><br><span style="font-size:0.65rem;color:#6b7280">(just launched)</span></td>
-      <td><span class="price price-free">✓ 100% Free</span><br><span style="font-size:0.7rem;color:#6b7280">No limits</span></td>
-      <td><span class="price price-free">✓ Free Forever</span><br><span style="font-size:0.7rem;color:#6b7280">No cloud required</span></td>
+      <td><span class="price price-free">✓ 100% Free</span><br><span style="font-size:0.7rem;color:#6b7280">No limits, no API key</span></td>
+      <td><span class="price price-free">✓ Free Forever</span><br><span style="font-size:0.7rem;color:#6b7280">No cloud, no account</span></td>
       <td><span class="tag tag-opensource">✓ MIT License</span></td>
+    </tr>
+    <tr>
+      <td><span class="name-cell">Mem0 OpenMemory <span class="mcp-badge">NEW</span></span></td>
+      <td><span class="star"><span class="star-icon">★</span> (in m0 repo)</span></td>
+      <td><span class="price price-free">Free tier</span><br><span style="font-size:0.7rem;color:#6b7280">Requires OpenAI key</span></td>
+      <td><span class="price price-paid">$19+ /mo</span><br><span style="font-size:0.7rem;color:#6b7280">Sends data to cloud</span></td>
+      <td><span class="tag tag-closed">Open Core</span></td>
     </tr>
   </tbody>
 </table>
@@ -236,9 +243,9 @@
 </p>
 
 <div class="insight">
-  <div class="insight-title">💡 Key Insight</div>
+  <div class="insight-title">💡 Key Insight — NEW: Mem0 OpenMemory vs agent-memory</div>
   <div class="insight-text">
-    <strong>agent-memory is the only MCP-native memory system.</strong> Mem0 raised $24M but requires cloud dependency. Letta and Zep are either tied to LangChain or have massive memory footprints. agent-memory gives you <strong>MCP v3.2 + JSON/SQLite/Redis backends + TTL + AES encryption</strong> — all without a cloud account or API key.
+    <strong>Mem0 just launched OpenMemory MCP</strong> (mem0ai/mem0-mcp on GitHub) — an MCP server for coding agents (Cursor, VS Code, Claude). This validates the market but <strong>OpenMemory requires your OpenAI API key and sends data to Mem0's cloud</strong>. agent-memory is the only <strong>truly local-first, API-key-free</strong> MCP memory — your data stays on your machine. <strong>No cloud. No API key. No account.</strong>
   </div>
 </div>
 
@@ -256,6 +263,11 @@
       <td>MCP-native (Cursor, Claude Code, OpenClaw)</td>
       <td><strong style="color:#0ea5e9">agent-memory ✓</strong></td>
       <td>Only MCP v3.2 native option</td>
+    </tr>
+    <tr>
+      <td>MCP-native + no API key + offline</td>
+      <td><strong style="color:#0ea5e9">agent-memory ✓ ONLY</strong></td>
+      <td>OpenMemory requires OpenAI key + cloud</td>
     </tr>
     <tr>
       <td>Privacy-first, no cloud, no API key</td>
