@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenMemory MCP vs agent-memory — The Privacy-First Alternative</title>
+<meta name="description" content="OpenMemory MCP vs agent-memory comparison: both use Model Context Protocol for AI coding agents. But agent-memory is 100% local, no API key, no cloud. See the full breakdown.">
+<meta property="og:title" content="OpenMemory MCP vs agent-memory — The Privacy-First Alternative">
+<meta property="og:description" content="OpenMemory MCP vs agent-memory: both MCP-native. One requires OpenAI key + cloud. The other is 100% local. Full comparison.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+  .container { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; }
+  h1 { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; line-height: 1.2; }
+  h2 { font-size: 1.35rem; font-weight: 700; color: #0f172a; margin: 2rem 0 0.75rem; }
+  h3 { font-size: 1.1rem; font-weight: 600; color: #334155; margin: 1rem 0 0.5rem; }
+  .subtitle { color: #64748b; font-size: 1rem; margin-bottom: 1.5rem; }
+  .byline { font-size: 0.85rem; color: #94a3b8; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0; }
+  .byline span { color: #0ea5e9; font-weight: 600; }
+  p { margin-bottom: 1rem; color: #334155; }
+  a { color: #0ea5e9; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hero-box { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; color: white; }
+  .hero-box h3 { color: white; margin-top: 0; }
+  .hero-box p { color: rgba(255,255,255,0.9); margin-bottom: 0; }
+  .hero-box strong { color: #fbbf24; }
+
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th { background: #1e293b; color: white; padding: 0.6rem 0.75rem; text-align: left; font-size: 0.8rem; }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .yes { color: #059669; font-weight: 700; }
+  .no { color: #dc2626; }
+  .partial { color: #d97706; }
+  .highlight-row td { background: #f0f9ff !important; border-left: 3px solid #0ea5e9; }
+  .highlight-row td:first-child { font-weight: 700; color: #0ea5e9; }
+
+  .verdict { background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+  .verdict h3 { color: #15803d; margin-top: 0; }
+  .verdict p { color: #166534; margin-bottom: 0; }
+
+  .code-block { background: #0f172a; border-radius: 8px; padding: 1rem; margin: 1rem 0; overflow-x: auto; }
+  .code-block code { color: #e2e8f0; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; line-height: 1.7; }
+  .comment { color: #64748b; }
+  .keyword { color: #f472b6; }
+  .string { color: #a5f3fc; }
+  .fn { color: #93c5fd; }
+
+  .footnote { font-size: 0.8rem; color: #94a3b8; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+
+  .share { background: #1e293b; border-radius: 10px; padding: 1.25rem; margin: 2rem 0; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .share a { background: white; color: #1e293b; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
+  .share a:hover { opacity: 0.9; text-decoration: none; }
+
+  @media (max-width: 600px) { table { font-size: 0.8rem; } h1 { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>OpenMemory MCP vs agent-memory</h1>
+<p class="subtitle">The Privacy-First Alternative for AI Coding Agents</p>
+<div class="byline">By <span>AI SaaS Lab</span> · March 28, 2026 · 6 min read</div>
+
+<div class="hero-box">
+  <h3>TL;DR</h3>
+  <p>Both OpenMemory MCP and agent-memory expose memory to AI coding agents via the Model Context Protocol. <strong>OpenMemory requires an OpenAI API key and sends your code context to Mem0's cloud.</strong> agent-memory stores everything locally — <strong>no API key, no cloud, no account</strong>. If privacy or offline work matters to you, agent-memory is the choice.</p>
+</div>
+
+<h2>What is OpenMemory MCP?</h2>
+<p>
+<a href="https://mem0.ai/openmemory">OpenMemory</a> is Mem0's open-source MCP server for AI coding agents. It connects to Cursor, VS Code, and Claude Desktop via the MCP protocol, providing persistent memory across sessions. It's part of the Mem0 ecosystem, which has raised <strong>$24M from Y Combinator</strong> and accumulated ~24K GitHub stars.
+</p>
+<p>
+The core appeal: plug-and-play MCP memory for coding agents. The catch: it wraps the Mem0 API, which means your code context gets sent to Mem0's servers for processing.
+</p>
+
+<h2>What is agent-memory?</h2>
+<p>
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">agent-memory</a> is a lightweight, open-source AI agent memory library (MIT license) with native MCP v3.2 support. It stores memories locally in JSON, SQLite, or Redis — nothing leaves your machine unless you explicitly configure cloud sync.
+</p>
+<p>
+Built specifically for AI agents that need persistent memory, agent-memory offers TTL expiration, AES encryption, tagging, and multiple storage backends — all without requiring an API key.
+</p>
+
+<h2>Head-to-Head Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>OpenMemory MCP</th>
+      <th>agent-memory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCP Protocol</td>
+      <td class="yes">✓ Yes</td>
+      <td class="yes">✓ v3.2</td>
+    </tr>
+    <tr>
+      <td>Works offline</td>
+      <td class="no">✗ Requires internet</td>
+      <td class="yes">✓ 100% offline</td>
+    </tr>
+    <tr>
+      <td>API key required</td>
+      <td class="no">✗ OpenAI key required</td>
+      <td class="yes">✓ No key needed</td>
+    </tr>
+    <tr>
+      <td>Data stays local</td>
+      <td class="partial">Sends to Mem0 cloud</td>
+      <td class="yes">✓ Always local</td>
+    </tr>
+    <tr>
+      <td>Encryption</td>
+      <td class="partial">Via Mem0 cloud</td>
+      <td class="yes">✓ AES local</td>
+    </tr>
+    <tr>
+      <td>TTL expiration</td>
+      <td class="yes">✓ Yes</td>
+      <td class="yes">✓ Built-in</td>
+    </tr>
+    <tr>
+      <td>Multiple backends</td>
+      <td class="no">Mem0 cloud only</td>
+      <td class="yes">✓ JSON / SQLite / Redis</td>
+    </tr>
+    <tr>
+      <td>Open source</td>
+      <td class="partial">Open core</td>
+      <td class="yes">✓ MIT License</td>
+    </tr>
+    <tr>
+      <td>Pricing</td>
+      <td>$19–$249/mo (cloud)</td>
+      <td class="yes">Free forever</td>
+    </tr>
+    <tr>
+      <td>LangChain required</td>
+      <td class="no">✗ Vendor lock-in</td>
+      <td class="yes">✓ Framework agnostic</td>
+    </tr>
+    <tr class="highlight-row">
+      <td>Best for</td>
+      <td>Teams wanting managed cloud + Mem0 ecosystem</td>
+      <td>Privacy-first devs, offline work, self-hosted</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>The Real Difference: Where Does Your Data Go?</h2>
+
+<p>OpenMemory MCP wraps the Mem0 Memory API. When you use it, your code context — file paths, function names, architectural decisions — is sent to Mem0's servers for embedding and retrieval. This is fine for personal projects. It may not be fine for:</p>
+
+<ul style="margin: 0.5rem 0 1rem 1.5rem; color: #334155;">
+  <li>Proprietary code at a company with data policies</li>
+  <li>Healthcare, finance, or legal codebases</li>
+  <li>Government or enterprise environments with strict data residency rules</li>
+  <li>Developers who just don't want their code sent to a third party</li>
+</ul>
+
+<p>agent-memory was designed with this in mind from day one. Your memory data never leaves your machine. The embedding computation happens locally. There's no account to create, no API key to rotate, no vendor to trust with your context.</p>
+
+<h2>Code Comparison</h2>
+
+<h3>OpenMemory MCP — Setup</h3>
+<div class="code-block">
+<code>
+<span class="comment"># Requires: OpenAI API key + Mem0 account</span>
+<span class="keyword">git clone</span> https://github.com/mem0ai/mem0.git
+<span class="keyword">cd</span> openmemory/api
+
+<span class="comment"># .env file — your API key is the key difference</span>
+<span class="fn">OPENAI_API_KEY</span>=sk-...
+
+<span class="comment"># Your code context is sent to Mem0 cloud</span>
+<span class="keyword">docker compose</span> up
+</code>
+</div>
+
+<h3>agent-memory — Setup</h3>
+<div class="code-block">
+<code>
+<span class="comment"># No API key. No account. Just install.</span>
+<span class="keyword">pip install</span> agent-memory
+
+<span class="comment"># Works immediately — all data stays local</span>
+python -m agent_memory.mcp_server
+<span class="comment"># → MCP server running on port 18080</span>
+<span class="comment"># → All memory stored in ./memory.json (or SQLite/Redis)</span>
+</code>
+</div>
+
+<h2>Who Should Use What?</h2>
+
+<div class="verdict">
+  <h3>Use OpenMemory MCP if...</h3>
+  <p>You're already in the Mem0 ecosystem, want the managed cloud experience, and data privacy isn't a concern for your codebase. You value plug-and-play over control.</p>
+</div>
+
+<div class="verdict" style="background:#f0f9ff; border-color:#0ea5e9;">
+  <h3 style="color:#0369a1;">Use agent-memory if...</h3>
+  <p style="color:#0c4a6e;">You want MCP-native memory for coding agents with <strong>zero external dependencies</strong>. No API key. No cloud. No account. Your code context never leaves your machine. Works offline. MIT license.</p>
+</div>
+
+<div class="share">
+  <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">★ Star on GitHub</a>
+  <a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/compare.html">📊 Full Comparison</a>
+  <a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">🚀 Live Demo</a>
+</div>
+
+<p class="footnote">
+  <strong>Disclosure:</strong> agent-memory is developed by AI SaaS Lab. This comparison was written to help developers make informed decisions. OpenMemory MCP is a legitimate product from a well-funded team — the point isn't that one is "bad," but that different developers have different requirements for privacy, cost, and control. Data verified March 2026 from mem0.ai, GitHub, and official documentation.
+</p>
+
+</div>
+</body>
+</html>
