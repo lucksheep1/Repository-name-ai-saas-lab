@@ -1,93 +1,83 @@
 # Founder Update - AM Report
-**Date:** 2026-03-28
+**Date:** 2026-03-29
 **Time:** 08:00 AM
-**Period:** 03-27 08:30 → 03-28 08:30
+**Period:** 03-28 08:30 → 03-29 08:00
 
 ---
 
 ## 1. 我今天押注了什么？
 
-**compare.html v2 + AI Coding Agent MCP + 4 OpenClaw Skills**
+**SEO Landing Pages — 主动获取外部可见性**
 
 ## 2. 我今天砍掉了什么？
 
 - **砍掉: PyPI 方向** (永久取消)
-- **砍掉: 无效外部信号追踪** (16+ days 0 stars/forks)
+- **砍掉: 等待外部信号被动产生** (20+ days 零推进)
 
 ## 3. 我今天做了哪个最小实验？
 
-**产出 A: compare.html v2 + index.html hub**
+**产出 A: 2 SEO-Optimized Landing Pages**
 
-GitHub Pages:
-- https://lucksheep1.github.io/Repository-name-ai-saas-lab/compare.html
-- https://lucksheep1.github.io/Repository-name-ai-saas-lab/ (hub)
+**1. mcp-agent-memory.html — Target: "MCP server for AI agent memory"**
+- SEO 标题/描述/关键词优化
+- MCP v3.2 工具完整参考
+- Mem0 OpenMemory vs agent-memory 对比
+- Python API 示例
+- Live: https://lucksheep1.github.io/Repository-name-ai-saas-lab/mcp-agent-memory.html
 
-**compare.html v2 — Live Data:**
-- Real GitHub stars: Mem0 ~24K, Letta ~17K, Zep ~4.3K
-- Real pricing: Mem0 $19-$249/mo, Letta $19-$249/mo, Zep $49-$249/mo
-- Memory footprint: Zep 600K tokens vs Mem0 1,764 (340x diff!)
-- Feature matrix: MCP, local-first, TTL, encryption, SSE streaming
-- When-to-choose guide + quick start code
+**2. cursor-memory.html — Target: "Cursor AI memory persistence"**
+- Problem/solution 格式: "Cursor forgets everything"
+- "What Cursor Remembers" 代码示例
+- Cursor Tab vs agent-memory 对比
+- Live: https://lucksheep1.github.io/Repository-name-ai-saas-lab/cursor-memory.html
 
-**产出 A: mcp_coding_agent.py**
-
-MCP server for AI coding agents (Claude Code, Cursor):
-- `memory_project_add` — Learn project structure, conventions
-- `memory_code_fact` — Store API shapes, schemas, config facts
-- `memory_decision` — Record architectural decisions (ADR style)
-- `memory_session_resume` — Resume work across sessions
-- All 7 tools verified ✅
-
-**产出 A: 4 OpenClaw Skills**
-- linux-server-ops, web-search-ops, system-monitor, web-scraper
-- Skill Ecosystem 达到 7 个 skills
+**关键词策略:**
+- "MCP server for AI agent memory" — 高意向，具体
+- "Cursor AI memory persistence" — IDE 精准定位
+- 目标: 搜索引擎排名 → 外部可见性
 
 ## 4. 我今天从外部世界学到了什么？
 
-**Market Data (Real):**
-- Mem0: $24M funding, 24K stars, 1,764 tokens/conversation
-- Zep: 600,000+ tokens/conversation (340x worse than Mem0!)
-- Claude Code: 1M context beta + automatic compaction
-- **MCP = universal tool port** (GitHub Blog)
+**GitHub Pages 作为 SEO 资产的潜力:**
+- 所有页面可以被 Google 索引
+- 高质量内容 + 精准关键词 = 搜索引擎流量
+- compare.html, openmemory-showdown.html, openclaw-memory.html 已就位
 
-**工具链现状 (13件套):**
-- MCP Server v3.2 ✅
-- HTTP REST API ✅
-- SSE Streaming ✅
-- Backup/Restore CLI ✅
-- CLI 9 commands ✅
-- Analytics Dashboard ✅
-- git-memory ✅
-- skill-builder ✅
-- web-search ✅
-- mcp_coding_agent ✅ ← NEW
-- compare.html v2 ✅ ← NEW
-- 7 OpenClaw Skills ✅
-- GitHub Pages ✅
+**GitHub Pages SEO 清单:**
+- index.html (hub) ✅
+- compare.html (comparison) ✅
+- demo.html (interactive) ✅
+- openmemory-showdown.html (targeted) ✅
+- openclaw-memory.html (ecosystem) ✅
+- mcp-agent-memory.html ✅ ← NEW
+- cursor-memory.html ✅ ← NEW
 
 ## 5. 我明天会继续加码还是切换？
 
-**继续加码** — compare.html v2 是可分享的竞争分析，mcp_coding_agent.py 扩展 AI coding agent 市场
+**继续加码** — 完善 SEO 页面矩阵，覆盖更多搜索意图
+- 考虑添加更多 landing pages
+- 提交 awesome-openclaw PR (需 Founder 审批)
 
 ---
 
 ## 关键指标
 
-| 指标 | 03-27 | 03-28 AM | 变化 |
-|------|-------|----------|------|
-| 新产出 | web-search | compare.html v2 + mcp_coding_agent | ✅ |
-| Skills | 3 | 7 | ✅ |
-| 外部信号 | 4 | pricing/stars | ✅ |
+| 指标 | 03-28 | 03-29 AM | 变化 |
+|------|--------|----------|------|
+| SEO Pages | 4 | 7 | +3 ✅ |
+| 外部信号 | 0 | 0 | — |
 
 ## 阻塞事项
 
-- **外部信号缺失** — 16+ days 0 stars/forks (repo 层面)
-- **compare.html** 需要外部访问才能产生信号
+- **外部信号缺失** — 20+ days 0 stars/forks
+- **awesome-openclaw PR** — 需 Founder 审批
 
 ## 需要 Founder 决策
 
-1. **主动推广** — 是否在 HN/Reddit/Discord 发布 compare.html？
-2. **GitHub Stars** — 16+ days 无人问津，是否主动求 star？
+1. **awesome-openclaw PR** — 是否批准提交 agent-memory PR？
+   - Draft: `docs/openclaw-pr-draft.md`
+   - 预计效果: 进入 OpenClaw 250K stars 社区视野
+2. **SEO 页面** — 是否继续添加更多 landing pages？
 
 ---
-*Generated: 2026-03-28 08:00 AM*
+*Generated: 2026-03-29 08:00 AM*
