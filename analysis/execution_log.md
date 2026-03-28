@@ -1837,3 +1837,56 @@ New MCP server targeting Claude Code/Cursor:
 
 ---
 *Updated: 2026-03-28 10:00*
+
+---
+
+## Cycle 49 (AM) - 2026-03-28
+
+### Phase 1: Scout - Brave Search Pricing & Stars ✅
+
+**产出 B: 真实外部数据 (pricing + stars)**
+
+**发现: Mem0 Pricing (Real)**
+- Free: 10K memories, 1K retrieval calls/month
+- Starter: $19/month (50K memories)
+- Pro: $249/month (unlimited, graph features)
+- GitHub: ~24K stars
+- Funding: $24M (YC S24)
+
+**发现: Letta Pricing (Real)**
+- GitHub: ~17K stars
+- Free self-host, paid cloud
+- Key weakness: tied to LangChain/LangGraph
+
+**发现: Zep Memory Footprint (Real)**
+- 600,000+ tokens per conversation ⚠️
+- vs Mem0: 1,764 tokens (340x more efficient)
+- Source: Mem0 paper via Medium
+
+### Phase 2: Builder - compare.html v2 + index.html hub ✅
+
+**产出 A: GitHub Pages 升级**
+
+**compare.html v2 — major upgrade:**
+- Real GitHub stars (Mem0 ~24K, Letta ~17K, Zep ~4.3K)
+- Real pricing (all tiers)
+- Memory footprint benchmark visual
+- Feature matrix: MCP, local-first, TTL, encryption, SSE
+- When-to-choose guide
+- Live timestamp in browser JS
+
+**docs/index.html — new hub page:**
+- Links to compare.html as main entry
+- GitHub + demo links
+
+**Live deployed:**
+- https://lucksheep1.github.io/Repository-name-ai-saas-lab/compare.html
+- https://lucksheep1.github.io/Repository-name-ai-saas-lab/
+
+### Phase 3-5: 决策
+
+- **Scale** — compare.html 是可分享的竞争分析页面
+- **Next**: 推广 compare.html 获取外部信号
+
+---
+*Updated: 2026-03-28 08:30*
