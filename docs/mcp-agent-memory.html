@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP Server for AI Agent Memory — Local-First, No API Key</title>
+<meta name="description" content="Build AI agents with persistent memory using the Model Context Protocol. MCP v3.2 server for memory_search, memory_add, memory_get. JSON/SQLite/Redis backends. 100% local. No cloud. MIT license.">
+<meta property="og:title" content="MCP Server for AI Agent Memory — Local-First, No API Key">
+<meta property="og:description" content="MCP v3.2 server for AI agent memory. Works offline. No API key. MIT license.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/mcp-agent-memory.html">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 2rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.35rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  .hero { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero h1 { color: white; }
+  .hero p { color: rgba(255,255,255,0.9); }
+  .code { background: #0f172a; border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0; overflow-x: auto; }
+  .code code { color: #e2e8f0; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; line-height: 1.8; }
+  .comment { color: #64748b; }
+  .keyword { color: #f472b6; }
+  .string { color: #a5f3fc; }
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1.5rem 0; }
+  .feature { background: #111827; border-radius: 8px; padding: 1rem; }
+  .feature-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
+  .feature-name { font-weight: 600; color: #f8fafc; font-size: 0.9rem; }
+  .feature-desc { font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }
+  .comparison { background: #111827; border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+  .comparison h3 { color: #f9fafb; font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #1f2937; font-size: 0.875rem; }
+  .row:last-child { border-bottom: none; }
+  .label { color: #d1d5db; }
+  .val-yes { color: #34d399; font-weight: 700; }
+  .val-no { color: #f87171; }
+  .cta { display: inline-block; background: #0ea5e9; color: white; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; text-decoration: none; margin: 0.5rem 0.25rem 0.5rem 0; }
+  .cta:hover { opacity: 0.9; }
+  .cta-secondary { background: #1f2937; color: #d1d5db; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1f2937; font-size: 0.8rem; color: #475569; }
+  .footer a { color: #0ea5e9; text-decoration: none; }
+  @media (max-width: 600px) { .features { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>MCP Server for AI Agent Memory</h1>
+  <p>Give your AI agents persistent memory via the Model Context Protocol. MCP v3.2 tools: <strong>memory_search</strong>, <strong>memory_add</strong>, <strong>memory_get</strong>, <strong>memory_list</strong>, <strong>memory_clear</strong>. 100% local. No API key. MIT license.</p>
+</div>
+
+<p><strong>Last updated:</strong> March 2026 · <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="color:#0ea5e9">View on GitHub →</a></p>
+
+<h2>What is an MCP Memory Server?</h2>
+<p>An MCP memory server exposes memory tools to AI agents via the Model Context Protocol (MCP). Your agent can store, search, and retrieve information across sessions — without relying on the context window alone. MCP is the standard protocol for connecting AI agents to tools, adopted by OpenClaw, Claude Desktop, Cursor, and more.</p>
+<p>agent-memory is a lightweight, open-source MCP v3.2 server for AI agent memory. Unlike cloud-based alternatives, it runs entirely on your machine. No account. No API key. No data leaves your device.</p>
+
+<h2>Quick Start</h2>
+
+<div class="code">
+<code><span class="comment"># Install agent-memory</span>
+<span class="keyword">pip install</span> agent-memory
+
+<span class="comment"># Start the MCP memory server</span>
+python -m agent_memory.mcp_server
+
+<span class="comment"># Your AI agent can now use:</span>
+<span class="comment">#   memory_search(query) — find relevant memories</span>
+<span class="comment">#   memory_add(text, ttl='7d') — store a memory</span>
+<span class="comment">#   memory_get(id) — retrieve specific memory</span>
+<span class="comment">#   memory_list() — list recent memories</span>
+<span class="comment">#   memory_clear() — clear all memories</span></code>
+</div>
+
+<h2>Features</h2>
+
+<div class="features">
+  <div class="feature">
+    <div class="feature-icon">🔌</div>
+    <div class="feature-name">MCP v3.2 Native</div>
+    <div class="feature-desc">Full Model Context Protocol v3.2 support. Works with OpenClaw, Claude Desktop, Cursor, and any MCP client.</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🔒</div>
+    <div class="feature-name">100% Local</div>
+    <div class="feature-desc">All data stays on your machine. No cloud. No account. No API key required.</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">⏱️</div>
+    <div class="feature-name">TTL Expiration</div>
+    <div class="feature-desc">Set time-to-live on memories. They auto-expire after a specified duration (e.g., '1h', '7d', '30d').</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🔐</div>
+    <div class="feature-name">AES Encryption</div>
+    <div class="feature-desc">Encrypt sensitive memories with AES-256. Optional per-memory encryption.</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🏗️</div>
+    <div class="feature-name">Multiple Backends</div>
+    <div class="feature-desc">JSON for simplicity, SQLite for performance, Redis for production scale. Switch with one line.</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">📡</div>
+    <div class="feature-name">REST API + SSE</div>
+    <div class="feature-desc">Built-in REST API server and Server-Sent Events for real-time memory updates.</div>
+  </div>
+</div>
+
+<h2>MCP Memory Server Comparison</h2>
+
+<div class="comparison">
+  <h3>Which MCP memory server is right for you?</h3>
+  <div class="row"><div class="label">Feature</div><div class="val-yes">agent-memory</div><div class="val-no">Mem0 OpenMemory</div></div>
+  <div class="row"><div class="label">MCP Protocol</div><div class="val-yes">✓ v3.2</div><div class="val-yes">✓</div></div>
+  <div class="row"><div class="label">100% Local</div><div class="val-yes">✓ Always</div><div class="val-no">✗ Cloud required</div></div>
+  <div class="row"><div class="label">API Key Required</div><div class="val-yes">✗ Never</div><div class="val-no">✗ OpenAI key required</div></div>
+  <div class="row"><div class="label">TTL Expiration</div><div class="val-yes">✓ Built-in</div><div class="val-yes">✓</div></div>
+  <div class="row"><div class="label">AES Encryption</div><div class="val-yes">✓ Local</div><div class="val-no">—</div></div>
+  <div class="row"><div class="label">JSON/SQLite/Redis</div><div class="val-yes">✓ All three</div><div class="val-no">✗</div></div>
+  <div class="row"><div class="label">MIT License</div><div class="val-yes">✓</div><div class="val-no">Open core</div></div>
+  <div class="row"><div class="label">Price</div><div class="val-yes">Free forever</div><div class="val-no">$19–$249/mo</div></div>
+</div>
+
+<h2>Python API</h2>
+<p>Beyond MCP, use agent-memory directly in Python:</p>
+
+<div class="code">
+<code><span class="keyword">from</span> agent_memory <span class="keyword">import</span> Memory
+
+m = Memory(storage=<span class="string">"json"</span>, path=<span class="string">"./memory.json"</span>)
+
+<span class="comment"># Store memories with automatic TTL</span>
+m.add(<span class="string">"User prefers dark mode"</span>, ttl=<span class="string">"30d"</span>)
+m.add(<span class="string">"API endpoint: /api/v2/users"</span>, ttl=<span class="string">"7d"</span>)
+
+<span class="comment"># Retrieve via semantic search</span>
+results = m.search(<span class="string">"dark mode preference"</span>)
+<span class="keyword">for</span> r <span class="keyword">in</span> results:
+    <span class="keyword">print</span>(r[<span class="string">"text"</span>], r[<span class="string">"score"</span>])
+
+<span class="comment"># Or use encrypted storage</span>
+m_enc = Memory(encryption_key=<span class="string">"my-secret-key"</span>)
+m_enc.add(<span class="string">"Admin password hint"</span>)</code>
+</div>
+
+<h2>Use Cases</h2>
+
+<p><strong>AI Coding Agents (Cursor, Claude Code):</strong> Remember project conventions, API shapes, architectural decisions, and user preferences across sessions. No more re-explaining your codebase every time.</p>
+
+<p><strong>Research Agents:</strong> Store facts, URLs, and insights from web searches. Retrieve relevant context when working on related topics.</p>
+
+<p><strong>Customer Support Agents:</strong> Remember user preferences, past issues, and conversation history for personalized support.</p>
+
+<p><strong>DevOps Agents:</strong> Track server configurations, deployment history, and operational patterns for reliable automation.</p>
+
+<h2>Get Started</h2>
+
+<a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">★ Star on GitHub</a>
+<a class="cta cta-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">🚀 Live Demo</a>
+<a class="cta cta-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/compare.html">📊 Compare with Mem0</a>
+
+<div class="footer">
+  agent-memory MCP Server · <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">GitHub</a> · MIT License · <a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">Demo</a> · <a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/compare.html">Compare</a>
+</div>
+
+</div>
+</body>
+</html>

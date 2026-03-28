@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor Memory — Give Your AI Coding Agent Persistent Context</title>
+<meta name="description" content="Cursor AI memory persistence. agent-memory adds persistent memory to Cursor IDE via MCP. Remember project conventions, API shapes, and decisions across sessions. No cloud. MIT license.">
+<meta property="og:title" content="Cursor Memory — Persistent Context for AI Coding Agents">
+<meta property="og:description" content="agent-memory gives Cursor persistent memory via MCP. Works offline. MIT license.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  .cursor-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: #10b981; color: white; border-radius: 999px; padding: 0.3rem 0.75rem; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem; }
+  h1 { color: #f8fafc; font-size: 2rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  .subtitle { color: #94a3b8; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem; }
+  .hero { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero h1, .hero p { color: white; }
+  .code { background: #0f172a; border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0; overflow-x: auto; }
+  .code code { color: #e2e8f0; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; line-height: 1.8; }
+  .comment { color: #64748b; }
+  .keyword { color: #f472b6; }
+  .string { color: #a5f3fc; }
+  .benefits { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .benefit { background: #111827; border-radius: 8px; padding: 1rem 1.25rem; border-left: 3px solid #10b981; }
+  .benefit h3 { color: #f9fafb; font-size: 0.95rem; margin-bottom: 0.25rem; }
+  .benefit p { color: #6b7280; font-size: 0.875rem; margin: 0; }
+  .codeblock { background: #111827; border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+  .codeblock h3 { color: #f9fafb; font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .codeblock pre { background: #0a0a0f; border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 0; }
+  .codeblock code { color: #e2e8f0; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; line-height: 1.7; }
+  .comparison { background: #111827; border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+  .comparison h3 { color: #f9fafb; font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #1f2937; font-size: 0.875rem; }
+  .row:last-child { border-bottom: none; }
+  .label { color: #d1d5db; }
+  .val-yes { color: #34d399; font-weight: 700; }
+  .val-no { color: #f87171; }
+  .val-some { color: #fbbf24; }
+  .cta { display: inline-block; background: #10b981; color: white; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; text-decoration: none; margin: 0.5rem 0.25rem 0.5rem 0; }
+  .cta-secondary { background: #1f2937; color: #d1d5db; }
+  .cta:hover { opacity: 0.9; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1f2937; font-size: 0.8rem; color: #475569; }
+  .footer a { color: #10b981; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <div class="cursor-badge">🤖 For Cursor AI</div>
+  <h1>Give Cursor Persistent Memory</h1>
+  <p class="subtitle">Stop re-explaining your codebase every session. agent-memory adds persistent memory to Cursor via MCP — remember project conventions, API shapes, architectural decisions, and user preferences across sessions.</p>
+</div>
+
+<p><strong>Last updated:</strong> March 2026 · <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="color:#10b981">View on GitHub →</a></p>
+
+<h2 style="color:#f8fafc;font-size:1.35rem;font-weight:700;margin:2rem 0 0.75rem;">The Problem: Cursor Forgets Everything</h2>
+<p>Cursor AI is great at understanding your current codebase. But when you start a new session, it has no memory of:</p>
+
+<div class="benefits">
+  <div class="benefit">
+    <h3>🏗️ Architectural Decisions</h3>
+    <p>Why did we choose PostgreSQL over MySQL? Why use async here? Cursor doesn't remember — you explain again.</p>
+  </div>
+  <div class="benefit">
+    <h3>📡 API Shapes</h3>
+    <p>The UserService.get_by_id() returns User | None. You told Cursor this last week. It's forgotten.</p>
+  </div>
+  <div class="benefit">
+    <h3>🎨 Design Conventions</h3>
+    <p>Button styles go in ui/buttons.css. Modal components in ui/modals/. Cursor doesn't know.</p>
+  </div>
+  <div class="benefit">
+    <h3>👤 User Preferences</h3>
+    <p>User X prefers dark mode. This context is lost every session.</p>
+  </div>
+</div>
+
+<h2 style="color:#f8fafc;font-size:1.35rem;font-weight:700;margin:2rem 0 0.75rem;">The Solution: agent-memory for Cursor</h2>
+<p>agent-memory exposes persistent memory tools to Cursor via the Model Context Protocol (MCP). Cursor can now remember what you've taught it — across sessions, automatically.</p>
+
+<div class="codeblock">
+  <h3>Quick Start</h3>
+<pre><code><span class="comment"># Install agent-memory</span>
+<span class="keyword">pip install</span> agent-memory
+
+<span class="comment"># Start the MCP server</span>
+python -m agent_memory.mcp_server
+
+<span class="comment"># In Cursor, the memory tools are now available.</span>
+<span class="comment"># Cursor will remember your codebase forever.</span></code></pre>
+</div>
+
+<h2 style="color:#f8fafc;font-size:1.35rem;font-weight:700;margin:2rem 0 0.75rem;">What Cursor Remembers</h2>
+
+<div class="codeblock">
+  <h3>Project Conventions</h3>
+<pre><code><span class="comment"># Tell Cursor once:</span>
+memory_project_add(
+  "Our REST API conventions: GET=list, POST=create, PUT=update. "
+  "Base URL: /api/v2. Auth: Bearer token in Authorization header. "
+  "Pagination: cursor-based with ?after=cursor param."
+)
+
+<span class="comment"># Cursor remembers this forever.</span>
+<span class="comment"># Every new session: "Use our API conventions"</span></code></pre>
+</div>
+
+<div class="codeblock">
+  <h3>API Shapes</h3>
+<pre><code>memory_code_fact(
+  "UserService.get_by_id(uid: str) -> User | None. "
+  "User has fields: id, email, role, created_at. "
+  "Cache: Redis with 5min TTL.",
+  entity="UserService"
+)
+
+memory_code_fact(
+  "ProductModel: id, name, price_cents, category_id. "
+  "Prices stored as cents to avoid float issues.",
+  entity="ProductModel"
+)</code></pre>
+</div>
+
+<div class="codeblock">
+  <h3>Architectural Decisions</h3>
+<pre><code>memory_decision(
+  "Use PostgreSQL + Redis instead of MongoDB. "
+  "Reason: better JSON support in PG 16, "
+  "ACID compliance needed for transactions.",
+  decision_type="database",
+  status="accepted"
+)</code></pre>
+</div>
+
+<h2 style="color:#f8fafc;font-size:1.35rem;font-weight:700;margin:2rem 0 0.75rem;">Comparison: Cursor Memory Options</h2>
+
+<div class="comparison">
+  <div class="row"><div class="label">Solution</div><div class="val-yes">agent-memory</div><div class="val-some">Cursor Tab</div></div>
+  <div class="row"><div class="label">MCP Protocol</div><div class="val-yes">✓ v3.2</div><div class="val-no">✗</div></div>
+  <div class="row"><div class="label">Persistent across sessions</div><div class="val-yes">✓ Forever</div><div class="val-some">Context only</div></div>
+  <div class="row"><div class="label">Semantic search</div><div class="val-yes">✓ Built-in</div><div class="val-no">✗</div></div>
+  <div class="row"><div class="label">TTL expiration</div><div class="val-yes">✓ Auto-cleanup</div><div class="val-no">✗</div></div>
+  <div class="row"><div class="label">Encryption</div><div class="val-yes">✓ AES</div><div class="val-no">✗</div></div>
+  <div class="row"><div class="label">No cloud required</div><div class="val-yes">✓ 100% local</div><div class="val-no">✗</div></div>
+  <div class="row"><div class="label">Open source</div><div class="val-yes">✓ MIT</div><div class="val-no">✗</div></div>
+</div>
+
+<h2 style="color:#f8fafc;font-size:1.35rem;font-weight:700;margin:2rem 0 0.75rem;">Try It</h2>
+
+<a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">★ Star on GitHub</a>
+<a class="cta-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">🚀 Demo</a>
+
+<div class="footer">
+  agent-memory · <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">GitHub</a> · MIT License · Works with Cursor, Claude Code, OpenClaw
+</div>
+
+</div>
+</body>
+</html>
