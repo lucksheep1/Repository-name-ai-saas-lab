@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>agent-memory — The Memory Layer for OpenClaw Agents</title>
+<meta name="description" content="OpenClaw has 250K GitHub stars. Now give your OpenClaw agents persistent memory. MCP v3.2, JSON/SQLite/Redis, TTL, AES encryption. No cloud. No API key.">
+<meta property="og:title" content="agent-memory — The Memory Layer for OpenClaw Agents">
+<meta property="og:description" content="OpenClaw has 250K GitHub stars. Now give your OpenClaw agents persistent memory. MCP v3.2, JSON/SQLite/Redis, TTL, AES encryption. No cloud. No API key.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .openclaw-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #f97316, #ea580c); border-radius: 999px; padding: 0.3rem 0.75rem; font-size: 0.75rem; font-weight: 700; color: white; margin-bottom: 1.5rem; }
+  .openclaw-badge span { font-size: 1rem; }
+
+  h1 { color: #f8fafc; font-size: 2.25rem; font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+  h1 .highlight { color: #f97316; }
+  h2 { color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; margin: 2.5rem 0 1rem; }
+  p { color: #cbd5e1; font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.25rem; }
+  a { color: #0ea5e9; }
+
+  .hero { margin-bottom: 2rem; }
+  .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .stat { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 1rem 1.25rem; flex: 1; min-width: 140px; }
+  .stat-num { font-size: 1.75rem; font-weight: 800; color: #f97316; }
+  .stat-label { font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem; }
+
+  .code-block { background: #0f172a; border: 1px solid #1f2937; border-radius: 10px; padding: 1.25rem; margin: 1rem 0; overflow-x: auto; }
+  .code-block code { color: #e2e8f0; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; line-height: 1.8; }
+  .comment { color: #64748b; }
+  .keyword { color: #f472b6; }
+  .string { color: #a5f3fc; }
+
+  .comparison { background: #111827; border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+  .comparison h3 { color: #f9fafb; font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #1f2937; font-size: 0.9rem; }
+  .row:last-child { border-bottom: none; }
+  .row-label { color: #d1d5db; }
+  .yes { color: #34d399; font-weight: 700; }
+  .no { color: #f87171; }
+  .tag { display: inline-block; border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.7rem; font-weight: 600; }
+  .tag-local { background: #064e3b; color: #34d399; }
+  .tag-cloud { background: #1e3a5f; color: #60a5fa; }
+
+  .cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .btn { display: inline-block; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.9rem; }
+  .btn-primary { background: #f97316; color: white; }
+  .btn-secondary { background: #1f2937; color: #d1d5db; border: 1px solid #374151; }
+  .btn:hover { opacity: 0.9; }
+
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1f2937; font-size: 0.8rem; color: #475569; }
+  .footer a { color: #0ea5e9; text-decoration: none; }
+
+  @media (max-width: 600px) { h1 { font-size: 1.6rem; } .stat { min-width: 120px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <div class="openclaw-badge"><span>🦞</span> For OpenClaw Agents</div>
+  <h1>Give your <span class="highlight">OpenClaw agents</span> persistent memory</h1>
+  <p>OpenClaw just crossed <strong>250,000 GitHub stars</strong>, surpassing React. Now your OpenClaw agents can remember everything across sessions with agent-memory — the local-first memory layer with native MCP v3.2 support.</p>
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-num">250K+</div>
+      <div class="stat-label">OpenClaw GitHub Stars</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">API Key Required</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Local / Private</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">MIT</div>
+      <div class="stat-label">License</div>
+    </div>
+  </div>
+</div>
+
+<h2>Quick Install</h2>
+<div class="code-block">
+<code><span class="comment"># Install agent-memory</span>
+<span class="keyword">pip install</span> agent-memory
+
+<span class="comment"># Connect to OpenClaw via MCP (auto-detected)</span>
+python -m agent_memory.mcp_server
+
+<span class="comment"># Done. OpenClaw agents now have persistent memory.</span>
+<span class="comment">#记忆再也不丢失。</span>
+</code>
+</div>
+
+<h2>How It Works with OpenClaw</h2>
+<p>agent-memory exposes memory tools via MCP v3.2 — the same protocol OpenClaw uses. Once connected, your OpenClaw agent can:</p>
+
+<div class="code-block">
+<code><span class="comment"># MCP tools available to your OpenClaw agent:</span>
+memory_search   <span class="comment">— Find relevant memories</span>
+memory_add      <span class="comment">— Store new memory with TTL</span>
+memory_get      <span class="comment">— Get specific memory by ID</span>
+memory_list     <span class="comment">— List recent memories</span>
+memory_clear    <span class="comment">— Clear memories</span>
+
+<span class="comment"># Or use directly in Python:</span>
+<span class="keyword">from</span> agent_memory <span class="keyword">import</span> Memory
+m = Memory(storage=<span class="string">"json"</span>, path=<span class="string">"./memory.json"</span>)
+m.add(<span class="string">"User prefers dark mode"</span>, ttl=<span class="string">"30d"</span>)
+m.search(<span class="string">"dark mode"</span>)
+</code>
+</div>
+
+<h2>OpenClaw Memory Options Compared</h2>
+<div class="comparison">
+  <h3>Which memory works for OpenClaw agents?</h3>
+  <div class="row">
+    <div class="row-label">Memory Layer</div>
+    <div style="font-size:0.8rem; color:#9ca3af;">Local-first</div>
+    <div style="font-size:0.8rem; color:#9ca3af;">No API Key</div>
+    <div style="font-size:0.8rem; color:#9ca3af;">MCP Native</div>
+  </div>
+  <div class="row">
+    <div class="row-label"><strong>agent-memory</strong> ← You are here</div>
+    <div class="yes">✓ Always</div>
+    <div class="yes">✓ No key</div>
+    <div class="yes">✓ v3.2</div>
+  </div>
+  <div class="row">
+    <div class="row-label">MemOS Cloud Plugin</div>
+    <div class="no">✗ Cloud</div>
+    <div class="no">✗ Required</div>
+    <div class="yes">✓</div>
+  </div>
+  <div class="row">
+    <div class="row-label">OpenAmnesia</div>
+    <div class="yes">✓ Local</div>
+    <div class="tag tag-cloud">?</div>
+    <div class="tag tag-cloud">?</div>
+  </div>
+  <div class="row">
+    <div class="row-label">OpenClaw Built-in</div>
+    <div class="yes">✓ Markdown files</div>
+    <div class="yes">✓</div>
+    <div class="yes">✓</div>
+  </div>
+</div>
+
+<h2>Features</h2>
+<div class="comparison">
+  <div class="row"><div class="row-label">MCP v3.2 Protocol</div><div class="yes">✓ Native</div></div>
+  <div class="row"><div class="row-label">JSON / SQLite / Redis backends</div><div class="yes">✓ All three</div></div>
+  <div class="row"><div class="row-label">TTL memory expiration</div><div class="yes">✓ Built-in</div></div>
+  <div class="row"><div class="row-label">AES encryption</div><div class="yes">✓ Local only</div></div>
+  <div class="row"><div class="row-label">Tagging & metadata</div><div class="yes">✓</div></div>
+  <div class="row"><div class="row-label">REST API server</div><div class="yes">✓</div></div>
+  <div class="row"><div class="row-label">SSE streaming</div><div class="yes">✓</div></div>
+  <div class="row"><div class="row-label">Backup / restore</div><div class="yes">✓ CLI</div></div>
+  <div class="row"><div class="row-label">Open source</div><div class="yes">✓ MIT License</div></div>
+  <div class="row"><div class="row-label">Cloud required</div><div class="no">✗ Never</div></div>
+</div>
+
+<div class="cta-row">
+  <a class="btn btn-primary" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">★ Star on GitHub</a>
+  <a class="btn btn-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">🚀 Live Demo</a>
+  <a class="btn btn-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/compare.html">📊 Full Compare</a>
+</div>
+
+<div class="footer">
+  agent-memory — MIT License · Built for OpenClaw agents · <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">GitHub</a> · <a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/openmemory-showdown.html">vs Mem0 OpenMemory</a>
+</div>
+
+</div>
+</body>
+</html>
