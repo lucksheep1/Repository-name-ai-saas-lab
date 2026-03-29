@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory Security — How to Protect Sensitive Data in AI Agents</title>
+<meta name="description" content="AI agents remember everything — including sensitive data. Learn how to secure AI agent memory with encryption, TTL, access controls, and privacy-first architecture.">
+<meta property="og:title" content="AI Agent Memory Security — Protecting Sensitive Data">
+<meta property="og:description" content="OWASP, Microsoft, and security researchers agree: AI agent memory needs protection. Here's what to do about it.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.35rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #1a0a0a 0%, #0a1a1a 100%); border: 1px solid #166534; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero h1 { color: #f8fafc; }
+  .hero p { color: #94a3b8; }
+  .badge-sec { display:inline-block; background:#14532d; border:1px solid #166534; border-radius:6px; padding:0.25rem 0.6rem; font-size:0.7rem; font-weight:600; color:#86efac; margin: 0.25rem; }
+  .badge-owasp { display:inline-block; background:#1e3a5f; border:1px solid #1e40af; border-radius:6px; padding:0.25rem 0.6rem; font-size:0.7rem; font-weight:600; color:#93c5fd; margin: 0.25rem; }
+  .badge-new { background:#0ea5e9; color:#0f172a; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; font-style:italic; color:#d1d5db; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .threat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:0.75rem; margin:1.5rem 0; }
+  .threat { background:#1c0a0a; border:1px solid #7f1d1d; border-radius:10px; padding:1rem; }
+  .threat h4 { color:#f87171; font-size:0.9rem; margin-bottom:0.4rem; }
+  .threat p { font-size:0.8rem; color:#d1d5db; margin:0; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; }
+  .code code { color:#e2e8f0; font-size:0.85rem; font-family:'SFMono-Regular',Consolas,monospace; line-height:1.8; }
+  .comment { color:#64748b; }
+  .keyword { color:#f472b6; }
+  .string { color:#86efac; }
+  .number { color:#fbbf24; }
+  .solution-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.75rem; margin:1.5rem 0; }
+  .solution { background:#0a1e0a; border:1px solid #166534; border-radius:10px; padding:1rem; }
+  .solution h4 { color:#4ade80; font-size:0.9rem; margin-bottom:0.4rem; }
+  .solution p { font-size:0.8rem; color:#d1d5db; margin:0; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; }
+  tr:hover td { background:#0d1117; }
+  .tool-name { font-weight:700; color:#f9fafb; }
+  .tag-y { color:#34d399; font-weight:700; }
+  .tag-n { color:#f87171; }
+  .highlight-row { background:#0f1a2e !important; }
+  .cta { display:inline-block; background:#0ea5e9; color:white; padding:0.7rem 1.5rem; border-radius:8px; font-weight:700; text-decoration:none; margin:0.5rem 0.25rem 0.5rem 0; }
+  .cta:hover { opacity:0.9; }
+  .cta-secondary { background:#1f2937; color:#d1d5db; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ .threat-grid,.solution-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>AI Agent Memory Security</h1>
+  <p>AI agents remember everything — including sensitive data. Here's how to protect memory contents with encryption, access controls, and privacy-first architecture.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="badge-sec">&#128274; Encryption</span>
+    <span class="badge-sec">&#128267; TTL Expiration</span>
+    <span class="badge-sec">&#128100; Access Control</span>
+    <span class="badge-owasp">OWASP</span>
+    <span class="badge-owasp">New America</span>
+  </div>
+</div>
+
+<h2>The Problem: AI Agents Remember Too Much</h2>
+
+<p>AI agent memory systems solve the context-window problem — but they create a security problem. Every piece of context your agent saves to memory is a potential data leak vector.</p>
+
+<p>OWASP's AI Agent Security Cheat Sheet frames it this way:</p>
+
+<blockquote>
+  "Bad: Unvalidated memory storage. Good: Validated and isolated memory. Memory &amp; Context Security requires strict input validation, isolation between sessions, and automatic expiration of sensitive data."
+  <cite>— OWASP AI Agent Security Cheat Sheet, 2026</cite>
+</blockquote>
+
+<p>New America's report on AI Agents and Memory adds:</p>
+
+<blockquote>
+  "MCP extends this capacity beyond local storage, raising new governance challenges around persistence and distribution."
+  <cite>— New America, OTI Briefs, 2026</cite>
+</blockquote>
+
+<h2>OWASP AI Agent Memory Threats</h2>
+
+<p>The <a href="https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html">OWASP AI Agent Security Cheat Sheet</a> identifies specific memory-related threats:</p>
+
+<div class="threat-grid">
+  <div class="threat">
+    <h4>&#9888; Unvalidated Memory Storage</h4>
+    <p>Memory accepts any content without sanitization. Prompt injection can poison memory.</p>
+  </div>
+  <div class="threat">
+    <h4>&#9888; No Automatic Expiration</h4>
+    <p>Sensitive data lives forever in memory. No TTL means no forgotten data.</p>
+  </div>
+  <div class="threat">
+    <h4>&#9888; Unencrypted Memory</h4>
+    <p>Memory stored in plain text. Anyone with file access reads everything.</p>
+  </div>
+  <div class="threat">
+    <h4>&#9888; Cross-Session Leakage</h4>
+    <p>One session's context bleeds into another. Information isolation broken.</p>
+  </div>
+  <div class="threat">
+    <h4>&#9888; Memory Injection</h4>
+    <p>Adversarial content stored in memory, later retrieved as trusted context.</p>
+  </div>
+  <div class="threat">
+    <h4>&#9888; No Access Logging</h4>
+    <p>No audit trail for who accessed what memories and when.</p>
+  </div>
+</div>
+
+<h2>OWASP Secure Memory Example</h2>
+
+<p>The OWASP cheat sheet provides this reference implementation:</p>
+
+<div class="code">
+<code><span class="keyword">import</span> hashlib
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta
+
+<span class="keyword">class</span> <span class="string">SecureAgentMemory</span>:
+    MAX_MEMORY_ITEMS = <span class="number">100</span>        <span class="comment"># Cap memory size</span>
+    MAX_ITEM_LENGTH = <span class="number">5000</span>       <span class="comment"># Prevent memory overflow</span>
+    MEMORY_TTL_HOURS = <span class="number">24</span>           <span class="comment"># Auto-expire sensitive data</span>
+
+    <span class="keyword">def</span> <span class="string">validate_item</span>(item):
+        <span class="comment"># Input validation + sanitization</span>
+        <span class="keyword">assert</span> len(item) &lt;= <span class="string">SecureAgentMemory.MAX_ITEM_LENGTH</span>
+        <span class="comment"># Strip prompt injection patterns</span>
+
+    <span class="keyword">def</span> <span class="string">add_memory</span>(content, ttl=<span class="number">24</span>):
+        <span class="keyword">if</span> contains_sensitive_data(content):
+            ttl = min(ttl, <span class="number">1</span>)  <span class="comment"># Sensitive = short TTL</span>
+</code>
+</div>
+
+<h2>Solutions: How to Secure AI Agent Memory</h2>
+
+<div class="solution-grid">
+  <div class="solution">
+    <h4>&#128274; AES-256 Encryption</h4>
+    <p>Encrypt all memory at rest. Microsoft Azure AI uses AES-256 by default for AI Agent Service data.</p>
+  </div>
+  <div class="solution">
+    <h4>&#128267; TTL Expiration</h4>
+    <p>Auto-expire memories after N hours. Sensitive data gets shorter TTLs.</p>
+  </div>
+  <div class="solution">
+    <h4>&#128100; Session Isolation</h4>
+    <p>Each session has separate memory store. No cross-session data leakage.</p>
+  </div>
+  <div class="solution">
+    <h4>&#128221; Input Validation</h4>
+    <p>Sanitize all memory writes. Block prompt injection patterns.</p>
+  </div>
+  <div class="solution">
+    <h4>&#128273; Access Control</h4>
+    <p>Require authentication for memory read/write operations.</p>
+  </div>
+  <div class="solution">
+    <h4>&#128206; Local-First Storage</h4>
+    <p>Keep memory on your machine. Sage keeps "file content, commands, and source code" local.</p>
+  </div>
+</div>
+
+<h2>How Sage Handles AI Agent Security</h2>
+
+<p><a href="https://www.helpnetsecurity.com/2026/03/09/open-source-tool-sage-security-layer-ai-agents/">Help Net Security reported (March 9, 2026)</a> on Sage, an open-source tool that inserts a security layer between AI agents and the OS:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Works with:</strong> Claude Code, Cursor/VS Code, OpenClaw</li>
+  <li><strong>Intercepts:</strong> Bash commands, URL fetches, file writes</li>
+  <li><strong>URL reputation:</strong> Cloud-based malware/phishing detection (hashes only)</li>
+  <li><strong>Local heuristics:</strong> YAML-based threat definitions</li>
+  <li><strong>Privacy:</strong> "File content, commands, and source code stay local"</li>
+  <li><strong>Offline mode:</strong> Both services can be disabled for fully offline operation</li>
+</ul>
+
+<blockquote>
+  "The privacy model keeps most data on the local machine. Sage sends URL hashes and package hashes to Gen Digital reputation APIs. File content, commands, and source code stay local."
+  <cite>— Help Net Security, March 9, 2026</cite>
+</blockquote>
+
+<h2>AI Agent Memory Security Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Sage</th>
+      <th>Mem0 Cloud</th>
+      <th>agent-memory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tool-name">Encryption</td>
+      <td>—</td>
+      <td>—</td>
+      <td class="tag-y">AES-256</td>
+    </tr>
+    <tr>
+      <td class="tool-name">TTL Expiration</td>
+      <td>—</td>
+      <td>Limited</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Local-First</td>
+      <td class="tag-y">Yes</td>
+      <td class="tag-n">Cloud only</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Input Validation</td>
+      <td class="tag-y">YAML heuristics</td>
+      <td>—</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Session Isolation</td>
+      <td>—</td>
+      <td>—</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Open Source</td>
+      <td class="tag-y">Yes</td>
+      <td class="tag-n">Proprietary</td>
+      <td class="tag-y">MIT</td>
+    </tr>
+    <tr>
+      <td class="tool-name">MCP Native</td>
+      <td>—</td>
+      <td>—</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>The MCP Security Challenge</h2>
+
+<p>The <a href="https://www.coalitionforsecureai.org/securing-the-ai-agent-revolution-a-practical-guide-to-mcp-security/">Coalition for Secure AI</a> identifies MCP-specific security concerns:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li>LLMs as intermediaries between user intent and system actions</li>
+  <li>Tool calls can modify files, run commands, exfiltrate data</li>
+  <li>Memory servers receive and store unvalidated context</li>
+  <li>MCP servers can persist data across sessions — and across users</li>
+</ul>
+
+<p>agent-memory addresses these by:</p>
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li>Storing memory locally (never sent to third parties)</li>
+  <li>Supporting AES-256 encryption (even if someone accesses the file)</li>
+  <li>TTL-based automatic expiration (no permanent storage)</li>
+  <li>Session-scoped storage (isolation between projects)</li>
+</ul>
+
+<h2>Get Started with Secure AI Agent Memory</h2>
+
+<div class="code">
+<code><span class="comment"># Install agent-memory</span>
+pip install agent-memory
+
+<span class="comment"># Run with AES encryption + 7-day TTL</span>
+python -m agent_memory.mcp_server \\
+  --storage json \\
+  --path ./memory.json \\
+  --encryption aes256 \\
+  --ttl 7d
+
+<span class="comment"># Your agent now has encrypted, auto-expiring memory</span>
+<span class="comment"># Run: python -m agent_memory.mcp_server --help</span>
+</code>
+</div>
+
+<a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">agent-memory on GitHub</a>
+<a class="cta cta-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">Try Live Demo</a>
+
+<div class="footer">
+  Sources: <a href="https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html">OWASP AI Agent Security</a> &middot; <a href="https://www.helpnetsecurity.com/2026/03/09/open-source-tool-sage-security-layer-ai-agents/">Help Net Security</a> &middot; <a href="https://www.coalitionforsecureai.org/securing-the-ai-agent-revolution-a-practical-guide-to-mcp-security/">Coalition for Secure AI</a> &middot; <a href="https://www.newamerica.org/oti/briefs/ai-agents-and-memory/">New America</a>
+</div>
+
+</div>
+</body>
+</html>
