@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VS Code AI Memory Extensions — 5 Best for Persistent Context in 2026</title>
+<meta name="description" content="The best VS Code AI memory extensions for persistent context. Compare Cortex AI Memory, OpenMemory, Remember MCP, and more. Never lose AI context again.">
+<meta property="og:title" content="VS Code AI Memory Extensions — Best Persistent Context Tools">
+<meta property="og:description" content="Compare the best VS Code extensions for AI agent memory. Works with VS Code Copilot, Cursor, Claude Code, and any MCP client.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.35rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid #0f3460; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero h1 { color: #f8fafc; }
+  .hero p { color: #94a3b8; }
+  table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.875rem; }
+  th { background: #111827; color: #9ca3af; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid #1f2937; }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #111827; }
+  tr:hover td { background: #0d1117; }
+  .ext-name { font-weight: 700; color: #f9fafb; }
+  .tag { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; margin: 0.1rem; }
+  .tag-vscode { background: #1e3a5f; color: #60a5fa; }
+  .tag-mcp { background: #2e1065; color: #c4b5fd; }
+  .tag-free { background: #064e3b; color: #34d399; }
+  .tag-paid { background: #7f1d1d; color: #f87171; }
+  .tag-new { background: #0ea5e9; color: #0f172a; }
+  .card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+  .card h3 { color: #f8fafc; font-size: 1rem; margin-bottom: 0.5rem; }
+  .card p { font-size: 0.875rem; margin-bottom: 0.5rem; }
+  .card-meta { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }
+  .highlight-row { background: #0f1a2e !important; }
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+  .pros { background: #064e3b; border-radius: 10px; padding: 1.25rem; border-left: 4px solid #34d399; }
+  .cons { background: #7f1d1d; border-radius: 10px; padding: 1.25rem; border-left: 4px solid #f87171; }
+  .pros h3 { color: #34d399; font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .cons h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .pros ul, .cons ul { list-style: none; padding: 0; }
+  .pros li, .cons li { font-size: 0.875rem; padding: 0.25rem 0; color: #d1d5db; }
+  .pros li::before { content: "✓ "; color: #34d399; }
+  .cons li::before { content: "✗ "; color: #f87171; }
+  .code { background: #0f172a; border-radius: 8px; padding: 1.25rem; margin: 1rem 0; overflow-x: auto; }
+  .code code { color: #e2e8f0; font-size: 0.85rem; font-family: 'SFMono-Regular', Consolas, monospace; line-height: 1.8; }
+  .comment { color: #64748b; }
+  .cta { display: inline-block; background: #0ea5e9; color: white; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 700; text-decoration: none; margin: 0.5rem 0.25rem 0.5rem 0; }
+  .cta:hover { opacity: 0.9; }
+  .cta-secondary { background: #1f2937; color: #d1d5db; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #1f2937; font-size: 0.8rem; color: #475569; }
+  @media (max-width: 600px) { .pros-cons { grid-template-columns: 1fr; } table { font-size: 0.8rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>VS Code AI Memory Extensions</h1>
+  <p>Give your VS Code AI assistant persistent memory. Compare the top 5 extensions for long-term context across sessions — Copilot, Cursor, Claude, and more.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag tag-vscode">VS Code</span>
+    <span class="tag tag-mcp">MCP</span>
+    <span class="tag tag-free">Free Options</span>
+  </div>
+</div>
+
+<h2>Why VS Code AI Memory Matters</h2>
+
+<p>VS Code's AI assistants (Copilot, Copilot Chat, and MCP-compatible agents) are powerful within a single session. But between sessions, they start from scratch — forgetting your project architecture, coding conventions, recent decisions, and context.</p>
+
+<p>VS Code AI memory extensions solve this by persisting context between sessions, so your AI assistant remembers your project across restarts, clones, and interruptions.</p>
+
+<div class="pros-cons">
+  <div class="pros">
+    <h3>Benefits</h3>
+    <ul>
+      <li>No re-explaining project context each session</li>
+      <li>AI remembers architecture decisions</li>
+      <li>Consistent coding standards enforced</li>
+      <li>Context survives VS Code restarts</li>
+      <li>Team knowledge sharing (some extensions)</li>
+      <li>Works with Copilot, Claude Code, Cursor</li>
+    </ul>
+  </div>
+  <div class="cons">
+    <h3>Trade-offs</h3>
+    <ul>
+      <li>Some require paid subscriptions</li>
+      <li>Context window still limited</li>
+      <li>Setup required per project</li>
+      <li>Data privacy varies by solution</li>
+      <li>Not all VS Code AI tools supported</li>
+      <li>Memory quality depends on prompting</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Top VS Code AI Memory Extensions in 2026</h2>
+
+<div class="card">
+  <h3>Cortex: AI Memory <span class="tag tag-vscode">VS Code Marketplace</span></h3>
+  <p>"Persistent Memory for AI Agents. Remember context, decisions, and code patterns across sessions. Works with Copilot, Claude Code, Cursor, and any MCP-compatible assistant."</p>
+  <div class="card-meta">Source: marketplace.visualstudio.com &middot; EcuaByte.cortex-vscode</div>
+</div>
+
+<div class="card">
+  <h3>OpenMemory for VS Code <span class="tag tag-vscode">VS Code Marketplace</span></h3>
+  <p>"Cognitive memory system that remembers your coding context across sessions." Part of the Mem0/OpenMemory ecosystem.</p>
+  <div class="card-meta">Source: marketplace.visualstudio.com &middot; Nullure.openmemory-vscode</div>
+</div>
+
+<div class="card">
+  <h3>AI Memory (CoderOne) <span class="tag tag-vscode">VS Code Marketplace</span></h3>
+  <p>"Easily manage AI context for your projects using memory bank technique."</p>
+  <div class="card-meta">Source: open-vsx.org &middot; CoderOne.aimemory</div>
+</div>
+
+<div class="card">
+  <h3>Remember MCP <span class="tag tag-vscode">VS Code</span> <span class="tag tag-mcp">MCP</span></h3>
+  <p>"The VS Code extension that brings real, persistent memory to your AI assistant and your team. Instantly store preferences, facts, and best practices — so Copilot always knows your context, and your team's knowledge is never lost."</p>
+  <div class="card-meta">Source: github.com/NiclasOlofsson/remember-mcp-vscode</div>
+</div>
+
+<div class="card">
+  <h3>Cortex AI (Web) <span class="tag tag-vscode">VS Code</span> <span class="tag tag-free">Free tier</span></h3>
+  <p>"Persistent memory for AI coding assistants. Your AI never starts from zero again. Works with Cursor, Claude, VS Code Copilot, Windsurf."</p>
+  <div class="card-meta">Source: cortex-website-theta.vercel.app</div>
+</div>
+
+<div class="card" style="border-color:#0ea5e9;background:#0f172a;">
+  <h3 style="color:#0ea5e9">&#9733; agent-memory (Universal MCP)</h3>
+  <p>Open-source MCP server that works with VS Code Copilot (via MCP), Cursor, Claude Code, and any MCP-compatible tool. JSON/SQLite/Redis backends. AES encryption. TTL. MIT license.</p>
+  <div class="card-meta">Source: github.com/lucksheep1/Repository-name-ai-saas-lab &middot; MIT License</div>
+</div>
+
+<h2>Comparison Table</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Extension</th>
+      <th>Type</th>
+      <th>MCP</th>
+      <th>Encryption</th>
+      <th>TTL</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ext-name">Cortex: AI Memory</span></td>
+      <td>VS Code Extension</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Freemium</td>
+    </tr>
+    <tr>
+      <td><span class="ext-name">OpenMemory VS Code</span></td>
+      <td>VS Code Extension</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Freemium</td>
+    </tr>
+    <tr>
+      <td><span class="ext-name">AI Memory (CoderOne)</span></td>
+      <td>VS Code Extension</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Free</td>
+    </tr>
+    <tr>
+      <td><span class="ext-name">Remember MCP</span></td>
+      <td>VS Code + MCP</td>
+      <td><span style="color:#34d399">✓</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td><span class="ext-name">Cortex AI (web)</span></td>
+      <td>Web + local</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Freemium</td>
+    </tr>
+    <tr class="highlight-row">
+      <td><span class="ext-name" style="color:#0ea5e9">agent-memory</span></td>
+      <td>MCP Server</td>
+      <td><span style="color:#34d399">✓ Native</span></td>
+      <td><span style="color:#34d399">✓ AES-256</span></td>
+      <td><span style="color:#34d399">✓</span></td>
+      <td><span style="color:#34d399">MIT</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>How to Add Memory to VS Code Copilot</h2>
+
+<div class="code">
+<code><span class="comment"># 1. Install agent-memory</span>
+pip install agent-memory
+
+<span class="comment"># 2. Run the MCP server</span>
+python -m agent_memory.mcp_server
+
+<span class="comment"># 3. Configure VS Code Copilot to use MCP</span>
+<span class="comment"># Add to VS Code settings.json (MCP config):</span>
+<span class="comment"># { "mcpServers": { "agent-memory": { "command": "python", "args": ["-m", "agent_memory.mcp_server"] } } }</span>
+
+<span class="comment"># 4. Your VS Code AI now has persistent memory</span>
+<span class="comment"># Use memory_add, memory_search, memory_list tools</span>
+</code>
+</div>
+
+<h2>What Gets Remembered</h2>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li>Project architecture and key files</li>
+  <li>Coding conventions and style rules</li>
+  <li>Recent bug fixes and decisions</li>
+  <li>API endpoints and data models</li>
+  <li>Testing approach and frameworks</li>
+  <li>Team conventions and standards</li>
+  <li>Context from before last session ended</li>
+</ul>
+
+<h2>VS Code Memory Bank Technique</h2>
+
+<p>The "memory bank" approach (used by CoderOne's AI Memory) involves maintaining structured documents that VS Code AI reads at the start of each session:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Project overview</strong> — what the project does</li>
+  <li><strong>Coding standards</strong> — style, patterns, anti-patterns</li>
+  <li><strong>Current context</strong> — what you're working on now</li>
+  <li><strong>Lessons learned</strong> — decisions and why</li>
+</ul>
+
+<p>VS Code AI memory extensions automate this by letting the AI itself update these documents as it works, creating a self-maintaining memory system.</p>
+
+<h2>Get Started</h2>
+
+<a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">agent-memory on GitHub</a>
+<a class="cta cta-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">Try Live Demo</a>
+
+<div class="footer">
+  agent-memory &middot; Open-source MCP server for AI agent memory &middot; <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">GitHub</a> &middot; MIT License &middot; No API key required
+</div>
+
+</div>
+</body>
+</html>
