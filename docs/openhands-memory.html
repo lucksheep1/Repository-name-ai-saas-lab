@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenHands Memory — Give OpenHands Persistent Project Memory That Survives Every Session</title>
+<meta name="description" content="OpenHands has 65K GitHub stars but forgets everything between sessions. Here's how to give OpenHands persistent memory so it stops re-discovering your codebase every time.">
+<meta property="og:title" content="OpenHands Memory — Persistent Project Context for 65K-Star Agents">
+<meta property="og:description" content="OpenHands forgets your codebase every session. 65K GitHub stars, zero project memory. Here's the fix.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.35rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid #0f3460; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero h1 { color: #f8fafc; }
+  .hero .stat { display:inline-block; background:rgba(14,165,233,0.15); border:1px solid #0ea5e9; border-radius:6px; padding:0.25rem 0.75rem; font-size:0.85rem; font-weight:700; color:#0ea5e9; margin: 0.25rem; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; font-style:italic; color:#d1d5db; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .problem-box { background:#1c0a0a; border:1px solid #7f1d1d; border-radius:10px; padding:1.25rem; margin:1.5rem 0; }
+  .problem-box h3 { color:#f87171; margin-bottom:0.75rem; }
+  .solution-box { background:#0a1e0a; border:1px solid #166534; border-radius:10px; padding:1.25rem; margin:1.5rem 0; }
+  .solution-box h3 { color:#4ade80; margin-bottom:0.75rem; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; }
+  tr:hover td { background:#0d1117; }
+  .tool-name { font-weight:700; color:#f9fafb; }
+  .tag-y { color:#34d399; font-weight:700; }
+  .tag-n { color:#f87171; }
+  .highlight-row { background:#0f1a2e !important; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; }
+  .code code { color:#e2e8f0; font-size:0.85rem; font-family:'SFMono-Regular',Consolas,monospace; line-height:1.8; }
+  .comment { color:#64748b; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  .card-meta { margin-top:0.75rem; font-size:0.75rem; color:#64748b; }
+  .tag { display:inline-block; font-size:0.7rem; font-weight:700; padding:0.15rem 0.5rem; border-radius:4px; }
+  .tag-new { background:#0ea5e9; color:#0f172a; }
+  .cta { display:inline-block; background:#0ea5e9; color:white; padding:0.7rem 1.5rem; border-radius:8px; font-weight:700; text-decoration:none; margin:0.5rem 0.25rem 0.5rem 0; }
+  .cta:hover { opacity:0.9; }
+  .cta-secondary { background:#1f2937; color:#d1d5db; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ .card-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>OpenHands Memory</h1>
+  <p>OpenHands has 65,000 GitHub stars — but forgets your entire codebase between sessions. Here's how to give it persistent project memory that survives every restart.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="stat">&#9733; 65K GitHub Stars</span>
+    <span class="stat">&#128577; Zero Project Memory</span>
+    <span class="stat">&#128274; MIT License</span>
+  </div>
+</div>
+
+<h2>The Problem: OpenHands Forgets Everything Between Sessions</h2>
+
+<div class="problem-box">
+  <h3>65K stars, but every session starts from zero</h3>
+  <p>OpenHands (formerly OpenDevin) is one of the most popular open-source AI coding agents. But like most AI agents, it has no persistent project memory. Every session begins with the agent re-discovering your codebase from scratch.</p>
+</div>
+
+<blockquote>
+  "OpenHands brings 65,000 GitHub stars as an open-source AI coding agent — But without persistent project memory, the agent re-discovers codebases every session."
+  <cite>— MemU Blog, March 2026 (memu.pro)</cite>
+</blockquote>
+
+<p>This is a well-known limitation. When you start a new OpenHands session:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li>The agent doesn't remember your project's architecture</li>
+  <li>Coding conventions and style rules are forgotten</li>
+  <li>Previous bug fixes and decisions are lost</li>
+  <li>The agent spends the first 10-20 minutes re-orienting</li>
+  <li>Every session requires re-explaining the codebase context</li>
+</ul>
+
+<h2>How to Give OpenHands Persistent Memory</h2>
+
+<div class="solution-box">
+  <h3>agent-memory — Universal MCP Memory for OpenHands</h3>
+  <p>agent-memory is an open-source MCP server that gives OpenHands persistent memory. It works by exposing memory tools (add, search, list, get) via the Model Context Protocol — which OpenHands supports natively.</p>
+</div>
+
+<div class="code">
+<code><span class="comment"># 1. Install agent-memory</span>
+pip install agent-memory
+
+<span class="comment"># 2. Run the MCP server (OpenHands connects via MCP)</span>
+python -m agent_memory.mcp_server --storage json --path ./openhands-memory.json
+
+<span class="comment"># 3. Configure OpenHands to use the MCP server</span>
+<span class="comment"># Add to OpenHands MCP config:</span>
+<span class="comment"># { "mcpServers": { "agent-memory": { "command": "python", "args": ["-m", "agent_memory.mcp_server"] } } }</span>
+
+<span class="comment"># 4. Now OpenHands remembers your project across sessions</span>
+<span class="comment"># agent_memory.add(\"Project uses PostgreSQL for users\")</span>
+<span class="comment"># agent_memory.search(\"database schema\")</span>
+</code>
+</div>
+
+<h2>What Gets Remembered</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Memory Type</th>
+      <th>Example</th>
+      <th>Survives Restart?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tool-name">Architecture</td>
+      <td>"API layer: FastAPI, DB: PostgreSQL"</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Code Style</td>
+      <td>"Use type hints, max line 100 chars"</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Bug History</td>
+      <td>"Fixed: Race condition in auth.py #452"</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Decisions</td>
+      <td>"Chose Redis over Memcached for sessions"</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Context Window</td>
+      <td>Current session working state</td>
+      <td class="tag-n">No — lost at /compact</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Open Source Memory Solutions for OpenHands</h2>
+
+<div class="card-grid">
+
+  <div class="card">
+    <h4>MemOS OpenClaw Plugin</h4>
+    <p>Official OpenClaw memory plugin. Cloud & local options. 72% lower cost than alternatives. AGPL license.</p>
+    <div class="card-meta">
+      <span class="tag tag-new">March 2026</span>
+      MemTensor/MemOS · github.com/MemTensor/MemOS
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>memU</h4>
+    <p>Memory for 24/7 proactive agents like OpenClaw (moltbot, clawdbot). PyPI: memu-py since Feb 2026.</p>
+    <div class="card-meta">
+      NevaMind-AI/memU · AGPLv3
+    </div>
+  </div>
+
+  <div class="card" style="border-color:#0ea5e9;background:#0f172a;">
+    <h4 style="color:#0ea5e9">&#9733; agent-memory</h4>
+    <p>Universal MCP server for ANY MCP agent (OpenHands, Claude Code, Cursor). MIT license. AES-256 + TTL.</p>
+    <div class="card-meta">
+      MIT License · github.com/lucksheep1/Repository-name-ai-saas-lab
+    </div>
+  </div>
+
+</div>
+
+<h2>Comparison: OpenHands Memory Solutions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>MemOS</th>
+      <th>memU</th>
+      <th>agent-memory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tool-name">License</td>
+      <td>AGPLv3</td>
+      <td>AGPLv3</td>
+      <td class="tag-y">MIT</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Universal MCP</td>
+      <td class="tag-n">OpenClaw only</td>
+      <td class="tag-n">OpenClaw only</td>
+      <td class="tag-y">Any MCP client</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Encryption</td>
+      <td>—</td>
+      <td>—</td>
+      <td class="tag-y">AES-256</td>
+    </tr>
+    <tr>
+      <td class="tool-name">TTL Expiration</td>
+      <td>—</td>
+      <td>—</td>
+      <td class="tag-y">Yes</td>
+    </tr>
+    <tr>
+      <td class="tool-name">Local-First</td>
+      <td>Cloud + local</td>
+      <td>Cloud + local</td>
+      <td class="tag-y">100% local</td>
+    </tr>
+    <tr>
+      <td class="tool-name">OpenHands Compatible</td>
+      <td class="tag-n">Via OpenClaw</td>
+      <td class="tag-n">Via OpenClaw</td>
+      <td class="tag-y">Direct MCP</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Why agent-memory Works Best for OpenHands</h2>
+
+<p>MemOS and memU are designed for OpenClaw agents specifically. agent-memory is:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Universal MCP</strong> — works with OpenHands directly via MCP protocol</li>
+  <li><strong>Truly local</strong> — no cloud dependency, your code never leaves your machine</li>
+  <li><strong>MIT licensed</strong> — use it in any project, no AGPL restrictions</li>
+  <li><strong>Encrypted</strong> — AES-256 encryption for sensitive project data</li>
+  <li><strong>TTL support</strong> — memories auto-expire, no stale context buildup</li>
+</ul>
+
+<p>OpenHands + agent-memory = the only combination that gives you a 65K-star agent with universal memory, no cloud dependency, and MIT licensing.</p>
+
+<h2>Get Started</h2>
+
+<a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">agent-memory on GitHub</a>
+<a class="cta cta-secondary" href="https://github.com/openhands/OpenHands">OpenHands on GitHub</a>
+
+<div class="footer">
+  Sources: <a href="https://memu.pro/blog/openhands-open-source-coding-agent-memory">MemU Blog — OpenHands Memory</a> &middot; <a href="https://github.com/openhands/OpenHands">OpenHands GitHub</a> &middot; <a href="https://github.com/MemTensor/MemOS">MemOS GitHub</a>
+</div>
+
+</div>
+</body>
+</html>
