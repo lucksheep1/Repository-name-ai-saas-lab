@@ -47,6 +47,7 @@
 - [x] Cycle 61 - openhands-memory.html + MemU/MemOS/memU signals ✅
 - [x] Cycle 62 - ai-coding-agent-comparison.html (12 agents) ✅
 - [x] Cycle 63 - best-ai-agent-memory.html + MachineLearningMastery signals ✅
+- [x] Cycle 64 - Hindsight signal + best-ai-agent-memory.html v2 (9 frameworks) ✅
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
 - [x] PM 汇报 (03-29 20:30) ✅ - 发送至飞书
