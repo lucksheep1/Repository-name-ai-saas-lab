@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Best AI Agent Memory Frameworks in 2026 — 8 Open-Source Options Compared</title>
-<meta name="description" content="Compare the best AI agent memory frameworks in 2026. 8 open-source options with encryption, TTL, and local storage compared by MachineLearningMastery and others.">
-<meta property="og:title" content="Best AI Agent Memory Frameworks 2026 — Open Source Compared">
-<meta property="og:description" content="8 AI agent memory frameworks compared. Only one gives you MIT license, AES encryption, TTL, and 100% local storage.">
+<title>Best AI Agent Memory Frameworks in 2026 — 9 Open-Source Options Compared</title>
+<meta name="description" content="Compare 9 AI agent memory frameworks in 2026. Including Hindsight, agent-memory, Letta, Mem0, Zep, MemOS. Open-source with encryption and TTL compared.">
+<meta property="og:title" content="Best AI Agent Memory Frameworks 2026 — 9 Open Source Options">
+<meta property="og:description" content="Hindsight vs agent-memory vs Letta vs Mem0. 9 frameworks compared. Only one has MIT + AES-256 + 100% local.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
@@ -17,33 +17,27 @@
   a { color: #0ea5e9; }
   .hero { background: linear-gradient(135deg, #0a0a2e 0%, #1a1a2e 100%); border: 1px solid #0f3460; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
   .hero h1 { color: #f8fafc; }
-  .scores { display:flex; gap:0.5rem; flex-wrap:wrap; margin:0.5rem 0; }
-  .score-pill { display:inline-block; background:#1e293b; border:1px solid #334155; border-radius:20px; padding:0.15rem 0.7rem; font-size:0.75rem; color:#94a3b8; }
-  .score-pill strong { color:#0ea5e9; }
   blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; font-style:italic; color:#d1d5db; }
   blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
-  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
-  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
-  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.8rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.5rem 0.6rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.5rem 0.6rem; border-bottom:1px solid #111827; }
   tr:hover td { background:#0d1117; }
-  .framework-name { font-weight:700; color:#f9fafb; }
+  .fw { font-weight:700; color:#f9fafb; }
   .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.1rem 0.4rem; border-radius:4px; margin:0.1rem; }
-  .tag-y { background:#064e3b; color:#34d399; }
-  .tag-n { background:#7f1d1d; color:#f87171; }
-  .tag-s { background:#1e3a5f; color:#60a5fa; }
-  .tag-mit { background:#1e3a5f; color:#60a5fa; }
-  .tag-paid { background:#7f1d1d; color:#f87171; }
+  .ty { background:#064e3b; color:#34d399; }
+  .tn { background:#7f1d1d; color:#f87171; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
   .winner-row { background:#0a1628 !important; }
+  .highlight-box { background:#0a1a2e; border:1px solid #0ea5e9; border-radius:10px; padding:1.5rem; margin:1.5rem 0; }
+  .highlight-box h3 { color:#0ea5e9; margin-bottom:0.75rem; }
   .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; margin:1.5rem 0; }
   .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
   .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
   .card p { font-size:0.85rem; color:#6b7280; margin:0; }
-  .highlight-box { background:#0a1a2e; border:1px solid #0ea5e9; border-radius:10px; padding:1.5rem; margin:1.5rem 0; }
-  .highlight-box h3 { color:#0ea5e9; margin-bottom:0.75rem; }
   .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; }
   .code code { color:#e2e8f0; font-size:0.85rem; font-family:'SFMono-Regular',Consolas,monospace; line-height:1.8; }
   .comment { color:#64748b; }
-  .keyword { color:#f472b6; }
   .cta { display:inline-block; background:#0ea5e9; color:white; padding:0.7rem 1.5rem; border-radius:8px; font-weight:700; text-decoration:none; margin:0.5rem 0.25rem 0.5rem 0; }
   .cta:hover { opacity:0.9; }
   .cta-secondary { background:#1f2937; color:#d1d5db; }
@@ -56,174 +50,169 @@
 
 <div class="hero">
   <h1>Best AI Agent Memory Frameworks in 2026</h1>
-  <p>8 open-source AI agent memory frameworks compared on encryption, TTL, local storage, and license. According to MachineLearningMastery, Vectorize.io, and Fast.io.</p>
-  <div class="scores">
-    <span class="score-pill"><strong>8</strong> frameworks</span>
-    <span class="score-pill"><strong>6</strong> MIT/Apache</span>
-    <span class="score-pill"><strong>2</strong> with AES-256</span>
-    <span class="score-pill"><strong>1</strong> 100% local</span>
-  </div>
+  <p>9 open-source AI agent memory frameworks compared. Including Hindsight (Vectorize.io), agent-memory, Letta, Mem0, Zep, MemOS, and more.</p>
 </div>
 
-<h2>What Is an AI Agent Memory Framework?</h2>
-
-<p>An AI agent memory framework provides persistent context storage for AI agents. Without it, every session starts from scratch — architecture decisions forgotten, coding conventions lost, bug fixes re-debated.</p>
-
-<blockquote>
-  "The emerging memory layer for agents enables persistent assistants, local LLM stacks, and long-lived agent workers. MemOS frames memory as an operating system concern."
-  <cite>— Top 10 AI Memory Products 2026, Medium (Feb 2026)</cite>
-</blockquote>
-
-<h2>8 AI Agent Memory Frameworks Compared</h2>
+<h2>9 AI Agent Memory Frameworks Compared</h2>
 
 <div style="overflow-x:auto;">
 <table>
   <thead>
     <tr>
       <th>Framework</th>
+      <th>MCP</th>
       <th>Encryption</th>
       <th>TTL</th>
-      <th>Local Storage</th>
+      <th>Local</th>
       <th>License</th>
-      <th>Best For</th>
+      <th>Key Feature</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td><span class="framework-name">agent-memory</span></td>
-      <td><span class="tag tag-y">AES-256</span></td>
-      <td><span class="tag tag-y">Yes</span></td>
-      <td><span class="tag tag-y">100% local</span></td>
-      <td><span class="tag tag-mit">MIT</span></td>
-      <td>Privacy-first agents</td>
+    <tr class="winner-row">
+      <td><span class="fw" style="color:#0ea5e9">&#9733; agent-memory</span></td>
+      <td><span class="ty">Native</span></td>
+      <td><span class="ty">AES-256</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="ty">100%</span></td>
+      <td><span class="ts">MIT</span></td>
+      <td>Universal MCP + encryption</td>
     </tr>
     <tr>
-      <td><span class="framework-name">Letta</span></td>
-      <td><span class="tag tag-y">Yes</span></td>
-      <td><span class="tag tag-y">Yes</span></td>
-      <td><span class="tag tag-s">Partial</span></td>
-      <td><span class="tag tag-mit">MIT</span></td>
+      <td><span class="fw">Hindsight</span></td>
+      <td><span class="ty">Native</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="ts">Adaptive</span></td>
+      <td><span class="ty">Docker local</span></td>
+      <td><span class="ts">MIT</span></td>
+      <td>Knowledge graph + reflect</td>
+    </tr>
+    <tr>
+      <td><span class="fw">Letta</span></td>
+      <td><span class="ts">Via MCP</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="ts">Partial</span></td>
+      <td><span class="ts">MIT</span></td>
       <td>Stateful LLM apps</td>
     </tr>
     <tr>
-      <td><span class="framework-name">Mem0</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-s">Limited</span></td>
-      <td><span class="tag tag-n">Cloud</span></td>
-      <td><span class="tag-paid">Open Core</span></td>
+      <td><span class="fw">Mem0</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="ts">Limited</span></td>
+      <td><span class="tn">Cloud</span></td>
+      <td>Open Core</td>
       <td>Teams, cloud-first</td>
     </tr>
     <tr>
-      <td><span class="framework-name">Zep</span></td>
-      <td><span class="tag tag-y">Yes</span></td>
-      <td><span class="tag tag-y">Yes</span></td>
-      <td><span class="tag tag-n">Cloud</span></td>
-      <td><span class="tag-paid">Proprietary</span></td>
+      <td><span class="fw">Zep</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="ty">Yes</span></td>
+      <td><span class="tn">Cloud</span></td>
+      <td>Proprietary</td>
       <td>Production AI apps</td>
     </tr>
     <tr>
-      <td><span class="framework-name">MemOS</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-s">Cloud + local</span></td>
-      <td><span class="tag tag-paid">AGPL</span></td>
+      <td><span class="fw">MemOS</span></td>
+      <td><span class="tn">OpenClaw</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="ts">Cloud+local</span></td>
+      <td>AGPL</td>
       <td>OpenClaw ecosystem</td>
     </tr>
     <tr>
-      <td><span class="framework-name">memU</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-s">Cloud + local</span></td>
-      <td><span class="tag-paid">AGPL</span></td>
-      <td>OpenClaw agents</td>
+      <td><span class="fw">memU</span></td>
+      <td><span class="tn">OpenClaw</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="ts">Cloud+local</span></td>
+      <td>AGPL</td>
+      <td>24/7 proactive agents</td>
     </tr>
     <tr>
-      <td><span class="framework-name">LangGraph Memory</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-s">Custom</span></td>
-      <td><span class="tag tag-s">Custom</span></td>
-      <td><span class="tag tag-mit">MIT</span></td>
-      <td>LangChain users</td>
+      <td><span class="fw">LangGraph Memory</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="ts">Custom</span></td>
+      <td><span class="ts">Custom</span></td>
+      <td><span class="ts">MIT</span></td>
+      <td>LangChain integration</td>
     </tr>
     <tr>
-      <td><span class="framework-name">InMemoryStore (Redis)</span></td>
-      <td><span class="tag tag-n">No</span></td>
-      <td><span class="tag tag-y">Yes (Redis TTL)</span></td>
-      <td><span class="tag tag-y">Local/Server</span></td>
-      <td><span class="tag tag-mit">BSD</span></td>
-      <td>Redis users, fast vector</td>
+      <td><span class="fw">Redis InMemoryStore</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="tn">No</span></td>
+      <td><span class="ty">Yes (Redis)</span></td>
+      <td><span class="ty">Local</span></td>
+      <td>BSD</span></td>
+      <td>Fast, vector search</td>
     </tr>
   </tbody>
 </table>
 </div>
 
-<h2>What Experts Say About AI Agent Memory</h2>
+<h2>What Is Hindsight? (March 2026)</h2>
+
+<p><a href="https://hindsight.vectorize.io/blog/2026/03/04/mcp-agent-memory">Hindsight</a> is an open-source MCP memory server from Vectorize.io. Key quote:</p>
 
 <blockquote>
-  "The 6 Best AI Agent Memory Frameworks You Should Try in 2026 — From basic context management to complex memory systems, these frameworks provide the scaffolding that AI agents need to maintain coherent, persistent experiences."
-  <cite>— MachineLearningMastery.com (3 weeks ago)</cite>
+  "Hindsight isn't a vector database. It extracts structured facts, resolves entities, builds a knowledge graph, and uses cross-encoder reranking to surface what actually matters. Three core operations: retain (store), recall (search), reflect (reason). Plus mental models — living documents that auto-update as memories grow."
+  <cite>— Hindsight Blog, March 4, 2026</cite>
 </blockquote>
 
-<blockquote>
-  "For long-term storage, LangGraph supports tools like InMemoryStore or other databases. This provides flexible control over how memory is scoped and retrieved — critical for agents that need to maintain context across thousands of interactions."
-  <cite>— AI Multiple, Top 5 Open-Source Agentic AI Frameworks (3 weeks ago)</cite>
-</blockquote>
+<p>Key differentiators of Hindsight:</p>
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Knowledge graph approach</strong> — not just vector similarity</li>
+  <li><strong>Three operations:</strong> retain, recall, reflect</li>
+  <li><strong>Mental models</strong> — auto-updating living documents</li>
+  <li><strong>Docker one-command</strong> local run</li>
+  <li><strong>MCP-native</strong> — connect any MCP-compatible client</li>
+</ul>
 
-<blockquote>
-  "Redis is widely used for 'short-term' or 'working' memory due to its extreme speed. With Redis Vector Library, it can also handle vector similarity search for semantic memory."
-  <cite>— Fast.io, Best AI Agent Memory Solutions (2026)</cite>
-</blockquote>
-
-<h2>How to Choose an AI Agent Memory Framework</h2>
+<h2>How They Compare: Hindsight vs agent-memory</h2>
 
 <div class="card-grid">
   <div class="card">
-    <h4>Need Privacy?</h4>
-    <p>Choose agent-memory. Only framework with AES-256 encryption AND 100% local storage AND MIT license.</p>
-  </div>
-  <div class="card">
-    <h4>Need Open Source?</h4>
-    <p>Letta (MIT) or agent-memory (MIT). MemOS and memU are AGPL — affects how you deploy.</p>
-  </div>
-  <div class="card">
-    <h4>Using LangChain/LangGraph?</h4>
-    <p>LangGraph's InMemoryStore integrates directly. Built-in persistence for LangChain agents.</p>
-  </div>
-  <div class="card">
-    <h4>Need Cloud Management?</h4>
-    <p>Mem0 (Open Core) or Zep (Proprietary). Both offer team features, audit logs, and managed hosting.</p>
-  </div>
-  <div class="card">
-    <h4>Using OpenClaw?</h4>
-    <p>MemOS or memU. Both designed specifically for OpenClaw agents. AGPL license.</p>
+    <h4>Hindsight Strengths</h4>
+    <p>Knowledge graph + mental models. Reflect operation for auto-reasoning. Docker one-command setup. MIT license.</p>
   </div>
   <div class="card" style="border-color:#0ea5e9;background:#0f172a;">
-    <h4 style="color:#0ea5e9">&#9733; Need Everything?</h4>
-    <p>agent-memory. MIT + AES-256 + TTL + 100% local + Universal MCP. Works with any agent.</p>
+    <h4 style="color:#0ea5e9">agent-memory Strengths</h4>
+    <p>AES-256 encryption. TTL with configurable expiration. 100% local (no Docker). Universal MCP. JSON/SQLite/Redis backends. MIT license.</p>
   </div>
 </div>
 
-<h2>Quick Start</h2>
+<h2>Expert Sources</h2>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><a href="https://machinelearningmastery.com/the-6-best-ai-agent-memory-frameworks-you-should-try-in-2026/">MachineLearningMastery.com</a> — The 6 Best AI Agent Memory Frameworks (3 weeks ago)</li>
+  <li><a href="https://vectorize.io/articles/best-ai-agent-memory-systems">Vectorize.io</a> — Best AI Agent Memory Systems: 8 Frameworks Compared (2 weeks ago)</li>
+  <li><a href="https://hindsight.vectorize.io/blog/2026/03/04/mcp-agent-memory">Hindsight Blog</a> — The Open-Source MCP Memory Server Your AI Agent Is Missing (March 4, 2026)</li>
+  <li><a href="https://fast.io/resources/best-ai-agent-memory-solutions/">Fast.io</a> — Best AI Agent Memory Solutions (2026)</li>
+  <li><a href="https://aimultiple.com/agentic-frameworks">AI Multiple</a> — Top 5 Open-Source Agentic AI Frameworks</li>
+</ul>
+
+<h2>Get Started with agent-memory</h2>
 
 <div class="code">
 <code><span class="comment"># Install agent-memory</span>
 pip install agent-memory
 
-<span class="comment"># Run MCP server</span>
+<span class="comment"># Run MCP server (no Docker needed)</span>
 python -m agent_memory.mcp_server --storage json --path ./memory.json
 
-<span class="comment"># Works with any MCP-compatible agent:
-# OpenHands, Claude Code, Cursor, Cline, Goose, Continue</span>
+<span class="comment"># Connect any MCP client: OpenHands, Claude Code, Cursor, Cline, Goose</span>
 </code>
 </div>
-
-<h2>Get Started</h2>
 
 <a class="cta" href="https://github.com/lucksheep1/Repository-name-ai-saas-lab">agent-memory on GitHub</a>
 <a class="cta cta-secondary" href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html">Try Live Demo</a>
 
 <div class="footer">
-  Sources: <a href="https://machinelearningmastery.com/the-6-best-ai-agent-memory-frameworks-you-should-try-in-2026/">MachineLearningMastery.com</a> &middot; <a href="https://vectorize.io/articles/best-ai-agent-memory-systems">Vectorize.io</a> &middot; <a href="https://fast.io/resources/best-ai-agent-memory-solutions/">Fast.io</a> &middot; <a href="https://aimultiple.com/agentic-frameworks">AI Multiple</a>
+  Sources: <a href="https://machinelearningmastery.com/the-6-best-ai-agent-memory-frameworks-you-should-try-in-2026/">MachineLearningMastery.com</a> &middot; <a href="https://vectorize.io/articles/best-ai-agent-memory-systems">Vectorize.io</a> &middot; <a href="https://hindsight.vectorize.io/blog/2026/03/04/mcp-agent-memory">Hindsight Blog</a>
 </div>
 
 </div>
