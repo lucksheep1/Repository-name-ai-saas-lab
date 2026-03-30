@@ -44,6 +44,7 @@
 - [x] Cycle 58 - claude-code-memory.html + Claude Code amnesia signals ✅
 - [x] Cycle 59 - vscode-ai-memory.html + 5 VS Code extension signals ✅
 - [x] Cycle 60 - ai-agent-security-memory.html + OWASP/Sage/Azure signals ✅
+- [x] Cycle 61 - openhands-memory.html + MemU/MemOS/memU signals ✅
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] PM 汇报 (03-29 20:30) ✅ - 发送至飞书
 
