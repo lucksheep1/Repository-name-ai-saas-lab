@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory Benchmark 2026 — LoCoMo Scores Compared (Mem0, Zep, Letta, Hindsight, SuperLocalMemory)</title>
+<meta name="description" content="Real benchmark data: AI agent memory systems scored on LoCoMo (81 Q&A pairs). See how Mem0, Zep, Letta, Hindsight, SuperLocalMemory, and agent-memory compare on accuracy, open source, and cloud dependency.">
+<meta property="og:title" content="AI Agent Memory Benchmark 2026 — Real LoCoMo Scores">
+<meta property="og:description" content="81 Q&A pairs. 5 systems. Real numbers. See which AI agent memory system actually wins.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 800px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a0a2e 0%, #0a1e0a 100%); border: 1px solid #166534; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero p { color: #9ca3af; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .ty { background:#064e3b; color:#34d399; }
+  .tn { background:#7f1d1d; color:#f87171; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  .to { background:#78350f; color:#fbbf24; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafb; }
+  tr.row-agent td { color:#f8fafc; background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  .highlight-box { background:#0f172a; border:1px solid #1e40af; border-radius:10px; padding:1.5rem; margin:1.5rem 0; }
+  .highlight-box h3 { color:#60a5fa; font-size:1rem; margin-bottom:0.75rem; }
+  .highlight-box p { color:#93c5fd; margin:0; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>AI Agent Memory Benchmark 2026</h1>
+  <p>Real data from the LoCoMo benchmark (Long Conversation Memory) — 81 question-answer pairs across long multi-session conversations. Updated March 2026 with fresh scores from 10 systems.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag ty">LoCoMo Benchmark</span>
+    <span class="tag ts">81 Q&A Pairs</span>
+    <span class="tag ty">10 Systems</span>
+    <span class="tag to">March 2026</span>
+  </div>
+</div>
+
+<h2>LoCoMo Benchmark Results</h2>
+
+<p>The <a href="https://arxiv.org/abs/2402.09714">LoCoMo benchmark</a> (Long Conversation Memory) is the most widely cited evaluation framework for AI agent memory systems — 81 question-answer pairs across long multi-session conversations. Higher score = better memory accuracy.</p>
+
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Score</th>
+      <th>Cloud LLM</th>
+      <th>Open Source</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="fw">EverMemOS</td>
+      <td><span class="fw" style="color:#fbbf24">92.3%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td>Proprietary</td>
+    </tr>
+    <tr>
+      <td class="fw">MemMachine</td>
+      <td><span class="fw" style="color:#fbbf24">91.7%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td>Proprietary</td>
+    </tr>
+    <tr>
+      <td class="fw">Hindsight</td>
+      <td><span class="fw" style="color:#fbbf24">89.6%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">SLM V3 Mode C</td>
+      <td><span class="fw" style="color:#34d399">87.7%</span></td>
+      <td><span class="tag to">Synthesis</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">Zep</td>
+      <td><span class="fw">~85%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag to">Partial</span></td>
+      <td>Apache 2.0</td>
+    </tr>
+    <tr>
+      <td class="fw">Letta / MemGPT</td>
+      <td><span class="fw">~83.2%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>Apache 2.0</td>
+    </tr>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td><span class="fw" style="color:#94a3b8">—</span></td>
+      <td><span class="tag ty">Zero</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">SuperLocalMemory V3 Mode A</td>
+      <td><span class="fw">74.8%</span></td>
+      <td><span class="tag ty">Zero</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">Supermemory</td>
+      <td><span class="fw">~70%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">Mem0 (self-reported)</td>
+      <td><span class="fw">~66%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag to">Partial</span></td>
+      <td>Open core</td>
+    </tr>
+    <tr>
+      <td class="fw">Mem0 (independent)</td>
+      <td><span class="fw">~58%</span></td>
+      <td><span class="tag tn">Required</span></td>
+      <td><span class="tag to">Partial</span></td>
+      <td>Open core</td>
+    </tr>
+    <tr>
+      <td class="fw">SLM V3 Zero-LLM</td>
+      <td><span class="fw">60.4%</span></td>
+      <td><span class="tag ty">None</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote>
+  "Every system requiring cloud LLMs clusters between 83-92%. SuperLocalMemory Mode A achieves 74.8% with zero cloud dependency — demonstrating that mathematical retrieval captures most of the benchmark value without cloud compute."
+  <cite>— Varun Pratap Bhardwaj, DEV Community, March 18, 2026<br>
+  <a href="https://dev.to/varun_pratapbhardwaj_b13/5-ai-agent-memory-systems-compared-mem0-zep-letta-supermemory-superlocalmemory-2026-benchmark-59p3">dev.to — 5 AI Agent Memory Systems Compared (Mar 18, 2026)</a></cite>
+</blockquote>
+
+<h2>Why This Benchmark Matters</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>&#128200; Accuracy Gap = Opportunity</h4>
+    <p>Closed-source systems score 89-92%. Open-source top score is 87.7% (SuperLocalMemory Mode C). There's room for improvement.</p>
+  </div>
+  <div class="card">
+    <h4>&#128274; Zero-Cloud = 74.8% Floor</h4>
+    <p>SuperLocalMemory Mode A gets 74.8% with ZERO cloud calls. Mathematical retrieval captures most value without LLM dependency.</p>
+  </div>
+  <div class="card">
+    <h4>&#128172; Mem0 Gap = Real Pain</h4>
+    <p>Mem0 self-reports 66%, independent measures 58%. Users want the real number. Accuracy gap = 26% relative uplift available.</p>
+  </div>
+  <div class="card">
+    <h4>&#36; Cost vs Accuracy</h4>
+    <p>Cloud systems charge per-call. Zero-cloud systems have fixed infra cost. At scale, zero-cloud wins on TCO for many use cases.</p>
+  </div>
+</div>
+
+<h2>What No Benchmark Tests (and Why It Matters)</h2>
+
+<div class="highlight-box">
+  <h3>&#9888; Benchmark Gaps in LoCoMo</h3>
+  <p>LoCoMo tests memory accuracy — but doesn't measure:</p>
+  <p style="margin-top:0.5rem;">
+    &#8226; <strong>Encryption</strong> — Is conversation data encrypted at rest?<br>
+    &#8226; <strong>TTL / Expiration</strong> — Does old memory auto-expire?<br>
+    &#8226; <strong>MCP Protocol</strong> — Native MCP server support?<br>
+    &#8226; <strong>Multi-agent sharing</strong> — Can multiple agents share a memory store?<br>
+    &#8226; <strong>Self-hosting</strong> — Can you run it on your own infrastructure?<br>
+    &#8226; <strong>EU AI Act compliance</strong> — Does data ever leave the device?
+  </p>
+</div>
+
+<p>These dimensions determine real-world fit — especially for enterprise and privacy-sensitive deployments. A system that scores 90% but sends data to cloud servers may fail EU AI Act compliance requirements (August 2, 2026 deadline).</p>
+
+<h2>Where agent-memory Fits</h2>
+
+<p>agent-memory doesn't appear in the LoCoMo benchmark yet — but here's how it maps to the evaluation criteria:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>agent-memory</th>
+      <th>Mem0</th>
+      <th>Zep</th>
+      <th>Letta</th>
+      <th>SuperLocalMemory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="fw">AES-256 Encryption</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td><span class="tag tn">No</span></td>
+    </tr>
+    <tr>
+      <td class="fw">TTL Auto-expiration</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">MCP Native Server</td>
+      <td><span class="tag ty">Yes (v3.2)</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">Self-Hosted (100% Local)</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td><span class="tag to">Partial</span></td>
+      <td><span class="tag tn">No</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">JSON / SQLite / Redis</td>
+      <td><span class="tag ty">All 3</span></td>
+      <td><span class="tag tn">Cloud only</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">EU AI Act Compliant</td>
+      <td><span class="tag ty">By architecture</span></td>
+      <td><span class="tag tn">Requires DPA</span></td>
+      <td><span class="tag tn">Requires DPA</span></td>
+      <td><span class="tag tn">Requires DPA</span></td>
+      <td><span class="tag ty">Mode A</span></td>
+    </tr>
+    <tr>
+      <td class="fw">MIT License</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag tn">Open core</span></td>
+      <td><span class="tag to">Apache 2.0</span></td>
+      <td><span class="tag ty">Apache 2.0</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>The Benchmark Verdict</h2>
+
+<blockquote>
+  "The right tool for the job: Need zero cloud costs forever? SuperLocalMemory Mode A. No API costs, no subscription."
+  <cite>— DEV Community benchmark comparison, March 18, 2026</cite>
+</blockquote>
+
+<p>The LoCoMo benchmark reveals an important truth: <strong>the top closed systems score 89-92%, but the best open-source (MIT) scores 87.7%</strong>. The gap is closing. And for the growing class of privacy-sensitive, EU AI Act-bound, zero-cloud deployments, open-source local-first systems offer a compelling alternative.</p>
+
+<a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html" class="cta" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0.25rem 0.5rem 0;">Try agent-memory — MCP Native, AES-256, Zero Cloud</a>
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="color:#64748b;">View on GitHub</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://dev.to/varun_pratapbhardwaj_b13/5-ai-agent-memory-systems-compared-mem0-zep-letta-supermemory-superlocalmemory-2026-benchmark-59p3">DEV Community: 5 AI Agent Memory Systems Compared (Mar 18, 2026)</a></p>
+  <p>&#8226; <a href="https://arxiv.org/abs/2402.09714">LoCoMo Benchmark — arXiv:2402.09714</a></p>
+  <p>&#8226; <a href="https://mem0.ai/research">Mem0 Research: 26% relative uplift vs OpenAI on LoCoMo</a></p>
+  <p>Note: agent-memory is not currently included in the LoCoMo benchmark. Scores shown for other systems are from published benchmarks as cited by the source article.</p>
+</div>
+
+</div>
+</body>
+</html>
