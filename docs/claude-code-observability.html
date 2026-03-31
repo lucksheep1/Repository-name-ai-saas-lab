@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Observability — Monitor Context, Agents & Tools in Real-Time (2026)</title>
+<meta name="description" content="Claude Code observability tools in 2026. Compare Claude HUD, context monitors, and telemetry plugins. Track context window usage, active agents, tool calls, and token consumption.">
+<meta property="og:title" content="Claude Code Observability — Real-Time Monitoring Tools">
+<meta property="og:description" content="Monitor Claude Code context, agents, tools. Claude HUD + agent-memory dashboard.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a0a2e 0%, #1a0a2e 100%); border: 1px solid #1e3a5f; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .ty { background:#064e3b; color:#34d399; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  .to { background:#78350f; color:#fbbf24; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  .fw { font-weight:700; color:#f9fafb; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
+  @media(max-width:600px){ .card-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>Claude Code Observability</h1>
+  <p>Real-time monitoring for Claude Code — context window usage, active agents, tool calls, and token consumption. The observability layer your AI coding agent is missing.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag ty">Live Context</span>
+    <span class="tag ts">Tool Monitoring</span>
+    <span class="tag to">Agent Tracking</span>
+    <span class="tag ty">Open Source</span>
+  </div>
+</div>
+
+<h2>The Observability Gap in AI Coding</h2>
+
+<p>AI coding agents like Claude Code are powerful — but they're black boxes. You type a prompt, wait, and hope the agent makes progress. When it fails, you have no idea why. When it hits context limits, you get a cryptic error. When it runs 47 tool calls, you can't see what's happening.</p>
+
+<p>Claude HUD by <a href="https://github.com/jarrodwatts/claude-hud">jarrodwatts/claude-hud</a> is the first open-source tool to crack this open — a real-time HUD for Claude Code that shows context usage, active tools, running agents, and todo progress.</p>
+
+<blockquote>
+  "As AI agents become more autonomous, understanding what an agent is doing at any given moment is essential for debugging and optimization. Claude HUD displays 'running agents' and 'active tools,' giving the user a clear window into the AI's decision-making process and current actions."
+  <cite>— AIToolly, <a href="https://aitoolly.com/ai-news/article/2026-03-22-claude-hud-a-new-monitoring-plugin-for-claude-code-tracking-context-and-agent-activity">March 22, 2026</a></cite>
+</blockquote>
+
+<h2>Claude HUD — GitHub Trending Plugin</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Context Window Tracking</h4>
+    <p>Real-time display of context usage — see token consumption before hitting limits</p>
+  </div>
+  <div class="card">
+    <h4>Active Tools Monitor</h4>
+    <p>See exactly which tools Claude Code is calling right now — Read, Edit, Bash, Glob...</p>
+  </div>
+  <div class="card">
+    <h4>Running Agents</h4>
+    <p>Track multi-agent workflows — know which agent is doing what at every moment</p>
+  </div>
+  <div class="card">
+    <h4>Todo Progress</h4>
+    <p>Visualize pending tasks and progress — align agent trajectory with your goals</p>
+  </div>
+</div>
+
+<blockquote>
+  "A Claude Code plugin that shows what's happening — context usage, active tools, running agents, and todo progress."
+  <cite>— <a href="https://github.com/jarrodwatts/claude-hud">jarrodwatts/claude-hud</a> on GitHub (1 week ago)</cite>
+</blockquote>
+
+<h2>Observability for AI Coding Agents — Full Landscape</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Type</th>
+      <th>Platform</th>
+      <th>Context Monitor</th>
+      <th>Open Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="fw" style="color:#0ea5e9">Claude HUD</td>
+      <td>IDE Plugin</td>
+      <td>Claude Code</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">context_monitor.py</td>
+      <td>CLI Dashboard</td>
+      <td>OpenClaw</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">agent-memory dashboard</td>
+      <td>Terminal Dashboard</td>
+      <td>Any MCP agent</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">Langfuse</td>
+      <td>LLMOps Platform</td>
+      <td>OpenAI, LangChain</td>
+      <td><span class="tag to">Partial</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">OpenTelemetry + Traceloop</td>
+      <td>Telemetry</td>
+      <td>Any LLM app</td>
+      <td>—</td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Why Context Observability Matters</h2>
+
+<p>Claude Code's <code>/compact</code> command forces context compaction — but you never know <em>when</em> it's about to happen or <em>what</em> will be lost. Tools like Claude HUD and context_monitor.py give you the visibility to act before data disappears.</p>
+
+<p>As the AI agent ecosystem matures, observability is becoming a first-class requirement:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Resource management</strong> — Context windows are finite and expensive</li>
+  <li><strong>Debugging</strong> — Agent failures are opaque without telemetry</li>
+  <li><strong>Cost control</strong> — Token usage directly maps to API costs</li>
+  <li><strong>Compliance</strong> — EU AI Act requires transparency in automated decisions</li>
+  <li><strong>Multi-agent coordination</strong> — Know which agent is doing what</li>
+</ul>
+
+<h2>For OpenClaw Agents — Add Memory + Observability</h2>
+
+<p>OpenClaw agents (250K+ GitHub stars) can now add both <strong>memory</strong> and <strong>observability</strong>:</p>
+
+<div class="code">
+<code># 1. Give your agent memory (MCP server)
+pip install agent-memory
+python -m agent_memory.mcp_server
+
+# 2. Monitor context health
+python dashboard.py --json | jq .entries
+
+# 3. context_monitor.py — predict overflow before it happens
+python context_monitor.py --path ~/.openclaw/memory_state</code>
+</div>
+
+<p>Together, agent-memory and context_monitor.py provide:</p>
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Memory persistence</strong> — memories survive /compact and restarts</li>
+  <li><strong>Context observability</strong> — know token usage in real time</li>
+  <li><strong>TTL auto-expiration</strong> — stale data auto-clears</li>
+  <li><strong>AES-256 encryption</strong> — sensitive memory is encrypted</li>
+</ul>
+
+<h2>Get Started</h2>
+
+<a href="https://github.com/jarrodwatts/claude-hud" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0.25rem 0.5rem 0;">Claude HUD on GitHub</a>
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/jarrodwatts/claude-hud">jarrodwatts/claude-hud on GitHub</a> (1 week ago)</p>
+  <p>&#8226; <a href="https://aitoolly.com/ai-news/article/2026-03-22-claude-hud-a-new-monitoring-plugin-for-claude-code-tracking-context-and-agent-activity">AIToolly: Claude HUD Review (March 22, 2026)</a></p>
+  <p>&#8226; <a href="https://opentelemetry.io/blog/2025/ai-agent-observability/">OpenTelemetry AI Agent Observability (March 6, 2025)</a></p>
+</div>
+
+</div>
+</body>
+</html>
