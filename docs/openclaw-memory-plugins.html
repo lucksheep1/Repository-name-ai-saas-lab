@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw Memory Plugins — 5 Local-First Options Compared (2026)</title>
+<meta name="description" content="Compare 5 OpenClaw memory plugins: agent-memory, ClawMem, engram, MemU, and Supermemory. Full local-first, AES-256, MCP native. No cloud dependency.">
+<meta property="og:title" content="OpenClaw Memory Plugins — 5 Options Compared (2026)">
+<meta property="og:description" content="5 OpenClaw memory plugins compared. Local-first, MCP, no API keys. Which one is right for your agent?">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 800px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a0a2e 0%, #0a1e0a 100%); border: 1px solid #166534; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .ty { background:#064e3b; color:#34d399; }
+  .to { background:#78350f; color:#fbbf24; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  .tr { background:#7f1d1d; color:#f87171; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafb; }
+  tr.row-agent td { background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>OpenClaw Memory Plugins</h1>
+  <p>5 local-first memory plugins for OpenClaw compared — agent-memory, ClawMem, engram, MemU, and Supermemory. MIT license. No API keys. 100% private.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag ty">MIT License</span>
+    <span class="tag ty">No API Key</span>
+    <span class="tag ts">MCP Native</span>
+    <span class="tag ty">100% Local</span>
+  </div>
+</div>
+
+<h2>The OpenClaw Memory Ecosystem — March 2026</h2>
+
+<p>OpenClaw has 250K+ GitHub stars and a rich plugin ecosystem. But memory remains the missing piece: every new session starts fresh. Five projects now compete to fix this — each with a different approach.</p>
+
+<blockquote>
+  "OpenHands has 65K stars but every new session requires the agent to re-discover the codebase. The more complex the project, the more severe this context loss becomes."
+  <cite>— <a href="https://memu.pro/blog/openhands-open-source-coding-agent-memory">MemU Blog, March 2026</a></cite>
+</blockquote>
+
+<h2>OpenClaw Memory Plugins Compared</h2>
+
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Plugin</th>
+      <th>Storage</th>
+      <th>Encryption</th>
+      <th>TTL</th>
+      <th>MCP</th>
+      <th>License</th>
+      <th>Cloud</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td>JSON/SQLite/Redis</td>
+      <td><span class="tag ty">AES-256</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">v3.2</span></td>
+      <td>MIT</td>
+      <td><span class="tag ty">Zero</span></td>
+    </tr>
+    <tr>
+      <td class="fw">ClawMem</td>
+      <td>SQLite vault</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+      <td><span class="tag ty">None</span></td>
+    </tr>
+    <tr>
+      <td class="fw">engram</td>
+      <td>Markdown</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>MIT</td>
+      <td><span class="tag ty">None</span></td>
+    </tr>
+    <tr>
+      <td class="fw">MemU</td>
+      <td>Hierarchical</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="tag ty">None</span></td>
+    </tr>
+    <tr>
+      <td class="fw">Supermemory</td>
+      <td>Cloud</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Proprietary</td>
+      <td><span class="tag tr">Required</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2>New GitHub Repos — March 2026</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>&#9733; ClawMem — yoloshii/ClawMem (2 weeks ago)</h4>
+    <p>On-device context engine. Hybrid RAG (BM25 + vector + QMD). MCP server + hooks. MIT. TypeScript/Bun.</p>
+    <p style="margin-top:0.5rem;"><a href="https://github.com/yoloshii/ClawMem">github.com/yoloshii/ClawMem</a></p>
+  </div>
+  <div class="card">
+    <h4>&#9734; MemU — NevaMind-AI/memU (Jan 29, 2026)</h4>
+    <p>"Memory for 24/7 proactive agents like openclaw." File-system-like hierarchical memory. Always-on agent memory.</p>
+    <p style="margin-top:0.5rem;"><a href="https://github.com/NevaMind-AI/memU">github.com/NevaMind-AI/memU</a></p>
+  </div>
+  <div class="card">
+    <h4>&#128269; engram — joshuaswarren/openclaw-engram (2 weeks ago)</h4>
+    <p>Local-first memory plugin. LLM-powered extraction. Plain markdown storage. QMD hybrid search.</p>
+    <p style="margin-top:0.5rem;"><a href="https://github.com/joshuaswarren/openclaw-engram">github.com/joshuaswarren/openclaw-engram</a></p>
+  </div>
+  <div class="card">
+    <h4>&#128200; Supermemory — supermemoryai (5 days ago)</h4>
+    <p>Long-term memory for OpenClaw. Cloud-only. Auto-recall and auto-capture. Requires Supermemory Pro API key.</p>
+    <p style="margin-top:0.5rem;"><a href="https://github.com/supermemoryai/openclaw-supermemory">github.com/supermemoryai/openclaw-supermemory</a></p>
+  </div>
+</div>
+
+<h2>Why agent-memory is Different</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>agent-memory</th>
+      <th>ClawMem</th>
+      <th>engram</th>
+      <th>MemU</th>
+      <th>Supermemory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="fw">AES-256 Encryption</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">TTL Expiration</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">MCP v3.2 Native</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">Redis Backend</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">OpenClaw Plugin</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">Claude Code Compatible</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">100% Local (No API Key)</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag tr">No (Cloud)</span></td>
+    </tr>
+    <tr>
+      <td class="fw">EU AI Act Compliant</td>
+      <td><span class="tag ty">By architecture</span></td>
+      <td><span class="tag ty">By architecture</span></td>
+      <td><span class="tag ty">By architecture</span></td>
+      <td><span class="tag ty">By architecture</span></td>
+      <td><span class="tag tr">No</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>OpenClaw Memory for OpenHands Too</h2>
+
+<p>The same memory problem affects OpenHands (65K GitHub stars):</p>
+
+<blockquote>
+  "An agent without persistent project memory faces a fundamental productivity ceiling: every new session requires the agent to re-discover the codebase it is working on. Architecture decisions, dependency relationships, code conventions, testing patterns, and domain-specific abstractions must all be rediscovered."
+  <cite>— <a href="https://memu.pro/blog/openhands-open-source-coding-agent-memory">MemU Blog, March 2026</a></cite>
+</blockquote>
+
+<p>agent-memory works with any MCP-compatible agent — OpenClaw, OpenHands, Claude Code, Cursor, and more:</p>
+
+<div style="background:#0f172a;border-radius:8px;padding:1.25rem;margin:1rem 0;font-family:monospace;font-size:0.85rem;color:#e2e8f0;line-height:1.8;overflow-x:auto;">
+<code style="color:#64748b;"># Works with OpenClaw, OpenHands, Claude Code, Cursor, any MCP agent</code><br>
+pip install agent-memory<br>
+python -m agent_memory.mcp_server<br>
+<br>
+<code style="color:#64748b;"># Then connect via MCP config in your agent's claude_desktop_config.json</code>
+</div>
+
+<h2>Get Started — Give Your Agent Memory</h2>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0.25rem 0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">Try Live Demo</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/yoloshii/ClawMem">yoloshii/ClawMem on GitHub</a> — "On-device context engine for Claude Code and OpenClaw" (2 weeks ago)</p>
+  <p>&#8226; <a href="https://github.com/NevaMind-AI/memU">NevaMind-AI/memU on GitHub</a> — "Memory for 24/7 proactive agents like openclaw" (January 29, 2026)</p>
+  <p>&#8226; <a href="https://github.com/joshuaswarren/openclaw-engram">joshuaswarren/openclaw-engram on GitHub</a> — "Local-first memory plugin for OpenClaw" (2 weeks ago)</p>
+  <p>&#8226; <a href="https://github.com/supermemoryai/openclaw-supermemory">supermemoryai/openclaw-supermemory on GitHub</a> — "Long-term memory for OpenClaw" (5 days ago)</p>
+  <p>&#8226; <a href="https://memu.pro/blog/openhands-open-source-coding-agent-memory">MemU Blog: OpenHands 65K Stars — Memory Ceiling (March 2026)</a></p>
+</div>
+
+</div>
+</body>
+</html>
