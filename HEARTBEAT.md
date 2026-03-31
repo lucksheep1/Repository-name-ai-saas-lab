@@ -49,6 +49,7 @@
 - [x] Cycle 63 - best-ai-agent-memory.html + MachineLearningMastery signals ✅
 - [x] Cycle 64 - Hindsight signal + best-ai-agent-memory.html v2 (9 frameworks) ✅
 - [x] Cycle 65 - ai-agent-context-management.html + Mastra/Google ADK signals ✅
+- [x] Cycle 66 - self-hosted-mcp-server.html + Linux Foundation MCP signal ✅
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-31 08:30) ✅ - 发送至飞书
