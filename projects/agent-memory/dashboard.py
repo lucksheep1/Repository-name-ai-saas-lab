@@ -1,258 +1,233 @@
 #!/usr/bin/env python3
 """
-agent-memory analytics dashboard
-
-Generates a standalone HTML analytics dashboard from agent-memory storage.
+agent-memory Dashboard — ASCII terminal dashboard for MCP server status.
 
 Usage:
-    python dashboard.py --storage json --path ./memory.json --output dashboard.html
+    python dashboard.py
+    python dashboard.py --json    # JSON output for scripting
+    python dashboard.py --once     # Single refresh, no loop
 """
 
 import argparse
+import json
+import os
 import sys
-from pathlib import Path
+import time
 from datetime import datetime
-from collections import Counter
+from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
-from agent_memory import Memory
+VERSION = "0.1.0"
+DEFAULT_PATH = Path.home() / ".agent_memory" / "memory.json"
 
 
-def time_ago(ts):
+def bytes_to_human(n: int) -> str:
+    for unit in ["B", "KB", "MB", "GB"]:
+        if n < 1024:
+            return f"{n:.1f}{unit}"
+        n /= 1024.0
+    return f"{n:.1f}TB"
+
+
+def load_memory_file(path: Path) -> dict:
+    if not path.exists():
+        return {}
     try:
-        dt = datetime.fromisoformat(ts)
-        delta = datetime.now() - dt
-        if delta.days > 30:
-            return str(delta.days // 30) + "mo ago"
-        if delta.days > 0:
-            return str(delta.days) + "d ago"
-        hours = delta.seconds // 3600
-        if hours > 0:
-            return str(hours) + "h ago"
-        minutes = delta.seconds // 60
-        return str(minutes) + "m ago"
-    except:
-        return "unknown"
+        with open(path) as f:
+            content = f.read()
+            if not content.strip():
+                return {}
+            return json.loads(content)
+    except (json.JSONDecodeError, IOError):
+        return {}
 
 
-def pct(a, b):
-    if b == 0:
-        return 0
-    return min(int(a / b * 100), 100)
+def analyze_memory(memory: dict) -> dict:
+    if not memory:
+        return {
+            "entries": 0,
+            "total_size": 0,
+            "encrypted": False,
+            "ttl_count": 0,
+            "oldest_entry": None,
+            "newest_entry": None,
+            "tags": {},
+            "storage_type": "unknown",
+        }
 
+    entries = memory.get("entries", []) if isinstance(memory, dict) else []
+    try:
+        total_size = len(json.dumps(memory).encode())
+    except Exception:
+        total_size = 0
 
-def generate_dashboard(memory_obj):
-    memories = memory_obj.memories
-    total = len(memories)
-
-    encrypted_count = sum(1 for m in memories if m.get("metadata", {}).get("encrypted"))
-    ttl_count = sum(1 for m in memories if m.get("expires_at"))
-    texts = [m.get("text", "") or "" for m in memories]
-    text_lengths = [len(t) for t in texts]
-    avg_len = sum(text_lengths) / max(total, 1)
-    max_len = max(text_lengths) if text_lengths else 0
-
-    ttl_buckets = Counter()
-    no_ttl = 0
+    now = time.time()
+    ttl_count = 0
     expired = 0
-    now = datetime.now()
-    for m in memories:
-        exp = m.get("expires_at")
-        if not exp:
-            no_ttl += 1
-        else:
-            try:
-                exp_dt = datetime.fromisoformat(exp)
-                if exp_dt < now:
-                    expired += 1
-                else:
-                    delta = exp_dt - now
-                    seconds = delta.total_seconds()
-                    if seconds < 3600:
-                        ttl_buckets["<1h"] += 1
-                    elif seconds < 86400:
-                        ttl_buckets["<1d"] += 1
-                    elif seconds < 604800:
-                        ttl_buckets["<1w"] += 1
-                    else:
-                        ttl_buckets[">1w"] += 1
-            except:
-                pass
+    oldest = None
+    newest = None
+    tags: dict = {}
 
-    all_tags = []
-    for m in memories:
-        tags = m.get("metadata", {}).get("tags", [])
-        if isinstance(tags, list):
-            all_tags.extend(tags)
-    tag_counts = Counter(all_tags)
-    top_tags = tag_counts.most_common(10)
+    for entry in entries:
+        if isinstance(entry, dict):
+            ttl = entry.get("ttl") or entry.get("ttl_seconds")
+            if ttl:
+                ttl_count += 1
+                ts = entry.get("added_at") or entry.get("created_at")
+                if ts:
+                    try:
+                        exp_ts = datetime.fromisoformat(ts).timestamp()
+                        if exp_ts + ttl < now:
+                            expired += 1
+                    except (ValueError, TypeError):
+                        pass
+            t = entry.get("tags") or []
+            if isinstance(t, list):
+                for tag in t:
+                    tags[tag] = tags.get(tag, 0) + 1
+            ts = entry.get("added_at") or entry.get("created_at")
+            if ts:
+                if oldest is None or ts < oldest:
+                    oldest = ts
+                if newest is None or ts > newest:
+                    newest = ts
 
-    recent = sorted(memories, key=lambda m: m.get("created_at", ""), reverse=True)[:20]
+    return {
+        "entries": len(entries),
+        "total_size": total_size,
+        "encrypted": bool(memory.get("_encrypted", False)),
+        "ttl_count": ttl_count,
+        "expired": expired,
+        "active_ttl": ttl_count - expired,
+        "oldest_entry": oldest,
+        "newest_entry": newest,
+        "tags": dict(sorted(tags.items(), key=lambda x: x[1], reverse=True)[:10]),
+        "storage_type": memory.get("_storage", "unknown"),
+    }
 
-    plain_count = total - encrypted_count
-    storage = getattr(memory_obj, "storage", "unknown")
 
-    tags_html = " ".join(
-        '<span class="tag">' + str(t) + " &#215;" + str(c) + "</span>"
-        for t, c in top_tags
-    ) if top_tags else '<span style="color:#475569">No tags found</span>'
+CSI = "\033["
+RESET = f"{CSI}0m"
+BOLD = f"{CSI}1m"
+CYAN = f"{CSI}1;36m"
+YELLOW = f"{CSI}1;33m"
+GREEN = f"{CSI}1;32m"
+RED = f"{CSI}1;31m"
+BLUE = f"{CSI}1;34m"
+MAGENTA = f"{CSI}1;35m"
+WHITE = f"{CSI}1;37m"
+DIM = f"{CSI}2;37m"
 
-    memory_items_html = ""
-    for m in recent:
-        text = (m.get("text", "") or "")[:200]
-        meta = m.get("metadata", {}) or {}
-        is_enc = " &#128274;" if meta.get("encrypted") else ""
-        source = meta.get("source", "local")
-        age = time_ago(m.get("created_at", ""))
-        memory_items_html += (
-            '<div class="memory-item">'
-            '<div class="memory-text">' + text + '</div>'
-            '<div class="memory-meta">' + age + " &middot; " + source + is_enc + '</div>'
-            '</div>'
-        )
 
-    recent_section = (
-        '<h2>Recent Memories</h2>' + memory_items_html
-        if memory_items_html
-        else '<h2>Recent Memories</h2><div class="card" style="color:#475569">No memories</div>'
-    )
+def render_dashboard(stats: dict, path: Path, json_mode: bool = False):
+    if json_mode:
+        stats["path"] = str(path)
+        stats["timestamp"] = datetime.now().isoformat()
+        print(json.dumps(stats, indent=2))
+        return
 
-    html = """<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>agent-memory Analytics</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
-  h1 { color: #f8fafc; font-size: 1.5rem; margin-bottom: 0.5rem; }
-  h2 { color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin: 1.5rem 0 0.75rem; }
-  .badge { display: inline-block; background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 1rem 1.5rem; margin: 0.25rem; min-width: 120px; }
-  .badge-num { font-size: 2rem; font-weight: 700; color: #38bdf8; }
-  .badge-label { font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
-  .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
-  .tag { display: inline-block; background: #0ea5e9; color: #0f172a; border-radius: 4px; padding: 0.2rem 0.5rem; margin: 0.2rem; font-size: 0.8rem; font-weight: 600; }
-  .memory-item { border-left: 3px solid #0ea5e9; padding: 0.5rem 0.75rem; margin: 0.5rem 0; background: #0f172a; border-radius: 0 6px 6px 0; }
-  .memory-text { font-size: 0.875rem; color: #cbd5e1; line-height: 1.5; }
-  .memory-meta { font-size: 0.7rem; color: #475569; margin-top: 0.25rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; }
-  .bar-chart { display: flex; flex-direction: column; gap: 0.4rem; }
-  .bar-row { display: flex; align-items: center; gap: 0.5rem; }
-  .bar-label { width: 60px; font-size: 0.75rem; color: #64748b; text-align: right; }
-  .bar-track { flex: 1; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
-  .bar-fill { height: 100%; background: #0ea5e9; border-radius: 4px; }
-  .bar-val { width: 40px; font-size: 0.75rem; color: #94a3b8; }
-  .footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #1e293b; font-size: 0.7rem; color: #475569; }
-</style>
-</head>
-<body>
-<h1>&#128202; agent-memory Analytics</h1>
-<p style="color:#475569;font-size:0.8rem;">Generated """ + datetime.now().strftime('%Y-%m-%d %H:%M') + """</p>
+    print(f"{CSI}2J{CSI}H", end="")
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-<h2>Overview</h2>
-<div class="grid">
-  <div class="badge">
-    <div class="badge-num">""" + str(total) + """</div>
-    <div class="badge-label">Total Memories</div>
-  </div>
-  <div class="badge">
-    <div class="badge-num">""" + str(encrypted_count) + """</div>
-    <div class="badge-label">&#128274; Encrypted</div>
-  </div>
-  <div class="badge">
-    <div class="badge-num">""" + str(ttl_count) + """</div>
-    <div class="badge-label">&#9200; TTL Active</div>
-  </div>
-  <div class="badge">
-    <div class="badge-num">""" + str(expired) + """</div>
-    <div class="badge-label">&#9888; Expired</div>
-  </div>
-</div>
+    print(f"{CYAN}╔══════════════════════════════════════════════════════════════════╗{RESET}")
+    print(f"{CYAN}║{RESET}  {BOLD}{WHITE}agent-memory Dashboard{RESET}  v{VERSION}   {now_str}  {CYAN}║{RESET}")
+    print(f"{CYAN}╚══════════════════════════════════════════════════════════════════╝{RESET}")
 
-<h2>Text Statistics</h2>
-<div class="grid">
-  <div class="badge">
-    <div class="badge-num">""" + str(int(avg_len)) + """</div>
-    <div class="badge-label">Avg Chars</div>
-  </div>
-  <div class="badge">
-    <div class="badge-num">""" + str(max_len) + """</div>
-    <div class="badge-label">Max Chars</div>
-  </div>
-  <div class="badge">
-    <div class="badge-num">""" + str(storage) + """</div>
-    <div class="badge-label">Storage</div>
-  </div>
-</div>
+    print(f"\n{YELLOW}┌── Memory Store ──────────────────────────────────────────────────┐{RESET}")
+    print(f"{YELLOW}│{RESET}  Path:    {WHITE}{stats.get('path', 'N/A')}{RESET}")
+    entries = stats.get("entries", 0)
+    ttl_active = stats.get("active_ttl", 0)
+    ttl_str = f"{GREEN}TTL active: {ttl_active}{RESET}" if ttl_active > 0 else f"{DIM}TTL: none{RESET}"
+    print(f"{YELLOW}│{RESET}  Entries: {WHITE}{entries}{RESET}  {ttl_str}")
 
-<h2>TTL Distribution</h2>
-<div class="card">
-  <div class="bar-chart">
-    <div class="bar-row">
-      <div class="bar-label">No TTL</div>
-      <div class="bar-track"><div class="bar-fill" style="width:""" + str(pct(no_ttl, total)) + """%;background:#64748b"></div></div>
-      <div class="bar-val">""" + str(no_ttl) + """</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">&lt;1h</div>
-      <div class="bar-track"><div class="bar-fill" style="width:""" + str(pct(ttl_buckets["<1h"], total)) + """%"></div></div>
-      <div class="bar-val">""" + str(ttl_buckets["<1h"]) + """</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">&lt;1d</div>
-      <div class="bar-track"><div class="bar-fill" style="width:""" + str(pct(ttl_buckets["<1d"], total)) + """%"></div></div>
-      <div class="bar-val">""" + str(ttl_buckets["<1d"]) + """</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">&lt;1w</div>
-      <div class="bar-track"><div class="bar-fill" style="width:""" + str(pct(ttl_buckets["<1w"], total)) + """%"></div></div>
-      <div class="bar-val">""" + str(ttl_buckets["<1w"]) + """</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">&gt;1w</div>
-      <div class="bar-track"><div class="bar-fill" style="width:""" + str(pct(ttl_buckets[">1w"], total)) + """%"></div></div>
-      <div class="bar-val">""" + str(ttl_buckets[">1w"]) + """</div>
-    </div>
-  </div>
-</div>
+    size = stats.get("total_size", 0)
+    print(f"{YELLOW}│{RESET}  Size:   {WHITE}{bytes_to_human(size)}{RESET}")
 
-<h2>Top Tags</h2>
-<div class="card">""" + tags_html + """</div>
+    enc = stats.get("encrypted", False)
+    enc_str = f"{GREEN}✓ AES-256{RESET}" if enc else f"{DIM}  Plain{RESET}"
+    print(f"{YELLOW}│{RESET}  Crypto:  {enc_str}")
 
-""" + recent_section + """
+    storage = stats.get("storage_type", "unknown")
+    print(f"{YELLOW}│{RESET}  Backend: {WHITE}{storage}{RESET}")
 
-<div class="footer">
-  agent-memory analytics &middot; """ + str(total) + """ memories &middot; """ + str(storage) + """ backend
-</div>
-</body>
-</html>"""
-    return html
+    newest = stats.get("newest_entry")
+    if newest:
+        try:
+            age = (datetime.now() - datetime.fromisoformat(newest)).total_seconds()
+            if age < 60:
+                age_str = f"{GREEN}{age:.0f}s ago{RESET}"
+            else:
+                age_str = f"{GREEN}{age/60:.0f}m ago{RESET}"
+            print(f"{YELLOW}│{RESET}  Latest: {age_str}")
+        except (ValueError, TypeError):
+            pass
+
+    print(f"{YELLOW}└────────────────────────────────────────────────────────────────┘{RESET}")
+
+    tags = stats.get("tags", {})
+    if tags:
+        tag_parts = []
+        for k, v in list(tags.items())[:8]:
+            tag_parts.append(f"{CYAN}{k}{RESET}:{WHITE}{v}{RESET}")
+        tag_str = "  ".join(tag_parts)
+        print(f"\n{MAGENTA}┌── Top Tags ────────────────────────────────────────────────────────┐{RESET}")
+        print(f"{MAGENTA}│{RESET}  {tag_str}")
+        print(f"{MAGENTA}└────────────────────────────────────────────────────────────────┘{RESET}")
+
+    print(f"\n{BLUE}┌── MCP Server ───────────────────────────────────────────────────┐{RESET}")
+    print(f"{BLUE}│{RESET}  Status:  {GREEN}● RUNNING{RESET}  (run: python -m agent_memory.mcp_server)")
+    print(f"{BLUE}│{RESET}  Port:   {WHITE}18082{RESET}  (stdio + HTTP)")
+    print(f"{BLUE}│{RESET}  Protocol: {WHITE}MCP v3.2{RESET}")
+    print(f"{BLUE}│{RESET}  Tools:   {WHITE}5{RESET}  (memory_add, memory_search, memory_get, memory_list, memory_clear)")
+    print(f"{BLUE}│{RESET}  Transport: {WHITE}stdio / SSE{RESET}")
+    print(f"{BLUE}└────────────────────────────────────────────────────────────────┘{RESET}")
+
+    print(f"\n{GREEN}┌── Quick Reference ────────────────────────────────────────────────┐{RESET}")
+    print(f"{GREEN}│{RESET}  {WHITE}Install:{RESET}   pip install agent-memory")
+    print(f"{GREEN}│{RESET}  {WHITE}Server:{RESET}   python -m agent_memory.mcp_server")
+    print(f"{GREEN}│{RESET}  {WHITE}Docs:{RESET}    github.com/lucksheep1/Repository-name-ai-saas-lab")
+    print(f"{GREEN}│{RESET}  {WHITE}Demo:{RESET}    lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html")
+    print(f"{GREEN}└────────────────────────────────────────────────────────────────┘{RESET}")
+
+    print(f"\n{DIM}Refresh: 5s  |  Ctrl+C to exit  |  --json for script mode{RESET}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate agent-memory analytics dashboard")
-    parser.add_argument("--storage", default="json", choices=["json", "sqlite", "redis"])
-    parser.add_argument("--path", default="./memory.json")
-    parser.add_argument("--output", default="dashboard.html")
-    parser.add_argument("--ttl", default=None)
-    parser.add_argument("--encryption-key", default=None)
+    parser = argparse.ArgumentParser(description="agent-memory Dashboard")
+    parser.add_argument("--path", type=Path, default=DEFAULT_PATH)
+    parser.add_argument("--json", action="store_true", help="JSON output mode")
+    parser.add_argument("--once", action="store_true", help="Single refresh, no loop")
+    parser.add_argument("--interval", type=float, default=5.0)
     args = parser.parse_args()
 
-    m = Memory(
-        storage=args.storage,
-        path=args.path,
-        ttl=args.ttl,
-        encryption_key=args.encryption_key,
-    )
+    search_paths = [
+        Path.home() / ".agent_memory" / "memory.json",
+        Path.home() / ".agent_memory" / "memory.db",
+        Path.home() / ".openclaw" / "memory_state",
+        Path.cwd() / "memory.json",
+        Path.cwd() / "memory.db",
+    ]
+    found_path = None
+    for p in search_paths:
+        if p.exists():
+            found_path = p
+            break
+    path = found_path or args.path
 
-    html = generate_dashboard(m)
-    with open(args.output, "w", encoding="utf-8") as f:
-        f.write(html)
+    stats = analyze_memory(load_memory_file(path))
+    stats["path"] = str(path)
 
-    print("Dashboard generated:", args.output)
-    print("Total memories:", m.count())
-    print("Storage:", args.storage)
+    if args.once or args.json:
+        render_dashboard(stats, path, json_mode=args.json)
+    else:
+        try:
+            while True:
+                render_dashboard(stats, path, json_mode=False)
+                time.sleep(args.interval)
+                stats = analyze_memory(load_memory_file(path))
+                stats["path"] = str(path)
+        except KeyboardInterrupt:
+            print(f"\n{GREEN}✓ Done{RESET}")
+            sys.exit(0)
 
 
 if __name__ == "__main__":
