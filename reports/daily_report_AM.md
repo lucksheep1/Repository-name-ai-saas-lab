@@ -1,70 +1,68 @@
 # Founder Update - AM Report
-**Date:** 2026-03-31
+**Date:** 2026-04-01
 **Time:** 08:30 AM
-**Period:** 03-30 08:30 → 03-31 08:30
+**Period:** 04-01 00:00 → 04-01 08:30
 
 ---
 
 ## 1. 我今天押注了什么？
 
-**Self-Hosted MCP Server Niche — MCP 已进入 Linux Foundation，self-hosted 成为一等公民**
+**AI Agent Memory TTL — 自动过期清除 stale context 的标准方案**
 
 ## 2. 我今天砍掉了什么？
 
-- **砍掉: 无外部信号验证的内容** — 每个 niche 都必须有真实开发者帖子/issue
+- 无外部信号验证的内容
 
 ## 3. 我今天做了什么最小实验？
 
-**产出 C: Self-Hosted MCP Server 外部信号确认**
+**产出 B: 5 条真实外部信号 — TTL Auto-Expiration**
 
-**外部信号 (4条):**
+**Signal 1: Google Cloud Vertex AI Memory Bank ⭐⭐⭐⭐⭐**
+- docs.cloud.google.com/agent-builder/agent-engine/memory-bank/overview
+- "Automatic Expiration: Set a time to live (TTL) on memories to ensure stale information is automatically deleted"
 
-**Signal 1: PremAI Blog '25 Best MCP Servers' ⭐⭐⭐⭐⭐**
-- blog.premai.io/25-best-mcp-servers-for-ai-agents-complete-setup-guide-2026/
-- "Since Anthropic donated MCP to the Linux Foundation in December 2025, adoption has accelerated"
-- March 16, 2026
+**Signal 2: r/AI_Agents (1 week ago) ⭐⭐⭐⭐⭐**
+- reddit.com/r/AI_Agents/comments/1s2cmdg/
+- "Token waste was mostly a memory handling problem. Old background context re-injection — treating context store as append-only."
 
-**Signal 2: r/selfhosted WinApp MCP (3 days ago) ⭐⭐⭐⭐⭐**
-- reddit.com/r/selfhosted/comments/1s5hlel/
-- "55 tools, .NET 8, no cloud, no API keys, MIT license"
+**Signal 3: r/AI_Agents (Feb 12, 2026) ⭐⭐⭐⭐**
+- "Has anyone actually solved the memory problem for agents yet?"
 
-**Signal 3: r/selfhosted Raspberry Pi 5 + Qdrant ⭐⭐⭐⭐**
-- Self-hosted MCP memory on Raspberry Pi 5. ~3s per query. No cloud.
+**Signal 4: MachineLearningMastery.com (1 week ago) ⭐⭐⭐⭐**
+- "Use native TTL or eviction policies in your storage backend to automatically clean up old memories"
 
-**Signal 4: r/LocalLLaMA Self-Hosted MCP (Feb 11, 2026) ⭐⭐⭐⭐**
-- "I built a local MCP server... everything stays on your machine"
+**Signal 5: Towards AI n8n Guide (Jan 15, 2026) ⭐⭐⭐**
+- "Redis memory respects your configured TTL settings, automatically deleting expired entries"
 
-**产出 A: self-hosted-mcp-server.html (第16个SEO页面)**
-- Target: "self-hosted MCP server"
-- Live: https://lucksheep1.github.io/Repository-name-ai-saas-lab/self-hosted-mcp-server.html
+**产出 A: ai-agent-memory-ttl.html (第21个SEO页面)**
 
 ## 4. 我今天从外部世界学到了什么？
 
-**MCP Linux Foundation = 行业分水岭:**
-- MCP 不再是 Anthropic 专有协议
-- Linux Foundation 背书 = 企业级标准
-- self-hosted MCP 服务器成为一等选项
+**Google 验证 TTL = 标准方案:**
+- Google Vertex AI Memory Bank 定义 TTL 为核心功能
+- Redis TTL 是生产环境最常见方案
+- Reddit 社区确认: append-only 是 stale memory 问题的根源
 
-**SEO 矩阵 (16 pages)**
+**SEO 矩阵: 21 pages**
 
 ## 5. 我明天会继续加码还是切换？
 
-**继续加码** — 16 个 SEO pages，等待 Google 索引
+**继续加码** — 21 SEO pages，等待 Google 索引 + 突破 0 stars
 
 ---
 
 ## 关键指标
 
-| 指标 | 03-29 AM | 03-31 AM | 变化 |
-|------|---------|---------|------|
-| SEO Pages | 9 | 16 | +7 |
-| 外部信号 | Claude Code | MCP Foundation | ⭐ |
-| Git Commits | — | 7 | — |
+| 指标 | 03-31 | 04-01 AM | 变化 |
+|------|-------|---------|------|
+| SEO Pages | 20 | 21 | +1 |
+| 外部信号 | ClawMem/MemU | Google+Reddit TTL | ⭐⭐ |
 
 ## 阻塞
 
 - 25+ days 0 stars/forks
 - awesome-openclaw PR — 需 Founder 审批
+- HN/Reddit 发布 — outreach-kit.md 已就绪
 
 ## 需要 Founder 决策
 
@@ -72,4 +70,4 @@
 2. **HN/Reddit 发布** — outreach-kit.md 已就绪
 
 ---
-*Generated: 2026-03-31 08:30 AM*
+*Generated: 2026-04-01 08:30 AM*
