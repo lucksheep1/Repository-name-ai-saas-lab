@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Hosted AI Agent Memory Platforms — Local-First Privacy (2026)</title>
+<meta name="description" content="Compare self-hosted AI agent memory platforms: Memoh, LocalAGI, and agent-memory. Containerized, always-on, privacy-first. No cloud dependency.">
+<meta property="og:title" content="Self-Hosted AI Agent Memory Platforms — 2026 Comparison">
+<meta property="og:description" content="Containerized AI agents with persistent memory. No cloud. No data leaving your infrastructure.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a0a2e 0%, #0a1e0a 100%); border: 1px solid #166534; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .ty { background:#064e3b; color:#34d399; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafb; }
+  tr.row-agent td { background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>Self-Hosted AI Agent Memory Platforms</h1>
+  <p>Containerized, always-on AI agents with persistent memory. No cloud dependency. Your data stays on your infrastructure. Memoh, LocalAGI, and agent-memory compared.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag ty">Privacy-First</span>
+    <span class="tag ty">Containerized</span>
+    <span class="tag ts">No Cloud</span>
+    <span class="tag ts">MIT License</span>
+  </div>
+</div>
+
+<h2>The Case for Self-Hosted AI Agent Memory</h2>
+
+<p>Cloud AI agents send your conversations to third-party servers. For personal assistants, that's acceptable. For enterprise teams handling sensitive data, it's a compliance nightmare. Self-hosted AI agent platforms solve this:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Data never leaves your infrastructure</strong> — no cloud dependency</li>
+  <li><strong>GDPR Article 28 compliance</strong> — no third-party data processor agreements needed</li>
+  <li><strong>Full control</strong> — audit every interaction, every memory access</li>
+  <li><strong>Cost predictable</strong> — fixed infrastructure cost vs per-call cloud fees</li>
+  <li><strong>Works offline</strong> — no internet required after setup</li>
+</ul>
+
+<blockquote>
+  "Hybrid split: Cloud inference for frontier model capability, local-first memory and indexing for privacy."
+  <cite>— <a href="https://github.com/memohai/Memoh">Memoh on GitHub</a></cite>
+</blockquote>
+
+<h2>Self-Hosted AI Agent Platforms Compared</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>Memoh</h4>
+    <p>Always-on containerized AI agents. Multi-platform (Discord, Telegram, Feishu, WeChat, etc). Local-first memory. MIT.</p>
+  </div>
+  <div class="card">
+    <h4>LocalAGI</h4>
+    <p>Drop-in OpenAI API replacement. Self-hostable on CPU/GPU. Maximum privacy. AGPL.</p>
+  </div>
+  <div class="card">
+    <h4>agent-memory</h4>
+    <p>MCP v3.2 server with AES-256 + TTL. Works with any MCP agent. MIT license.</p>
+  </div>
+</div>
+
+<h2>Platforms Full Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Memoh</th>
+      <th>LocalAGI</th>
+      <th>agent-memory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td>MCP server</td>
+      <td>MCP server</td>
+      <td><strong>MCP v3.2</strong></td>
+    </tr>
+    <tr>
+      <td class="fw">Encryption</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="tag ty">AES-256</span></td>
+    </tr>
+    <tr>
+      <td class="fw">TTL</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="tag ty">Yes</span></td>
+    </tr>
+    <tr>
+      <td class="fw">Containerized</td>
+      <td><span class="tag ty">Docker</span></td>
+      <td><span class="tag ty">Docker</span></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">Always-On</td>
+      <td><span class="tag ty">Yes</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">Multi-Platform</td>
+      <td><span class="tag ty">10+ channels</span></td>
+      <td>—</td>
+      <td>Any MCP agent</td>
+    </tr>
+    <tr>
+      <td class="fw">Privacy</td>
+      <td><span class="tag ty">Local-first</span></td>
+      <td><span class="tag ty">Maximum</span></td>
+      <td><span class="tag ty">Zero cloud</span></td>
+    </tr>
+    <tr>
+      <td class="fw">License</td>
+      <td>MIT</td>
+      <td>AGPL</td>
+      <td>MIT</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Memoh — GitHub (4 weeks ago)</h2>
+
+<blockquote>
+  "Self hosted, always-on AI agent platform run in containers. Create multiple bots with long memory, and connect them to Telegram, Discord, Feishu (Lark), Matrix, etc. Like OpenClaw."
+  <cite>— <a href="https://github.com/memohai/Memoh">memohai/Memoh on GitHub</a></cite>
+</blockquote>
+
+<p>One-command install:</p>
+
+<div class="code">
+<code>curl -fsSL https://memoh.sh | sudo sh
+# Visit http://localhost:8082 after startup
+# Default login: admin / admin123</code>
+</div>
+
+<p>Features:</p>
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li>Containerized — each bot in its own isolated container</li>
+  <li>Hybrid privacy — cloud inference + local memory</li>
+  <li>Multi-bot and multi-user — private and group chats</li>
+  <li>MCP tools support</li>
+  <li>Web UI for configuration — no coding required</li>
+</ul>
+
+<h2>LocalAGI — GitHub (Feb 28, 2026)</h2>
+
+<blockquote>
+  "A powerful, self-hostable AI Agent platform designed for maximum privacy and flexibility. A complete drop-in replacement for OpenAI's Responses APIs with advanced agentic capabilities."
+  <cite>— <a href="https://github.com/mudler/LocalAGI">mudler/LocalAGI on GitHub</a></cite>
+</blockquote>
+
+<h2>Add MCP Memory to Any Self-Hosted Agent</h2>
+
+<p>agent-memory works with any MCP-compatible agent, including self-hosted ones:</p>
+
+<div class="code">
+<code># Connect agent-memory to Memoh, LocalAGI, or any MCP agent
+pip install agent-memory
+
+python -m agent_memory.mcp_server \\
+  --storage json \\
+  --path ./memory.json \\
+  --host 0.0.0.0
+
+# Your agent now has:
+# - AES-256 encrypted persistent memory
+# - TTL auto-expiration
+# - Semantic search
+# - MCP v3.2 native</code>
+</div>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://github.com/memohai/Memoh" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">Memoh on GitHub</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/memohai/Memoh">memohai/Memoh on GitHub</a> — "Always-on, containerized AI agent platform" (4 weeks ago)</p>
+  <p>&#8226; <a href="https://github.com/mudler/LocalAGI">mudler/LocalAGI on GitHub</a> — "Self-hostable AI Agent platform for maximum privacy" (February 28, 2026)</p>
+  <p>&#8226; <a href="https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026">ByteByteGo: Top AI GitHub Repositories in 2026</a></p>
+</div>
+
+</div>
+</body>
+</html>
