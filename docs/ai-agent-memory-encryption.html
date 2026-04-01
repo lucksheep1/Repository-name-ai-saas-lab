@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory Encryption — AES-256 Secure Storage (2026)</title>
+<meta name="description" content="AI agent memory encryption at rest. AES-256-GCM vs alternatives. Compare agent-memory, omega-memory, and other secure AI agent memory solutions.">
+<meta property="og:title" content="AI Agent Memory Encryption — AES-256 Secure Storage">
+<meta property="og:description" content="AES-256 encrypted AI agent memory. Compare omega-memory, agent-memory, and others.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a0a2e 0%, #1a0a2e 100%); border: 1px solid #1e3a5f; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .ty { background:#064e3b; color:#34d399; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  .to { background:#78350f; color:#fbbf24; }
+  .tr { background:#7f1d1d; color:#f87171; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafb; }
+  tr.row-agent td { background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>AI Agent Memory Encryption</h1>
+  <p>AES-256 encrypted storage for AI agent memory. Protect sensitive conversation data, meet compliance requirements, and keep agent memories private.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag ty">AES-256-GCM</span>
+    <span class="tag ty">Encryption at Rest</span>
+    <span class="tag ts">MIT License</span>
+    <span class="tag ts">Open Source</span>
+  </div>
+</div>
+
+<h2>Why Encryption Matters for AI Agent Memory</h2>
+
+<p>AI agents remember everything — including sensitive information from your conversations. When agent memory is stored unencrypted, it creates security risks:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Data at rest</strong> — Unencrypted memory files expose conversation history to anyone with filesystem access</li>
+  <li><strong>Compliance requirements</strong> — GDPR Article 32, EU AI Act, SOC 2, HIPAA all require encryption of sensitive data</li>
+  <li><strong>Supply chain attacks</strong> — Memory files on shared systems or CI/CD pipelines can be read by unauthorized parties</li>
+  <li><strong>Secret leakage</strong> — API keys, credentials, and internal decisions stored in plain memory</li>
+</ul>
+
+<blockquote>
+  "Implement encryption at rest: Store sensitive data encrypted in databases and file systems using AES-256 encryption, ensuring that even if storage is compromised, data remains protected."
+  <cite>— <a href="https://www.theagenticbrief.com/p/securing-ai-agents-data-privacy-compliance">The Agentic Brief, November 28, 2025</a></cite>
+</blockquote>
+
+<h2>AES-256: The Standard for Encrypted Storage</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>&#128274; AES-256-GCM</h4>
+    <p>Authenticated encryption with Galois Counter Mode. Both confidentiality and integrity protection.</p>
+  </div>
+  <div class="card">
+    <h4>&#128273; Keychain Integration</h4>
+    <p>macOS Keychain stores encryption keys securely. Keys never stored alongside encrypted data.</p>
+  </div>
+  <div class="card">
+    <h4>&#128268; Zero-Cloud Keys</h4>
+    <p>Encryption keys stay on your machine. No key management service required.</p>
+  </div>
+  <div class="card">
+    <h4>&#128640; Transparent</h4>
+    <p>Encryption applied automatically before storage, decrypted on retrieval. No application changes needed.</p>
+  </div>
+</div>
+
+<h2>AI Agent Memory Solutions: Encryption Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Solution</th>
+      <th>AES-256</th>
+      <th>Encryption at Rest</th>
+      <th>Key Management</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td><span class="tag ty">AES-256</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>Custom (raw key)</td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">omega-memory</td>
+      <td><span class="tag ty">AES-256-GCM</span></td>
+      <td><span class="tag ty">Yes (optional)</span></td>
+      <td>macOS Keychain</td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">Mem0</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Cloud-managed</td>
+      <td>Open core</td>
+    </tr>
+    <tr>
+      <td class="fw">Zep</td>
+      <td>—</td>
+      <td>Partial</td>
+      <td>Cloud + self-host</td>
+      <td>Apache 2.0</td>
+    </tr>
+    <tr>
+      <td class="fw">Letta</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Self-hosted</td>
+      <td>Apache 2.0</td>
+    </tr>
+    <tr>
+      <td class="fw">Supermemory</td>
+      <td>—</td>
+      <td>—</td>
+      <td>Cloud-only</td>
+      <td>MIT</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>omega-memory: AES-256-GCM + macOS Keychain</h2>
+
+<p><a href="https://github.com/omega-memory/omega-memory">omega-memory</a> is a new competitor with strong encryption:</p>
+
+<blockquote>
+  "Encryption at Rest (optional) — AES-256-GCM encrypted storage with macOS Keychain integration."
+  <cite>— <a href="https://github.com/omega-memory/omega-memory">omega-memory GitHub</a></cite>
+</blockquote>
+
+<p>Key features:</p>
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li>Claude Code hooks for automatic memory capture</li>
+  <li>MCP server for cross-platform agents</li>
+  <li>Local embedding model (no cloud)</li>
+  <li>Benchmarks at <a href="https://omegamax.co/benchmarks">omegamax.co/benchmarks</a></li>
+</ul>
+
+<h2>agent-memory: AES-256 + TTL + MCP v3.2</h2>
+
+<p>agent-memory combines encryption with unique features no competitor offers:</p>
+
+<div class="code">
+<code># agent-memory — AES-256 encryption + TTL + MCP v3.2
+pip install agent-memory
+
+# Run with encryption enabled
+python -m agent_memory.mcp_server \\
+  --storage json \\
+  --path ./secure_memory.json
+
+# Store encrypted memories with auto-expiration
+memory_add key="customer_context" value="..." ttl_seconds=86400
+
+# AES-256 encryption applied before storage
+# TTL auto-expires old entries — no stale sensitive data left behind
+# MCP v3.2 — connect to any agent: Claude Code, Cursor, OpenClaw, OpenHands</code>
+</div>
+
+<p>What makes agent-memory different:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>AES-256 + TTL combined</strong> — Encrypted memories auto-expire. No other solution has both.</li>
+  <li><strong>MCP v3.2 native</strong> — Works with any MCP-compatible agent, not just Claude Code</li>
+  <li><strong>JSON / SQLite / Redis backends</strong> — Choose your storage, keep encryption</li>
+  <li><strong>100% local</strong> — Keys and data never leave your infrastructure</li>
+  <li><strong>MIT license</strong> — No vendor lock-in, audit the code</li>
+</ul>
+
+<h2>Secure Storage for AI Agents — 2026 Guide</h2>
+
+<blockquote>
+  "If your agent stores customer records or internal strategy documents in a vector store, that data needs to be protected just as strictly as a standard production database."
+  <cite>— <a href="https://fast.io/resources/ai-agent-secure-storage/">Fast.io AI Agent Secure Storage Guide (2026)</a></cite>
+</blockquote>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://lucksheep1.github.io/Repository-name-ai-saas-lab/demo.html" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">Try Live Demo</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/omega-memory/omega-memory">omega-memory on GitHub</a> — "AES-256-GCM encrypted storage with macOS Keychain integration"</p>
+  <p>&#8226; <a href="https://www.theagenticbrief.com/p/securing-ai-agents-data-privacy-compliance">The Agentic Brief: Securing AI Agents (November 28, 2025)</a></p>
+  <p>&#8226; <a href="https://fast.io/resources/ai-agent-secure-storage/">Fast.io: AI Agent Secure Storage Guide (2026)</a></p>
+  <p>&#8226; <a href="https://omegamax.co/benchmarks">omegamax.co/benchmarks</a> — OMEGA Memory benchmarks</p>
+</div>
+
+</div>
+</body>
+</html>
