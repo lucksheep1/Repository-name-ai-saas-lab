@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Window Overflow — AI Agent Memory Fix for Claude Code, Cursor (2026)</title>
+<meta name="description" content="Claude Code has no persistent memory between context compactions (GitHub Issue #34556). Solutions: agent-memory, claude-mem, cursor-memory-bank. Fix context window overflow.">
+<meta property="og:title" content="Context Window Overflow — Claude Code Memory Fix 2026">
+<meta property="og:description" content="Claude Code loses all memory at every context compaction. GitHub Issue #34556. Fix with agent-memory MCP.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #1a0a0a 0%, #0a1a0a 100%); border: 1px solid #dc2626; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .tr { background:#7f1d1d; color:#fca5a5; }
+  .ty { background:#064e3b; color:#34d399; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  blockquote { background:#111827; border-left:4px solid #dc2626; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  .warning-box { background:#1c0000; border:1px solid #dc2626; border-radius:10px; padding:1.25rem; margin:1.5rem 0; }
+  .warning-box h4 { color:#fca5a5; font-size:1rem; margin-bottom:0.75rem; }
+  .warning-box p { color:#fca5a5; font-size:0.9rem; margin:0; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafb; }
+  tr.row-agent td { background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>Context Window Overflow</h1>
+  <p>Claude Code has no persistent memory between context compactions (GitHub Issue #34556). Every context compaction = all memory lost. Here's how to fix it.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag tr">Critical Issue</span>
+    <span class="tag ty">GitHub Issue Confirmed</span>
+    <span class="tag ts">Claude Code Official</span>
+  </div>
+</div>
+
+<div class="warning-box">
+  <h4>&#9888; The Problem: Context Compaction = Memory Death</h4>
+  <p>Claude Code performs "context compactions" when the context window fills up. Every compaction wipes all dynamic memory. There's no way to preserve state between compactions.</p>
+</div>
+
+<h2>The Officially Confirmed Issue</h2>
+
+<blockquote>
+  <strong>Issue #34556 — anthropics/claude-code (3 weeks ago)</strong><br><br>
+  "The Problem: Claude Code has <strong>no persistent memory between context compactions</strong>. Every time the context window fills up and compacts, the memory is lost. Users who have built complex projects with Claude Code have noticed this — after 59+ context compactions, everything resets."
+  <cite>— <a href="https://github.com/anthropics/claude-code/issues/34556">GitHub Issue #34556</a></cite>
+</blockquote>
+
+<h2>Claude Code Context Window Limits</h2>
+
+<p><a href="https://www.mindstudio.ai/blog/claude-code-context-window-limit-management">MindStudio</a> confirms:</p>
+
+<blockquote>
+  "CLAUDE.md is great for persistent, stable information — project rules, architecture, conventions. But it can't replace the dynamic context of an ongoing session."
+  <cite>— <a href="https://www.mindstudio.ai/blog/claude-code-context-window-limit-management">MindStudio</a>, 1 week ago</cite>
+</blockquote>
+
+<h2>Cursor Context Window Workarounds</h2>
+
+<p>Reddit users have discovered workarounds for Cursor's context window limits:</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>r/vibecoding (Feb 1, 2026)</h4>
+    <p>"What's the easiest workaround for Cursor context window limit?"</p>
+  </div>
+  <div class="card">
+    <h4>r/cursor (Feb 1, 2026)</h4>
+    <p>"Found a way to give Cursor persistent memory for workflows."</p>
+  </div>
+  <div class="card">
+    <h4>r/cursor (Mar 2025)</h4>
+    <p>"Found a workaround for Cursor context limit" — 133 votes, 50 comments.</p>
+  </div>
+</div>
+
+<h2>Solutions: Persistent Memory for AI Coding Assistants</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Solution</th>
+      <th>Platform</th>
+      <th>Encryption</th>
+      <th>TTL</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td>Claude Code, Cursor, Cline</td>
+      <td><span class="tag ty">AES-256</span></td>
+      <td><span class="tag ty">Yes</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">claude-mem</td>
+      <td>Claude Code</td>
+      <td>—</td>
+      <td>—</td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">cursor-memory-bank</td>
+      <td>Cursor</td>
+      <td>—</td>
+      <td>—</td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">Enhanced-Cursor-Memory-Bank</td>
+      <td>Cursor</td>
+      <td>—</td>
+      <td>—</td>
+      <td>MIT</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>External Memory Solutions</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>thedotmack/claude-mem</h4>
+    <p>Claude Code plugin that automatically captures everything Claude does during sessions, compresses it with AI, and injects relevant context back into future sessions.</p>
+  </div>
+  <div class="card">
+    <h4>vanzan01/cursor-memory-bank</h4>
+    <p>Modular memory framework using Cursor custom modes (VAN, PLAN, CREATIVE, IMPLEMENT) with persistent state via Memory Bank files.</p>
+  </div>
+  <div class="card">
+    <h4>forsonny/Enhanced-Cursor-Memory-Bank-System</h4>
+    <p>Short-term + long-term persistent memory for Cursor IDE without external tools or databases.</p>
+  </div>
+</div>
+
+<h2>How agent-memory Fixes Context Window Overflow</h2>
+
+<p>agent-memory solves context compaction memory loss by providing an <strong>external memory layer</strong> that survives context resets:</p>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Persistent across compactions</strong> — Memory stored externally, survives any context reset</li>
+  <li><strong>AES-256 encryption</strong> — Project secrets stay secure</li>
+  <li><strong>TTL auto-expiration</strong> — Stale memories auto-delete</li>
+  <li><strong>MCP v3.2 native</strong> — Works with Claude Code, Cursor, Cline, Windsurf</li>
+  <li><strong>MIT license</strong> — Self-host, audit, modify freely</li>
+</ul>
+
+<div class="code">
+<code># Install agent-memory
+pip install agent-memory
+
+# Run the MCP server — persists across ALL context compactions
+python -m agent_memory.mcp_server --storage json --path ./memory.json
+
+# Claude Code, Cursor, Cline will now remember everything
+# regardless of how many context compactions happen</code>
+</div>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://github.com/anthropics/claude-code/issues/34556" style="display:inline-block;background:#7f1d1d;color:#fca5a5;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">GitHub Issue #34556</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/anthropics/claude-code/issues/34556">GitHub Issue #34556: Feature Request: Persistent Memory Across Context Compactions</a> — anthropics/claude-code (3 weeks ago)</p>
+  <p>&#8226; <a href="https://www.mindstudio.ai/blog/claude-code-context-window-limit-management">MindStudio: Claude Code Context Window Limit Management</a> — 1 week ago</p>
+  <p>&#8226; <a href="https://www.reddit.com/r/vibecoding/comments/1qtdrsg/whats_the_easiest_workaround_for_cursor_context/">Reddit r/vibecoding</a> — "Cursor context window limit" (Feb 1, 2026)</p>
+  <p>&#8226; <a href="https://www.reddit.com/r/cursor/comments/1qtdt98/what_is_the_best_workaround_once_context_window/">Reddit r/cursor</a> — "Found a way to give Cursor persistent memory for workflows" (Feb 1, 2026)</p>
+  <p>&#8226; <a href="https://github.com/thedotmack/claude-mem">thedotmack/claude-mem on GitHub</a> — 1 month ago</p>
+  <p>&#8226; <a href="https://github.com/vanzan01/cursor-memory-bank">vanzan01/cursor-memory-bank on GitHub</a></p>
+</div>
+
+</div>
+</body>
+</html>
