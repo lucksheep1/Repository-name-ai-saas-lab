@@ -7,6 +7,11 @@
 
 ## 目录索引
 
+### 0. Archive (归档)
+
+- `skills/AI/` - 归档技能别名（触发词：用AI归档）
+- `skills/archive-ingest/` - 文档统一归档技能
+
 ### 1. Feishu (飞书)
 - `skills/feishu-doc/` - 飞书文档操作
 - `skills/feishu-drive/` - 云空间管理
