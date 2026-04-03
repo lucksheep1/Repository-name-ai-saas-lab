@@ -4,6 +4,20 @@
 
 ---
 
+## 目标飞书知识库（已验证）
+
+| 配置项 | 值 |
+|--------|-----|
+| 目标 Space | 7522776428406849538 |
+| 根节点 | SI4kw3rLAiZEVkkF4pfcidVOnQg |
+| 知识库入口 | https://my.feishu.cn/wiki/SI4kw3rLAiZEVkkF4pfcidVOnQg |
+| 一级目录 | 按作者/来源创建为飞书 wiki 节点 |
+| 二级文档 | 按日期创建为飞书文档 |
+
+**权限状态：** 77项已授权（docx:document:create/write/read, wiki:wiki 等），链路完整验证通过。
+
+---
+
 ## 适用输入
 
 | 类型 | 描述 |
@@ -21,9 +35,9 @@
 归档标准（必须遵循）：定义了"什么必须写入、什么必须校验"
 
 主落点（飞书文档）：
-  飞书文档：feishu_doc create → write → read-back 全链路完成
-  总索引：archive/index.md（追加本次归档的飞书文档链接）
-  飞书文档路径字段：doc_token / feishu_url（写入文档后获取）
+  一级节点：feishu_wiki create（title = 作者/来源，parent = 根节点）
+  二级文档：feishu_doc create → write → feishu_doc read（全链路）
+  知识库入口：https://my.feishu.cn/wiki/SI4kw3rLAiZEVkkF4pfcidVOnQg
 
 本地备份（可选，非默认）：
   仅在飞书文档归档完成后执行
@@ -35,7 +49,7 @@
   不是归档完成的标志，不得以通知替代归档
 ```
 
-**归档完成的唯一标志：飞书文档 read-back 通过。**
+**归档完成的唯一标志：飞书文档 feishu_doc read-back 通过。**
 
 ---
 
@@ -59,24 +73,36 @@
 | PDF | PDF 解析提取文本 |
 | 截图/图片 | image 工具 → 保留原始识别文本输出（不经摘要加工） |
 
-### Step 3：确认一级目录（飞书文档）
+### Step 3：确认/创建一级目录（飞书 wiki 节点）
 
-飞书文档一级目录按**作者/来源**命名。
+目标 Space 根节点：`SI4kw3rLAiZEVkkF4pfcidVOnQg`
 
 ```
-[已存在的一级目录（飞书文档空间/知识库节点）]：直接使用
-[不存在的一级目录]：必须先向用户确认，未经确认不得自行创建飞书文档
+feishu_wiki create：
+  space_id: 7522776428406849538
+  parent_node_token: SI4kw3rLAiZEVkkF4pfcidVOnQg
+  title: [作者/来源名称]
+  obj_type: docx
+
+返回：node_token（后续写入用）+ obj_token（文档 ID）
 ```
 
-### Step 4：写入飞书文档
+- 已存在的一级目录（同一 space 内判断是否重复）：直接使用现有 node_token
+- 不存在的一级目录：**必须先向用户确认**，未经确认不得创建
 
-**主落点为飞书文档**，使用 feishu_doc create 创建文档，写入完整内容。
+### Step 4：创建并写入二级文档（飞书 doc）
 
-**内容层必须保留**，不能以摘要替代。
+```
+feishu_doc create：
+  title: [YYYY-MM-DD] [标题/来源]
+  folder_token: [Step 3 返回的 node_token]
 
-截图/图片：原始识别文本完整粘贴，不做删减。
+feishu_doc write：
+  doc_token: [Step 3 返回的 obj_token]
+  content: [完整文档内容，含原文层+摘要层+复核标记]
+```
 
-飞书文档写入完成后获取 doc_token，用于更新总索引。
+文档正文模板：
 
 ```markdown
 # [归档日期] [输入类型] [标题/来源]
@@ -114,7 +140,12 @@
 
 ### Step 5：read-back 复核（必须）
 
-必须从飞书文档重新读取（feishu_doc read）验证：
+```
+feishu_doc read：
+  doc_token: [Step 3 返回的 obj_token]
+```
+
+验证：
 1. 内容层非空
 2. 返回内容与预期一致
 
@@ -122,7 +153,7 @@ read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-
 
 ### Step 6：更新总索引 + 本地备份（可选）
 
-总索引追加本次归档的飞书文档链接（doc_token / URL）。
+总索引 `archive/index.md` 追加本次归档的飞书文档链接（doc_token / URL）。
 
 飞书文档归档完成后，可选择写入本地备份：`archive/[作者或来源]/[YYYY-MM-DD].md`。
 
@@ -132,7 +163,7 @@ read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-
 
 以下情况必须先向用户确认，不得自行推进：
 
-1. 需要新增一级目录（飞书文档空间/知识库节点不存在）时
+1. 需要新增一级目录（飞书 wiki 节点不存在）时
 2. 内容层为空，无法提取原文/OCR 文本时
 3. 链接 404 或权限限制，无法获取页面内容时
 4. read-back 失败，文档内容与预期不符时
@@ -146,11 +177,12 @@ read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-
 ✅ 文档录入完成
 
 飞书文档：✅ 已归档（doc_token: xxx）
+飞书文档 URL：https://my.feishu.cn/wiki/[node_token]
 本地备份：✅ 已写入 / 未执行（可选）
 总索引：index.md（✅ 已更新）
 输入类型：[纯文字/链接/PDF/截图]
 作者/来源：[实际作者名 或 来源名 或 待确认]
-内容层：✅ 已写入（共 N 字）/ ❌ 缺失
+内容层：✅ 已写入（共 N blocks）/ ❌ 缺失
 原文/OCR 首句：[feishu_doc read 返回的前50字，逐字copy]
 复核：✅ read-back 通过 / ❌ 未通过
 摘要：✅ 已写入 / 无
@@ -163,7 +195,7 @@ read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-
 
 - 不得在 read-back 之前报告"完成"
 - 不得以摘要替代内容层
-- 不得未经确认自行创建新一级目录
+- 不得未经确认自行创建新一级目录（飞书 wiki 节点）
 - 不得跳过 image 工具原始输出直接写摘要
 - 不得以本地 archive 替代飞书文档作为主落点
 - 不得以飞书消息通知替代飞书文档归档完成
