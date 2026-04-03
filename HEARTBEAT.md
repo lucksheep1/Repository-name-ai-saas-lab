@@ -64,6 +64,7 @@
 - [x] Cycle 78 - mem0-vs-langmem.html + Vectorize.io/MemoriLabs/Awesome-GraphMemory signals ✅
 - [x] Cycle 79 - context-window-overflow.html + Claude Code Issue #34556 + 6 signals ✅
 - [x] Cycle 80 - vibe-coding-ai-memory.html + m3swizz/vibe-brain + 3 signals ✅
+- [x] Cycle 81 - ai-agent-memory-privacy.html + Mem0/MemOS/DEV signals ✅
 - [x] AM 汇报 (04-01 08:30) ✅ - 发送至飞书 (om_x100b53f2469a3d3cc243aba861f2f9a)
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
