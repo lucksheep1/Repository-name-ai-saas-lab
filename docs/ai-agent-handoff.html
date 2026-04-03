@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory Handoff — Multi-Agent Context Transfer (2026)</title>
+<meta name="description" content="ReMe, MemOS, Memori: AI agent memory handoff between sessions and agents. Multi-agent memory sharing. 5 new GitHub repos in 2026.">
+<meta property="og:title" content="AI Agent Memory Handoff — Multi-Agent Context Transfer">
+<meta property="og:description" content="5 new GitHub repos tackle AI agent memory handoff: ReMe, MemOS, Memori, ClawMem, Redis.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a1a1a 0%, #1a0a2e 100%); border: 1px solid #0d9488; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .th { background:#134e4a; color:#5eead4; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  blockquote { background:#111827; border-left:4px solid #0d9488; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
+  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
+  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
+  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafc; }
+  tr.row-agent td { background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>AI Agent Memory Handoff</h1>
+  <p>How do AI agents transfer context between sessions and share memory with other agents? ReMe, MemOS, Memori, ClawMem, Redis — 5 new GitHub repos tackling multi-agent memory handoff in 2026.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag th">Multi-Agent</span>
+    <span class="tag th">Context Handoff</span>
+    <span class="tag ts">5 GitHub Repos</span>
+  </div>
+</div>
+
+<h2>The Handoff Problem</h2>
+
+<p>When an AI agent finishes a session and another agent (or the same agent in a new session) needs to continue — how much context survives?</p>
+
+<p>By default, nothing survives. Every session starts from scratch. This is the handoff problem: <strong>transferring learned context, decisions, and state between AI agents and sessions.</strong></p>
+
+<h2>ReMe: Remember Me, Refine Me (4 days ago)</h2>
+
+<blockquote>
+  "ReMe tackles two core problems of agent memory: <strong>limited context window</strong> (early information is truncated or lost in long conversations) and <strong>stateful memory</strong> across sessions."
+  <cite>— <a href="https://github.com/agentscope-ai/ReMe">agentscope-ai/ReMe on GitHub</a>, 4 days ago</cite>
+</blockquote>
+
+<h2>MemOS: Multi-Agent Memory Sharing (4 days ago)</h2>
+
+<blockquote>
+  "Multi-agent memory sharing — <strong>multi-instance agents share memory via same user_id</strong>, automatic context handoff between sessions and agents."
+  <cite>— <a href="https://github.com/MemTensor/MemOS">MemTensor/MemOS on GitHub</a>, 4 days ago</cite>
+</blockquote>
+
+<h2>VoltAgent: Adaptive Memory via Multi-Agent Collaboration (20 hours ago)</h2>
+
+<blockquote>
+  "AMA: Adaptive Memory via Multi-Agent Collaboration — Proposes a <strong>multi-agent memory framework with hierarchical granularity, adaptive consolidation</strong>."
+  <cite>— <a href="https://github.com/VoltAgent/awesome-ai-agent-papers">VoltAgent/awesome-ai-agent-papers on GitHub</a>, 20 hours ago</cite>
+</blockquote>
+
+<h2>OpenClaw Memory Plugins</h2>
+
+<div class="card-grid">
+  <div class="card">
+    <h4>MemOS-Cloud-OpenClaw-Plugin</h4>
+    <p>Official MemOS Cloud plugin for OpenClaw. Recalls context before execution, saves conversations after each run.</p>
+  </div>
+  <div class="card">
+    <h4>yoloshii/ClawMem</h4>
+    <p>On-device context engine and memory for AI agents. Claude Code and OpenClaw. Hooks + MCP server + hybrid RAG search.</p>
+  </div>
+  <div class="card">
+    <h4>redis-developer/openclaw-redis-agent-memory</h4>
+    <p>Redis Agent Memory Server for OpenClaw. Long-term memory with vector search across conversations.</p>
+  </div>
+  <div class="card">
+    <h4>Memori (MemoriLabs)</h4>
+    <p>"By default, OpenClaw agents forget everything between sessions. The Memori plugin fixes that."</p>
+  </div>
+</div>
+
+<h2>Comparison: Multi-Agent Memory Solutions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Solution</th>
+      <th>Platform</th>
+      <th>Multi-Agent</th>
+      <th>Encryption</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td>Any MCP agent</td>
+      <td>Via shared storage</td>
+      <td><span class="tag th">AES-256</span></td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <td class="fw">ReMe</td>
+      <td>agentscope</td>
+      <td>Cross-session</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">MemOS</td>
+      <td>OpenClaw</td>
+      <td><span style="color:#5eead4">&#10003; Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">Memori</td>
+      <td>OpenClaw</td>
+      <td>Cross-session</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">ClawMem</td>
+      <td>Claude Code, OpenClaw</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="fw">Redis Agent Memory</td>
+      <td>OpenClaw</td>
+      <td>Vector search</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Why agent-memory Wins for Handoff</h2>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Works with any MCP agent</strong> — Claude Code, Cursor, Cline, Windsurf, OpenClaw, OpenHands</li>
+  <li><strong>Shared storage backends</strong> — Redis or SQLite enables multi-agent handoff via same storage</li>
+  <li><strong>AES-256 encryption</strong> — memory stays encrypted during handoff</li>
+  <li><strong>TTL auto-expiration</strong> — stale handoff context auto-clears</li>
+  <li><strong>MIT license</strong> — self-host, no vendor lock-in</li>
+</ul>
+
+<div class="code">
+<code># agent-memory: external memory layer for handoff
+pip install agent-memory
+
+# Start MCP server — shared path enables handoff
+python -m agent_memory.mcp_server \
+  --storage redis \
+  --host localhost \
+  --port 6379 \
+  --path agent-memory
+
+# Any MCP agent can now read/write to shared memory
+# Handoff is automatic — next agent just reads the store</code>
+</div>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0d9488;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://github.com/agentscope-ai/ReMe" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">ReMe on GitHub</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/agentscope-ai/ReMe">agentscope-ai/ReMe on GitHub</a> — "Remember Me, Refine Me" (4 days ago)</p>
+  <p>&#8226; <a href="https://github.com/MemTensor/MemOS">MemTensor/MemOS on GitHub</a> — Multi-agent memory sharing (4 days ago)</p>
+  <p>&#8226; <a href="https://github.com/VoltAgent/awesome-ai-agent-papers">VoltAgent/awesome-ai-agent-papers on GitHub</a> — AMA: Adaptive Memory via Multi-Agent Collaboration (20 hours ago)</p>
+  <p>&#8226; <a href="https://github.com/MemTensor/MemOS-Cloud-OpenClaw-Plugin">MemTensor/MemOS-Cloud-OpenClaw-Plugin on GitHub</a> — Official MemOS OpenClaw plugin (4 days ago)</p>
+  <p>&#8226; <a href="https://github.com/yoloshii/ClawMem">yoloshii/ClawMem on GitHub</a> — On-device context engine (2 weeks ago)</p>
+</div>
+
+</div>
+</body>
+</html>
