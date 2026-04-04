@@ -3434,3 +3434,52 @@ MAGMA (Jan 2026) + Awesome-GraphMemory survey (Feb 2026) + Memora MCP = research
 
 ---
 *Updated: 2026-04-04 07:44*
+
+---
+
+## Cycle 87 (AM) - 2026-04-04
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — OpenHands Memory Problem**
+
+**Signal 1: MemU Blog ⭐⭐⭐⭐⭐**
+- URL: https://memu.pro/blog/openhands-open-source-coding-agent-memory
+- "OpenHands: 65K stars but coding agents without project memory re-discover codebases every session. Fifty sessions on the same codebase = fifty times re-discovering the project."
+
+**Signal 2: GitHub Issue #5726 — All-Hands-AI/OpenHands ⭐⭐⭐⭐⭐**
+- URL: https://github.com/All-Hands-AI/OpenHands/issues/5726
+- "How to resume a saved session? Is it currently possible to resume previous work without starting from scratch?" (December 21, 2024)
+
+**Signal 3: OpenHands Blog: Context Condensensation ⭐⭐⭐⭐**
+- URL: https://openhands.dev/blog/openhands-context-condensensation-for-more-efficient-ai-agents
+- "Intelligently summarize older interactions — but this is summarization, not memory." (November 12, 2025)
+
+**Signal 4: OpenHands/software-agent-sdk — GitHub ⭐⭐⭐⭐**
+- URL: https://github.com/OpenHands/software-agent-sdk
+- "Allows agents to ingest completed sessions into long-term storage and retrieve relevant information from past conversations." (6 days ago)
+
+**Signal 5: OpenContext Blog ⭐⭐⭐⭐**
+- URL: https://akillness.github.io/posts/opencontext-ai-agent-memory-store/
+- "Load history first, then act; ship, then persist." (January 17, 2026)
+
+### Phase 2: Builder
+
+**产出 A: openhands-memory.html**
+
+36th SEO page (targeting "OpenHands AI agent memory persistent context" keyword)
+- MemU Blog: "65K stars but no memory" featured prominently
+- GitHub Issue #5726 highlighted as user pain
+- OpenHands context condensensation vs real memory
+- agent-memory as MCP solution for OpenHands
+
+### Decision
+
+**Decision: Scale — OpenHands 65K stars = massive TAM with unaddressed memory pain**
+
+OpenHands itself acknowledges the problem via context condensensation (not memory). Issue #5726 since Dec 2024 still unresolved. Perfect entry point for agent-memory MCP.
+
+**SEO matrix: 36 pages**
+
+---
+*Updated: 2026-04-04 11:44*
