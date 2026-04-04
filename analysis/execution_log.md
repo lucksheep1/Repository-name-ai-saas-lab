@@ -3626,3 +3626,57 @@ MCPMarket.com listing + ClaudeKit Skills = plugin marketplace validation. Nevo S
 
 ---
 *Updated: 2026-04-04 19:44*
+
+---
+
+## Cycle 91 (Late PM) - 2026-04-04
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Evaluation Benchmark**
+
+**Signal 1: HUST-AI-HYZ/MemoryAgentBench — GitHub ⭐⭐⭐⭐⭐**
+- URL: https://github.com/HUST-AI-HYZ/MemoryAgentBench
+- "Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions" (ICLR 2026, 2 days ago)
+
+**Signal 2: Letta Blog: Benchmarking AI Agent Memory ⭐⭐⭐⭐⭐**
+- URL: https://www.letta.com/blog/benchmarking-ai-agent-memory
+- "Letta Evals: open-source evaluation framework for systematically testing stateful agents" (August 12, 2025)
+
+**Signal 3: Mem0.ai: State of AI Agent Memory 2026 ⭐⭐⭐⭐**
+- URL: https://mem0.ai/blog/state-of-ai-agent-memory-2026
+- "The fastest-growing surface area in AI agent memory is not the core pipeline — it is the integration layer." (4 days ago)
+
+**Signal 4: Atlan.com: Best AI Agent Memory Frameworks 2026 ⭐⭐⭐⭐**
+- URL: https://atlan.com/know/best-ai-agent-memory-frameworks-2026/
+- "We evaluated 8 frameworks on memory architecture, persistence model, multi-agent coordination, self-hosting support, enterprise authentication." (2 days ago)
+
+**Signal 5: DEV Community: 5 AI Agent Memory Systems Compared ⭐⭐⭐⭐**
+- URL: https://dev.to/varun_pratapbhardwaj_b13/5-ai-agent-memory-systems-compared-mem0-zep-letta-supermemory-superlocalmemory-2026-benchmark-59p3
+- "Need team memory? Mem0 or Zep. Need LLM to manage memory logic? Letta." (3 weeks ago)
+
+**Signal 6: DEV Community: Top 6 AI Agent Memory Frameworks for Devs ⭐⭐⭐⭐**
+- URL: https://dev.to/nebulagg/top-6-ai-agent-memory-frameworks-for-devs-2026-1fef
+- "Mem0 for broadest standalone memory layer, Zep for temporal-aware pipelines, Letta for long-running agents." (2 weeks ago)
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-evaluation-benchmark.html**
+
+40th SEO page (targeting "AI agent evaluation benchmark" keyword)
+- MemoryAgentBench featured (ICLR 2026, 2 days ago)
+- Letta Evals open-source framework
+- State of AI Agent Memory 2026
+- Atlan.com comparison (8 frameworks)
+- Framework comparison table with agent-memory
+
+### Decision
+
+**Decision: Scale — Research + production evaluation landscape both heating up**
+
+ICLR 2026 paper on memory evaluation confirms this is a legitimate research + engineering problem. Letta Evals open-source framework lowers the bar for systematic testing.
+
+**SEO matrix: 40 pages**
+
+---
+*Updated: 2026-04-04 21:55*
