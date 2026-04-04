@@ -73,6 +73,7 @@
 - [x] Cycle 87 - openhands-memory.html + MemU/Issue5726/SDK 5 signals ✅
 - [x] Cycle 88 - ai-agent-database-memory.html + beads(14h old)/Memori BYODB 4 signals ✅
 - [x] Cycle 89 - ai-agent-autonomous-memory.html + Mem2ActBench/memU/24-7-templates 5 signals ✅
+- [x] Cycle 90 - openclaw-memory-plugins.html + MCP Market/ClaudeKit/Nevo 5 signals ✅
 - [x] AM 汇报 (04-01 08:30) ✅ - 发送至飞书 (om_x100b53f2469a3d3cc243aba861f2f9a)
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
