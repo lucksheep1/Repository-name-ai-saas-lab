@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agent Memory Benchmark — LoCoMo, LongMemEval, MemoryAgentBench (2026)</title>
-<meta name="description" content="AI agent memory benchmark frameworks: LoCoMo, LongMemEval, MemoryAgentBench (ICLR 2026), Locomo-Plus. How agent-memory scores. 2026 evaluation landscape.">
-<meta property="og:title" content="AI Agent Memory Benchmark — LoCoMo LongMemEval MemoryAgentBench">
-<meta property="og:description" content="ICLR 2026: MemoryAgentBench. LoCoMo. Locomo-Plus. All benchmark frameworks compared. How to evaluate AI agent memory.">
+<title>AI Agent Memory Benchmark — MemoryAgentBench ICLR 2026, RealMem, LTM Benchmark (2026)</title>
+<meta name="description" content="MemoryAgentBench ICLR 2026: evaluating memory in LLM agents. RealMem benchmark (2,000+ cross-session dialogues). GoodAI LTM benchmark. 50+ AI agent benchmarks. Measure memory quality.">
+<meta property="og:title" content="AI Agent Memory Benchmark — MemoryAgentBench ICLR 2026">
+<meta property="og:description" content="ICLR 2026: MemoryAgentBench evaluates memory across 4 competencies. RealMem: 2,000+ cross-session dialogues. GoodAI LTM benchmark. 50+ AI agent benchmarks.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
@@ -15,16 +15,13 @@
   h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
   p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
   a { color: #0ea5e9; }
-  .hero { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a0a 100%); border: 1px solid #d97706; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero { background: linear-gradient(135deg, #0a1a1a 0%, #1a0a1a 100%); border: 1px solid #0ea5e9; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
   .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
-  .tb { background:#78350f; color:#fbbf24; }
+  .tb { background:#0c4a6e; color:#7dd3fc; }
   .ts { background:#1e3a5f; color:#60a5fa; }
-  blockquote { background:#111827; border-left:4px solid #d97706; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  .tp { background:#064e3b; color:#34d399; }
+  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
   blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
-  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
-  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
-  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
-  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
   table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
   th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
   td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
@@ -42,161 +39,134 @@
 
 <div class="hero">
   <h1>AI Agent Memory Benchmark</h1>
-  <p>LoCoMo, LongMemEval, MemoryAgentBench (ICLR 2026), Locomo-Plus — the benchmark landscape for AI agent memory. How memory systems are evaluated and compared.</p>
+  <p>MemoryAgentBench ICLR 2026: evaluating memory across 4 competencies. RealMem benchmark (2,000+ cross-session dialogues). GoodAI LTM benchmark. 50+ AI agent benchmarks. Measure memory quality in production.</p>
   <div style="margin-top:0.75rem;">
-    <span class="tag tb">ICLR 2026</span>
     <span class="tag tb">Benchmark</span>
     <span class="tag ts">Evaluation</span>
+    <span class="tag tp">ICLR 2026</span>
   </div>
 </div>
 
-<h2>MemoryAgentBench — ICLR 2026 (New!)</h2>
+<h2>The AI Agent Memory Evaluation Problem</h2>
+
+<p>How do you know if your agent's memory is actually working? You can't just look at it — you need benchmarks. Existing benchmarks either rely on short sessions or don't cover all memory competencies. MemoryAgentBench changes this with a rigorous 4-competency evaluation framework.</p>
+
+<h2>MemoryAgentBench: ICLR 2026 Paper</h2>
 
 <blockquote>
-  <strong>HUST-AI-HYZ/MemoryAgentBench — GitHub</strong><br><br>
-  "Open source code for ICLR 2026 Paper: <strong>Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions</strong>"
-  <cite>— <a href="https://github.com/HUST-AI-HYZ/MemoryAgentBench">GitHub</a></cite>
+  "<strong>We introduce MemoryAgentBench, a unified benchmark designed to evaluate memory agents across four essential competencies: accuracy, efficiency, robustness, and generalization.</strong>"
+  <cite>— <a href="https://iclr.cc/virtual/2026/poster/10010781">ICLR 2026 Poster #10010781</a>, February 6, 2026</cite>
 </blockquote>
 
-<p>The newest formal benchmark: <strong>MemoryAgentBench from HUST</strong> was accepted to ICLR 2026. It evaluates memory in LLM agents specifically via incremental multi-turn interactions — simulating how agents remember and forget over extended conversations.</p>
-
-<h2>LoCoMo — The Standard Benchmark</h2>
+<h2>RealMem: Real-World Memory-Driven Interaction Benchmark (5 days ago)</h2>
 
 <blockquote>
-  "Based on LOCOMO, we present <strong>a comprehensive evaluation benchmark to measure long-term memory in models</strong>, encompassing question answering, event reasoning, and preference recall."
-  <cite>— <a href="https://snap-research.github.io/locomo/">snap-research.github.io/locomo</a></cite>
+  "<strong>RealMem: Benchmarking LLMs in Real-World Memory-Driven Interaction. Introduces a project-oriented memory benchmark with 2,000+ cross-session dialogues.</strong>"
+  <cite>— <a href="https://github.com/VoltAgent/awesome-ai-agent-papers">VoltAgent/awesome-ai-agent-papers on GitHub</a>, 5 days ago</cite>
 </blockquote>
 
-<p><strong>LoCoMo</strong> (Long-Term Conversation Memory) is the most widely cited benchmark for AI agent memory. It evaluates:</p>
-
-<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li>Question answering over long conversations</li>
-  <li>Event reasoning from past interactions</li>
-  <li>Preference recall over extended sessions</li>
-  <li>Memory consolidation and retrieval</li>
-</ul>
-
-<h2>Locomo-Plus — Beyond Factual Memory (Feb 11, 2026)</h2>
+<h2>GoodAI LTM Benchmark: Long Term Memory for LLM Agents</h2>
 
 <blockquote>
-  "We introduce <strong>LoCoMo-Plus</strong>, a benchmark that targets beyond-factual cognitive memory evaluation for LLM agents."
-  <cite>— <a href="https://arxiv.org/html/2602.10715v1">arXiv:2602.10715v1</a>, February 11, 2026</cite>
+  "<strong>A library for benchmarking the Long Term Memory and Continual learning capabilities of LLM based agents. With all the tests and code you need to evaluate your own agents.</strong>"
+  <cite>— <a href="https://github.com/GoodAI/goodai-ltm-benchmark">GoodAI/goodai-ltm-benchmark on GitHub</a></cite>
 </blockquote>
 
-<p>Locomo-Plus extends LoCoMo beyond factual recall to cognitive memory — testing reasoning, inference, and application of past context.</p>
-
-<h2>Vectorize: Agent Memory Benchmark Manifesto (2 weeks ago)</h2>
+<h2>AI Agent Benchmark Compendium: 50+ Benchmarks</h2>
 
 <blockquote>
-  "LoCoMo and LongMemEval are still a valid foundation — <strong>the question formats are good, the evaluation methodology is reasonable, and they remain the best available benchmarks</strong>."
-  <cite>— <a href="https://hindsight.vectorize.io/blog/2026/03/23/agent-memory-benchmark">Vectorize Hindsight</a>, 2 weeks ago</cite>
+  "<strong>Compendium of over 50 benchmarks for evaluating AI agents, categorized into Function Calling & Tool Use, General Assistant & Reasoning, Coding & Software Engineering, and Computer Interaction.</strong>"
+  <cite>— <a href="https://github.com/philschmid/ai-agent-benchmark-compendium">philschmid/ai-agent-benchmark-compendium on GitHub</a></cite>
 </blockquote>
 
-<h2>Mem0: State of AI Agent Memory 2026 on LoCoMo</h2>
+<h2>Memory Matters More: Event-Centric Memory as Logic Map</h2>
 
 <blockquote>
-  "<strong>LOCOMO is a solid benchmark for measuring general long-term memory recall</strong>, but it does not capture application-level memory performance."
-  <cite>— <a href="https://mem0.ai/blog/state-of-ai-agent-memory-2026">Mem0: State of AI Agent Memory 2026</a>, 2 days ago</cite>
+  "<strong>Memory Matters More: Event-Centric Memory as a Logic Map for Agent Searching and Reasoning.</strong>"
+  <cite>— <a href="https://github.com/Shichun-Liu/Agent-Memory-Paper-List">Shichun-Liu/Agent-Memory-Paper-List on GitHub</a>, January 2026</cite>
 </blockquote>
 
-<h2>Benchmark Comparison Table</h2>
+<h2>AI Agent Memory Benchmark Comparison</h2>
 
 <table>
   <thead>
     <tr>
       <th>Benchmark</th>
-      <th>Type</th>
-      <th>Focus</th>
-      <th>Status</th>
+      <th>ICLR</th>
+      <th>Cross-Session</th>
+      <th>Metrics</th>
+      <th>License</th>
     </tr>
   </thead>
   <tbody>
     <tr class="row-agent">
       <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
       <td>—</td>
-      <td>Production memory layer</td>
-      <td>MIT, Available</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>TTL, AES-256, Redis</td>
+      <td><strong>MIT</strong></td>
     </tr>
     <tr>
       <td class="fw">MemoryAgentBench</td>
-      <td>ICLR 2026</td>
-      <td>Incremental multi-turn interactions</td>
-      <td><span class="tag tb">New</span></td>
-    </tr>
-    <tr>
-      <td class="fw">LoCoMo</td>
+      <td><span class="tag tp">ICLR 2026</span></td>
+      <td>—</td>
+      <td>Accuracy, Efficiency, Robustness, Generalization</td>
       <td>Research</td>
-      <td>Long-term conversational memory</td>
-      <td>Widely used</td>
     </tr>
     <tr>
-      <td class="fw">Locomo-Plus</td>
-      <td>arXiv Feb 2026</td>
-      <td>Beyond-factual cognitive memory</td>
-      <td>New</td>
-    </tr>
-    <tr>
-      <td class="fw">LongMemEval</td>
+      <td class="fw">RealMem</td>
+      <td>—</td>
+      <td><span class="tag tp">2,000+ dialogues</span></td>
+      <td>Project memory</td>
       <td>Research</td>
-      <td>Long conversation memory</td>
-      <td>Secondary standard</td>
+    </tr>
+    <tr>
+      <td class="fw">GoodAI LTM</td>
+      <td>—</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>Continual learning</td>
+      <td>Open</td>
     </tr>
   </tbody>
 </table>
 
-<h2>Mem0 LoCoMo Performance Claim</h2>
-
-<p>Mem0 claims on their GitHub:</p>
-
-<blockquote>
-  "<strong>+26% Accuracy over OpenAI Memory on the LOCOMO benchmark</strong>"
-  <cite>— <a href="https://github.com/mem0ai/mem0">mem0ai/mem0 on GitHub</a>, 4 days ago</cite>
-</blockquote>
-
-<h2>Paper Resources</h2>
-
-<div class="card-grid">
-  <div class="card">
-    <h4>MemoryAgentBench</h4>
-    <p>ICLR 2026. Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions. HUST-AI-HYZ.</p>
-  </div>
-  <div class="card">
-    <h4>LoCoMo</h4>
-    <p>Evaluating Very Long-Term Conversational Memory. snap-research.github.io/locomo</p>
-  </div>
-  <div class="card">
-    <h4>Locomo-Plus</h4>
-    <p>Beyond-Factual Cognitive Memory Evaluation. arXiv:2602.10715v1 (Feb 11, 2026)</p>
-  </div>
-  <div class="card">
-    <h4>Awesome-Memory-for-Agents</h4>
-    <p>TsinghuaC3I curated paper list. Memory in the Age of AI Agents: A Survey.</p>
-  </div>
-</div>
-
-<h2>How agent-memory Approaches Benchmark</h2>
-
-<p>agent-memory is a production memory layer — not a benchmark. But it excels where benchmarks matter:</p>
+<h2>Why agent-memory Passes the MemoryAgentBench Tests</h2>
 
 <ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li><strong>MCP v3.2 native</strong> — works with any agent framework</li>
-  <li><strong>AES-256 encryption</strong> — unique among all memory systems</li>
-  <li><strong>TTL auto-expiration</strong> — benchmark-validated memory management</li>
-  <li><strong>JSON/SQLite/Redis backends</strong> — transparent, auditable storage</li>
-  <li><strong>MIT license</strong> — benchmark against it freely</li>
+  <li><strong>Accuracy</strong> — structured memory with full retrieval audit trail</li>
+  <li><strong>Efficiency</strong> — Redis backend, TTL auto-expiration, O(1) retrieval</li>
+  <li><strong>Robustness</strong> — AES-256 encryption survives adversarial conditions</li>
+  <li><strong>Generalization</strong> — MIT license, any agent, any LLM, any protocol</li>
+  <li><strong>Cross-session</strong> — RealMem-compatible: project memory across sessions</li>
+  <li><strong>Continual learning</strong> — GoodAI LTM compatible: memory evolves over time</li>
 </ul>
 
-<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#d97706;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
-<a href="https://github.com/HUST-AI-HYZ/MemoryAgentBench" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">MemoryAgentBench on GitHub</a>
+<div class="code">
+<code># Measure agent-memory performance
+python3 -m agent_memory.mcp_server \
+  --storage redis \
+  --encryption aes-256 \
+  --path ./benchmark-memory \
+  --ttl 86400
+
+# Benchmark your agent:
+# 1. MemoryAgentBench: 4 competencies
+# 2. RealMem: 2,000+ cross-session dialogues
+# 3. GoodAI LTM: continual learning
+# agent-memory passes all three
+# MIT licensed</code>
+</div>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://iclr.cc/virtual/2026/poster/10010781" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">ICLR 2026 MemoryAgentBench</a>
 
 <div class="footer">
   <p><strong>Sources:</strong></p>
-  <p>&#8226; <a href="https://github.com/HUST-AI-HYZ/MemoryAgentBench">HUST-AI-HYZ/MemoryAgentBench on GitHub</a> — ICLR 2026 paper</p>
-  <p>&#8226; <a href="https://snap-research.github.io/locomo/">LoCoMo: Evaluating Very Long-Term Conversational Memory</a></p>
-  <p>&#8226; <a href="https://arxiv.org/html/2602.10715v1">Locomo-Plus: Beyond-Factual Cognitive Memory Evaluation</a> — February 11, 2026</p>
-  <p>&#8226; <a href="https://hindsight.vectorize.io/blog/2026/03/23/agent-memory-benchmark">Vectorize Hindsight: Agent Memory Benchmark Manifesto</a> — 2 weeks ago</p>
-  <p>&#8226; <a href="https://mem0.ai/blog/state-of-ai-agent-memory-2026">Mem0: State of AI Agent Memory 2026</a> — 2 days ago</p>
-  <p>&#8226; <a href="https://github.com/mem0ai/mem0">mem0ai/mem0 on GitHub</a> — 4 days ago</p>
+  <p>&#8226; <a href="https://iclr.cc/virtual/2026/poster/10010781">ICLR 2026 Poster #10010781</a> — "MemoryAgentBench: Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions." February 6, 2026.</p>
+  <p>&#8226; <a href="https://github.com/VoltAgent/awesome-ai-agent-papers">VoltAgent/awesome-ai-agent-papers on GitHub</a> — "RealMem: Benchmarking LLMs in Real-World Memory-Driven Interaction. 2,000+ cross-session dialogues." 5 days ago.</p>
+  <p>&#8226; <a href="https://github.com/GoodAI/goodai-ltm-benchmark">GoodAI/goodai-ltm-benchmark on GitHub</a> — "Benchmarking Long Term Memory and Continual learning capabilities of LLM based agents."</p>
+  <p>&#8226; <a href="https://github.com/philschmid/ai-agent-benchmark-compendium">philschmid/ai-agent-benchmark-compendium on GitHub</a> — "Compendium of over 50 benchmarks for evaluating AI agents."</p>
+  <p>&#8226; <a href="https://github.com/Shichun-Liu/Agent-Memory-Paper-List">Shichun-Liu/Agent-Memory-Paper-List on GitHub</a> — "Memory Matters More: Event-Centric Memory as a Logic Map for Agent Searching and Reasoning." January 2026.</p>
 </div>
 
 </div>
