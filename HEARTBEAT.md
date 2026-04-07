@@ -141,6 +141,10 @@
   if Site Tracker AM窗口 (08:55-09:05):
     运行 site-tracker (cd projects/site-tracker && ./run.sh)
     发送报告至飞书
+
+  if 机会研究 AM窗口 (09:05-09:15):
+    运行机会研究 (cd projects/opportunity-research && ./run.sh)
+    创建飞书文档到机会寻找目录 (space: 7522776428406849538, node: AS09w5D8xiq136kKJmTc7DDZnNW)
   
   if PM窗口 (20:30-21:30):
     生成 Founder Update 报告 (5个问题)
@@ -148,8 +152,12 @@
     Git 提交
 
   if Site Tracker PM窗口 (19:55-20:05):
-    运行 site-tracker
+    运行 site-tracker (cd projects/site-tracker && ./run.sh)
     发送报告至飞书
+
+  if 机会研究 PM窗口 (20:05-20:15):
+    运行机会研究 (cd projects/opportunity-research && ./run.sh)
+    创建飞书文档到机会寻找目录 (space: 7522776428406849538, node: AS09w5D8xiq136kKJmTc7DDZnNW)
   
   // Founder Mode 迭代
   执行: 押注 → 实验 → 获取反馈 → 判断 → 迭代/切换
