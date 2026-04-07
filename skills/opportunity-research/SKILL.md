@@ -118,8 +118,29 @@ signal类型: (与标题区一致)
 projects/opportunity-research/
 ├── research.py      # 信号选择脚本（读取watchlist，输出.json）
 ├── run.sh           # 调度入口（被heartbeat调用）
-└── .last_research.json  # 最近一次研究输入（临时文件）
+├── .last_research.json  # 最近一次研究输入（临时文件，gitignore）
+└── tracking.md      # 跟踪事项（进行中 + 已关闭）
 
 skills/opportunity-research/
 └── SKILL.md         # 本文件
 ```
+
+## 跟踪事项写入规范
+
+研究报告完成后，将「后续验证信号」同步追加到 `projects/opportunity-research/tracking.md`：
+
+```markdown
+### YYYY-MM-DD | 项目名
+**signal:** ... | **报告位置:** [wiki链接]
+
+**→ 判断正确应看到的信号：**
+- [ ] 信号1
+- [ ] 信号2
+
+**→ 降低优先级应出现的信号：**
+- [ ] 信号A
+
+**下次检查日期:** YYYY-MM-DD（+7天）
+```
+
+每次 AM/PM heartbeat 检查 tracking.md，如有信号出现 → 勾选并移至已关闭。

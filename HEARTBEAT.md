@@ -107,6 +107,20 @@
 - [x] PM 汇报 (03-29 20:30) ✅ - 发送至飞书
 - [x] PM 汇报 (03-30 20:30) ✅ - 发送至飞书
 
+### 今日产出 (2026-04-07)
+- [x] AM 汇报 ✅
+- [x] PM 汇报 ✅
+- [x] site-tracker skill 收口 ✅
+- [x] site-tracker: 修复 HN regex + 排除 Tiny Startups + HN sub-source 分类 ✅
+- [x] 机会研究 skill v1.0 起草 + v1.1/v1.2 修订（信号分类/证据分级/首轮自检/三区一致/对标白名单）✅
+- [x] 机会寻找飞书目录创建 (node: AS09w5D8xiq136kKJmTc7DDZnNW) ✅
+- [x] research.py 信号选择脚本 ✅
+- [x] 每日 AM+PM 机会研究自动运行机制（heartbeat）✅
+- [x] tracking.md 跟踪机制 ✅
+- [x] crawl4ai 机会研究报告（chat 现场版，signal:single_source_persistent，结论：偏保守，跟踪中）✅
+- [x] 鉴茶财经院 13篇 + 廖峥1篇 + 大盘剧本1篇 → 飞书存档 ✅
+- [x] MEMORY.md: 鉴茶财经院=南院大王、肥猪仔=大盘剧本、廖峥=看懂龙头股 ✅
+
 ---
 
 ## 定时任务
@@ -145,6 +159,7 @@
   if 机会研究 AM窗口 (09:05-09:15):
     运行机会研究 (cd projects/opportunity-research && ./run.sh)
     创建飞书文档到机会寻找目录 (space: 7522776428406849538, node: AS09w5D8xiq136kKJmTc7DDZnNW)
+    读取 tracking.md，将报告中新增跟踪事项追加写入
   
   if PM窗口 (20:30-21:30):
     生成 Founder Update 报告 (5个问题)
@@ -158,7 +173,12 @@
   if 机会研究 PM窗口 (20:05-20:15):
     运行机会研究 (cd projects/opportunity-research && ./run.sh)
     创建飞书文档到机会寻找目录 (space: 7522776428406849538, node: AS09w5D8xiq136kKJmTc7DDZnNW)
-  
+    读取 tracking.md，将报告中新增跟踪事项追加写入
+
+  // 机会跟踪每日检查（AM + PM 窗口各一次）
+  读取 projects/opportunity-research/tracking.md
+  检查所有进行中事项，如信号已出现 → 勾选并移至已关闭
+
   // Founder Mode 迭代
   执行: 押注 → 实验 → 获取反馈 → 判断 → 迭代/切换
 ```
