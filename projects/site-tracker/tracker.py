@@ -114,8 +114,10 @@ class TrackerDB:
         noisy_count = 0
         
         for item in items:
-            # Skip noise
-            if self._is_noise(item):
+            # Skip noise (but HN sub-sources already filtered by _quality_pass)
+            if source.startswith("Hacker News (") and item.get("description", "").startswith("Hacker News"):
+                pass  # skip noise check, already quality-filtered
+            elif self._is_noise(item):
                 noisy_count += 1
                 continue
             
@@ -216,17 +218,23 @@ class TrackerDB:
         """Check if item matches watchlist rules. Returns reason if matched."""
         title = item.get("title", "").lower()
         url = item.get("url", "").lower()
+        desc = item.get("description", "")
         
         # 1. High-signal source
         if source in HIGH_SIGNAL_SOURCES:
             return f"high_signal_source:{source}"
         
-        # 2. Useful keywords in title
+        # 2. HN sub-source priority (Show HN / Launch HN / Discussion)
+        if desc.startswith("Hacker News (") and desc.endswith(")"):
+            # Embed sub-source in reason for better traceability
+            return f"source:{desc}"
+        
+        # 3. Useful keywords in title
         for kw in USEFUL_KEYWORDS:
             if kw in title:
                 return f"keyword:{kw}"
         
-        # 3. Useful keywords in URL
+        # 4. Useful keywords in URL
         for kw in USEFUL_KEYWORDS:
             if kw in url:
                 return f"url_keyword:{kw}"
