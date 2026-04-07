@@ -398,28 +398,77 @@ class HackerNewsShow(BaseSite):
     name = "Hacker News"
     url = "https://news.ycombinator.com/"
     
+    # Minimum quality keywords for regular HN (non-show/launch) items
+    _quality_kw = ["launch", "open-source", "open source", "tool", "library",
+                   "api", "github", "project", "agent", "llm", "ai ", " ai",
+                   "startup", "beta", "new ", "dev", "code ", "github.com"]
+    # Reject patterns for regular items
+    _reject_kw = ["review", "essay", "opinion", "thoughts", "discussion",
+                   " HN", "how to", "why i", "why we", "i think", "ask "]
+    
+    def _sub_source(self, title: str) -> str:
+        if title.startswith("Launch HN"):
+            return "Hacker News (Launch HN)"
+        if title.startswith("Show HN"):
+            return "Hacker News (Show HN)"
+        return "Hacker News (Discussion)"
+    
+    def _quality_pass(self, title: str) -> bool:
+        """True if regular discussion item passes quality filter."""
+        tl = title.lower()
+        # Reject obvious non-opportunity posts
+        for r in self._reject_kw:
+            if r.lower() in tl:
+                return False
+        # Accept if it has at least one quality keyword
+        for kw in self._quality_kw:
+            if kw.lower() in tl:
+                return True
+        return False
+    
     def extract(self, html: str) -> List[Dict]:
         items = []
-        # HN page uses onclick="location.href" for stories; extract links with visible story text
         pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*>([^<]{10,150})</a>'
         seen = set()
         for url, title in re.findall(pattern, html):
             title = title.strip()
-            # Filter: skip internal links, short titles, duplicates, non-story links
-            skip_prefixes = ("news", "hnname", "newest", "front", "comments", "ask", "show", "item", "reply", "javascript")
+            sub = self._sub_source(title)
+            # Skip nav links
+            skip_prefixes = ("news", "hnname", "newest", "front", "comments",
+                             "ask", "show", "item", "reply", "javascript", "from?")
             if any(title.lower().startswith(p) or url.endswith(p) for p in skip_prefixes):
                 continue
             if len(title) < 10 or title in seen:
                 continue
             seen.add(title)
-            is_show = title.startswith("Show HN")
+            # Discussion items must pass quality filter; show/launch HN always kept
+            if sub == "Hacker News (Discussion)" and not self._quality_pass(title):
+                continue
             items.append({
                 "title": title,
                 "url": url,
-                "description": "Show HN" if is_show else "Hacker News",
-                "category": "startup"
+                "description": sub,
+                "category": "startup",
+                "source": sub,          # per-item sub-source overrides batch source
             })
-        return items[:15]
+        return items[:20]
+    
+    def run(self, db: TrackerDB = None) -> List[Dict]:
+        html = self.fetch()
+        if not html:
+            return []
+        items = self.extract(html)
+        if not items:
+            return []
+        if db is not None:
+            # Group by sub-source and save separately
+            from collections import defaultdict
+            groups = defaultdict(list)
+            for item in items:
+                groups[item.get("source", self.name)].append(item)
+            for sub_name, sub_items in groups.items():
+                db.save_opportunities(sub_name, sub_items)
+        return items
 
 
 class BetaListSite(BaseSite):
@@ -529,11 +578,16 @@ def run_tracker(name: str, db: TrackerDB) -> int:
         return 1
     
     tracker = TRACKERS[name]()
-    items = tracker.run()
-    
-    if items:
-        count = db.save_opportunities(tracker.name, items)
-        print(f"  Saved {count} items")
+    # HN uses per-group save in run(); pass db for that case
+    if hasattr(tracker, 'run') and tracker.__class__.__name__ == "HackerNewsShow":
+        items = tracker.run(db)
+        if items:
+            print(f"  -> Saved (grouped) items")
+    else:
+        items = tracker.run()
+        if items:
+            count = db.save_opportunities(tracker.name, items)
+            print(f"  Saved {count} items")
     
     return 0
 
