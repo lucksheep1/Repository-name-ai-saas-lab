@@ -400,26 +400,10 @@ class HackerNewsShow(BaseSite):
     
     def extract(self, html: str) -> List[Dict]:
         items = []
-        # HN page uses onclick="location.href" for stories; extract links with visible story text
-        pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*>([^<]{10,150})</a>'
-        seen = set()
-        for url, title in re.findall(pattern, html):
-            title = title.strip()
-            # Filter: skip internal links, short titles, duplicates, non-story links
-            skip_prefixes = ("news", "hnname", "newest", "front", "comments", "ask", "show", "item", "reply", "javascript")
-            if any(title.lower().startswith(p) or url.endswith(p) for p in skip_prefixes):
-                continue
-            if len(title) < 10 or title in seen:
-                continue
-            seen.add(title)
-            is_show = title.startswith("Show HN")
-            items.append({
-                "title": title,
-                "url": url,
-                "description": "Show HN" if is_show else "Hacker News",
-                "category": "startup"
-            })
-        return items[:15]
+        pattern = r'<a[^>]*href="(https?://[^"]+)"[^>]*class="titlelink"[^>]*>([^<]+)</a>'
+        for url, title in re.findall(pattern, html)[:15]:
+            items.append({"title": title.strip(), "url": url, "description": "Hacker News", "category": "startup"})
+        return items
 
 
 class BetaListSite(BaseSite):
@@ -539,13 +523,10 @@ def run_tracker(name: str, db: TrackerDB) -> int:
 
 
 def run_all(db: TrackerDB) -> int:
-    # Exclude Tiny Startups (210 noise / 2 success, 基本失效)
-    excluded = {"tinystartups"}
-    active_trackers = {k: v for k, v in TRACKERS.items() if k not in excluded}
-    print(f"Running {len(active_trackers)} trackers...\n\n")
+    print(f"Running {len(TRACKERS)} trackers...\n")
     
     total = 0
-    for name, cls in active_trackers.items():
+    for name, cls in TRACKERS.items():
         print(f"[{name}]")
         tracker = cls()
         items = tracker.run()
