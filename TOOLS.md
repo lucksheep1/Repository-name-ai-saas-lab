@@ -1,46 +1,57 @@
-# TOOLS.md - Local Notes
+# TOOLS.md - 工具边界与使用约束
 
-Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
+本文件明确工具边界，防止"工具存在=能力稳定"的幻觉。
 
-## What Goes Here
+## 一、工具边界清单
 
-Things like:
+### 禁止直接执行
+- ❌ 修改 /root/.openclaw/openclaw.json
+- ❌ 修改 /root/.openclaw/extensions/
+- ❌ 修改 /root/.openclaw/agents/
+- ❌ 修改 /root/.openclaw/cron/
+- ❌ 修改 /etc/ 或任何系统配置目录
 
-- Camera names and locations
-- SSH hosts and aliases
-- Preferred voices for TTS
-- Speaker/room names
-- Device nicknames
-- Anything environment-specific
+### 需要先确认授权
+- 需要用户明确授权：调用外部付费 API、发送非飞书消息
+- 需要先验证：TTS 语音输出、浏览器自动化复杂操作
 
-## Examples
+## 二、核心工具状态
 
-```markdown
-### Cameras
+### 可靠可用（可直接使用）
+| 工具 | 适用场景 | 典型风险 |
+|------|----------|----------|
+| read/write/edit | workspace 内文件操作 | 需确认目标路径在 workspace 内 |
+| exec | 非敏感 shell 命令执行 | 禁止修改系统文件 |
+| Git commit | workspace 内项目 | 仅日常提交 |
+| memory_search/get | 查询长期记忆 | 需过滤敏感信息 |
+| web_fetch | 获取外部文档 | 结果有时效风险 |
 
-- living-room → Main area, 180° wide angle
-- front-door → Entrance, motion-triggered
+### 需要确认（不可默认承诺）
+| 工具 | 触发条件 | 正确做法 |
+|------|----------|----------|
+| Git push | 任何 push 操作 | 禁止自行判断。push 前必须发消息确认用户，获得"可以 push"后执行 |
+| 飞书消息发送 | 重要/紧急消息 | 先确认用户是否确认发送 |
+| sub-agent spawn | 复杂任务分解 | 评估调用成本，优先自己处理 |
+| 外部付费 API | 用户未提供凭证 | 先记录需求，报告中说明 |
+| tts | 语音输出 | 需先测试实际可用性 |
+| browser | 页面自动化 | 需确认 session 状态 |
 
-### SSH
+## 三、exec 禁止执行清单
 
-- home-server → 192.168.1.100, user: admin
+以下命令类型**禁止执行**：
+- 任何修改系统文件的命令（chmod/chown 等）
+- 任何涉及 root/.openclaw 目录外的文件操作
+- 任何网络扫描/渗透类命令
+- 任何删除类命令（rm -rf 等）需先确认
 
-### TTS
+执行前自查：
+1. 目标路径是否在 /root/.openclaw/workspace/ 内？
+2. 是否涉及系统文件修改？
+3. 是否有数据删除风险？
+4. 是否涉及凭证/密钥操作？
 
-- Preferred voice: "Nova" (warm, slightly British)
-- Default speaker: Kitchen HomePod
-```
+## 四、边界提醒（不使用决策树）
 
-## Why Separate?
-
-Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
-
----
-
-## APIs
-
-- **Brave Search API**: BSAryFk9YNhfoKBVGmXGll0dAYS1vGF
-
----
-
-Add whatever helps you do your job. This is your cheat sheet.
+- Web 信息有时效风险，不能替代本地验证
+- 工具可用 ≠ 能力稳定，未验证工具不默认承诺
+- 需要授权的场景不自行判断，报告中说明

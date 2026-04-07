@@ -19,6 +19,14 @@
 - ✅ 一个 release note
 - ✅ 一个明确的 feedback hook
 
+### 快捷指令
+
+- `飞书存档` 前缀 → 将内容存档至飞书知识库（space: 7522776428406849538，parent: CztUwejITiqe8Xk5rIrc6taxn6b）
+  - **标准流程：** wiki create → doc write（摘要）→ doc upload_file（PDF）→ doc append（附上PDF链接）
+  - PDF上传后文件进云盘，文档内通过链接引用（飞书API不支持内嵌附件块）
+  - 图片：理解内容 → 写入摘要 → upload_image 嵌入文档
+  - 批量存档：用子代理并行处理，每篇独立走4步流程
+
 ### 今日产出 (2026-03-27)
 - [x] AM 汇报 (08:06) ✅ - 发送至飞书
 - [x] Cycle 39 - 新域 scout (AI Agent DevOps Skills / linux-server-skill) ✅
