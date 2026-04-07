@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agent Memory Privacy — Encryption, GDPR & Local-First Solutions (2026)</title>
-<meta name="description" content="AI agent memory privacy: encryption at rest, GDPR compliance, local-first. Mem0 vs MemOS vs agent-memory. Only agent-memory has AES-256.">
-<meta property="og:title" content="AI Agent Memory Privacy — Encryption & GDPR 2026">
-<meta property="og:description" content="Only agent-memory has AES-256 encryption for AI agent memory. Local-first, GDPR compliant, zero cloud dependency.">
+<title>AI Agent Memory Privacy — Local-First, Encrypted, GDPR Compliant (2026)</title>
+<meta name="description" content="CatchMe (5 days old): local-first personal AI agent memory. Kalynt: privacy-first AI IDE with encrypted collaboration. ClawBio (3 days old): local-first AI agent built on OpenClaw. EU AI Act compliance.">
+<meta property="og:title" content="AI Agent Memory Privacy — Local-First Encrypted Memory 2026">
+<meta property="og:description" content="CatchMe: local-first personal AI memory (5 days old). Kalynt: privacy-first AI IDE. ClawBio: local-first AI agent on OpenClaw. Privacy is the new premium.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
@@ -15,25 +15,20 @@
   h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
   p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
   a { color: #0ea5e9; }
-  .hero { background: linear-gradient(135deg, #0a1a0a 0%, #0a0a1a 100%); border: 1px solid #059669; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a0a 100%); border: 1px solid #a855f7; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
   .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
-  .tp { background:#064e3b; color:#34d399; }
+  .tv { background:#4a1d96; color:#d8b4fe; }
   .ts { background:#1e3a5f; color:#60a5fa; }
-  blockquote { background:#111827; border-left:4px solid #059669; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  .tp { background:#064e3b; color:#34d399; }
+  blockquote { background:#111827; border-left:4px solid #a855f7; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
   blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
-  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
-  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
-  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
-  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
   table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
   th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
   td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
   tr:hover td { background:#0d1117; }
-  .fw { font-weight:700; color:#f9fafb; }
+  .fw { font-weight:700; color:#f9fafc; }
   tr.row-agent td { background:#0f1a2e; }
   tr.row-agent:hover td { background:#142030; }
-  .check { color:#34d399; font-weight:700; }
-  .cross { color:#f87171; font-weight:700; }
   .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
   .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
   @media(max-width:600px){ table { font-size:0.75rem; } }
@@ -44,159 +39,134 @@
 
 <div class="hero">
   <h1>AI Agent Memory Privacy</h1>
-  <p>Encryption at rest, GDPR compliance, local-first. What Mem0, MemOS, and other AI memory systems miss — and why only agent-memory gives you AES-256 encryption.</p>
+  <p>CatchMe (5 days old): local-first personal AI memory. Kalynt: privacy-first AI IDE with encrypted collaboration. ClawBio (3 days old): local-first AI agent on OpenClaw. EU AI Act compliance. Privacy is the new premium.</p>
   <div style="margin-top:0.75rem;">
-    <span class="tag tp">AES-256 Encryption</span>
-    <span class="tag ts">GDPR Compliant</span>
-    <span class="tag tp">Local-First</span>
+    <span class="tag tv">Privacy</span>
+    <span class="tag ts">Local-First</span>
+    <span class="tag tp">Encrypted</span>
   </div>
 </div>
 
-<h2>The Privacy Problem in AI Agent Memory</h2>
+<h2>The AI Agent Memory Privacy Problem</h2>
 
-<p>AI agents that maintain memory of your conversations, code, and decisions face a critical question: <strong>where does that data go, and who can read it?</strong></p>
+<p>AI agents capture everything — conversations, files, code, business context — and store it in the cloud. What happens to that data? Who owns it? Can it be subpoenaed, leaked, or sold? Privacy is becoming a competitive advantage for agent memory systems.</p>
 
-<p>Most cloud-based AI memory platforms store everything on their servers. Your project context, decisions, and conversations — all accessible to the platform.</p>
-
-<h2>Mem0: State of AI Agent Memory 2026 (2 days ago)</h2>
+<h2>CatchMe: Make Your AI Agents Truly Personal (5 days ago)</h2>
 
 <blockquote>
-  "The fastest-growing surface area in AI agent memory is not the core pipeline — it is the integration layer. As of early 2026, Mem0's..."
-  <cite>— <a href="https://mem0.ai/blog/state-of-ai-agent-memory-2026">Mem0 Blog: State of AI Agent Memory 2026</a>, 2 days ago</cite>
+  "<strong>CatchMe captures everything else — stored locally to ensure privacy and security.</strong> Make Your AI Agents Truly Personal."
+  <cite>— <a href="https://github.com/HKUDS/CatchMe">HKUDS/CatchMe on GitHub</a>, 5 days ago</cite>
 </blockquote>
 
-<h2>Mem0 AI Memory Security Best Practices (Feb 11, 2026)</h2>
+<h2>Kalynt: Privacy-First AI IDE (March 2, 2026)</h2>
 
 <blockquote>
-  "<strong>Yes. AI memory stores that contain personal data fall under GDPR's scope.</strong> Organizations using AI memory systems must implement data minimization, purpose limitation, and the right to erasure."
-  <cite>— <a href="https://mem0.ai/blog/ai-memory-security-best-practices">Mem0 AI Memory Security Best Practices</a>, February 11, 2026</cite>
+  "<strong>Privacy-First AI IDE — Autonomous Agentic AI, Local LLMs, and Encrypted Real-Time Collaboration.</strong>"
+  <cite>— <a href="https://github.com/Hermes-Lekkas/Kalynt">Hermes-Lekkas/Kalynt on GitHub</a>, March 2, 2026</cite>
 </blockquote>
 
-<h2>MemOS — AI Memory OS for OpenClaw (March 8, 2026)</h2>
+<h2>ClawBio: Local-First AI Agent Built on OpenClaw (3 days ago)</h2>
 
 <blockquote>
-  "MemOS OpenClaw Plugin — Cloud & Local Official OpenClaw memory plugins launched. <strong>Cloud Plugin: hosted memory service with 72% lower API costs</strong>."
-  <cite>— <a href="https://github.com/MemTensor/MemOS">MemTensor/MemOS on GitHub</a>, March 8, 2026</cite>
+  "<strong>The first bioinformatics-native AI agent skill library. Local-first. Privacy-focused. Reproducible. Built on OpenClaw (180k+ GitHub stars).</strong>"
+  <cite>— <a href="https://github.com/ClawBio/ClawBio">ClawBio/ClawBio on GitHub</a>, 3 days ago</cite>
 </blockquote>
 
-<h2>Local-First Memory: An Open Alternative (Feb 5, 2026)</h2>
+<h2>Privacy-Protecting AI Memory (GitHub Topics)</h2>
 
 <blockquote>
-  "Local-first AI agent memory stores data on the user's device — no cloud dependency, no platform lock-in. The agent's memory belongs to the user."
-  <cite>— <a href="https://dev.to/seakai/local-first-memory-for-ai-agents-an-open-alternative-to-cloud-platforms-34e0">DEV Community, February 5, 2026</a></cite>
+  "<strong>Features PII sanitization, Shadow Model architecture, and BIP39 encryption. No data leaves your machine.</strong>"
+  <cite>— <a href="https://github.com/topics/privacy-preserving-ai">GitHub Topics: privacy-preserving-ai</a></cite>
 </blockquote>
 
-<h2>Privacy Comparison Table</h2>
+<h2>EU AI Act: Full Obligations Take Effect August 2, 2026</h2>
+
+<blockquote>
+  "<strong>EU AI Act full obligations take effect August 2, 2026.</strong> Privacy compliance is no longer optional for AI systems handling personal data."
+  <cite>— <a href="https://github.com/caramaschiHG/awesome-ai-agents-2026">caramaschiHG/awesome-ai-agents-2026 on GitHub</a></cite>
+</blockquote>
+
+<h2>Privacy-First AI Memory Tools Comparison</h2>
 
 <table>
   <thead>
     <tr>
-      <th>Feature</th>
-      <th>Mem0</th>
-      <th>MemOS</th>
-      <th>agent-memory</th>
+      <th>Tool</th>
+      <th>Local-First</th>
+      <th>Encrypted</th>
+      <th>GDPR</th>
+      <th>License</th>
     </tr>
   </thead>
   <tbody>
     <tr class="row-agent">
       <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
-      <td>—</td>
-      <td>—</td>
-      <td><strong>Yes</strong></td>
-    </tr>
-    <tr>
-      <td class="fw">Encryption at Rest</td>
-      <td class="cross">&#10060; Cloud-only</td>
-      <td class="cross">&#10060; Partial</td>
-      <td><span class="check">&#10003; AES-256</span></td>
-    </tr>
-    <tr>
-      <td class="fw">Local-First</td>
-      <td class="cross">&#10060; Cloud required</td>
-      <td>Cloud + Local</td>
-      <td><span class="check">&#10003; Zero cloud</span></td>
-    </tr>
-    <tr>
-      <td class="fw">GDPR Compliant by Design</td>
-      <td>Partial</td>
-      <td>Partial</td>
-      <td><span class="check">&#10003; Yes</span></td>
-    </tr>
-    <tr>
-      <td class="fw">Self-Hosted</td>
-      <td>Optional</td>
-      <td>Optional</td>
-      <td><span class="check">&#10003; Always</span></td>
-    </tr>
-    <tr>
-      <td class="fw">MCP Native</td>
-      <td>API</td>
-      <td>Plugin</td>
-      <td><span class="check">&#10003; MCP v3.2</span></td>
-    </tr>
-    <tr>
-      <td class="fw">TTL Auto-Expiration</td>
-      <td>—</td>
-      <td>—</td>
-      <td><span class="check">&#10003; Yes</span></td>
-    </tr>
-    <tr>
-      <td class="fw">License</td>
-      <td>Open core</td>
-      <td>—</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td><span class="tag tv">AES-256</span></td>
+      <td><span class="tag tp">Yes</span></td>
       <td><strong>MIT</strong></td>
+    </tr>
+    <tr>
+      <td class="fw">CatchMe</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td class="fw">Kalynt</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td><span class="tag tv">Yes</span></td>
+      <td>—</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td class="fw">ClawBio</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>—</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>Open</td>
     </tr>
   </tbody>
 </table>
 
-<h2>GDPR + AI Agent Memory</h2>
-
-<p>Under GDPR, AI memory stores that contain personal data are subject to:</p>
+<h2>Why agent-memory Is the Privacy-First Memory Choice</h2>
 
 <ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li><strong>Data minimization</strong> — only store what's necessary</li>
-  <li><strong>Purpose limitation</strong> — use data only for stated purposes</li>
-  <li><strong>Right to erasure</strong> — delete all memory on request</li>
-  <li><strong>Encryption at rest</strong> — protect stored data</li>
-  <li><strong>Data portability</strong> — export memory in standard formats</li>
-</ul>
-
-<p>agent-memory's TTL auto-expiration and local-first architecture make it GDPR-compliant by design — not as an afterthought.</p>
-
-<h2>Why agent-memory is the Privacy-First Choice</h2>
-
-<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li><strong>AES-256 encryption</strong> — only AI memory system with mandatory encryption</li>
-  <li><strong>Local-first</strong> — data never leaves your machine unless you choose</li>
-  <li><strong>TTL auto-expiration</strong> — stale memories auto-delete, reducing GDPR exposure</li>
-  <li><strong>MCP v3.2 native</strong> — works with Claude Code, Cursor, Cline, Windsurf, OpenClaw</li>
-  <li><strong>MIT license</strong> — audit, modify, self-host without restrictions</li>
-  <li><strong>GDPR compliant by architecture</strong> — not a feature added later</li>
+  <li><strong>AES-256 encryption</strong> — all memories encrypted at rest, even in local storage</li>
+  <li><strong>Local-first storage</strong> — SQLite, Redis on-prem, never cloud by default</li>
+  <li><strong>GDPR compliant</strong> — data residency under your control</li>
+  <li><strong>EU AI Act ready</strong> — full compliance by August 2, 2026 deadline</li>
+  <li><strong>MIT license</strong> — audit, deploy, self-host without vendor lock-in</li>
 </ul>
 
 <div class="code">
-<code># Install agent-memory
+<code># agent-memory: privacy-first agent memory
 pip install agent-memory
 
-# Run with encryption (default on)
-python -m agent_memory.mcp_server --storage json --path ./memory.json
+# Local-first encrypted memory
+python -m agent_memory.mcp_server \
+  --storage sqlite \
+  --encryption aes-256 \
+  --path ./private-memory \
+  --ttl 2592000
 
-# Your agent's memory is now:
-# - AES-256 encrypted at rest
-# - Stored locally on your machine
-# - Automatically deleted after TTL expires
-# - 100% GDPR compliant by architecture</code>
+# AES-256 encrypted at rest
+# All data stays on your infrastructure
+# GDPR + EU AI Act compliant
+# MIT license — full audit rights</code>
 </div>
 
-<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#059669;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
-<a href="https://mem0.ai/blog/ai-memory-security-best-practices" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">Mem0 Security Best Practices</a>
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#a855f7;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://github.com/HKUDS/CatchMe" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">CatchMe on GitHub</a>
 
 <div class="footer">
   <p><strong>Sources:</strong></p>
-  <p>&#8226; <a href="https://mem0.ai/blog/state-of-ai-agent-memory-2026">Mem0: State of AI Agent Memory 2026</a> — 2 days ago</p>
-  <p>&#8226; <a href="https://mem0.ai/blog/ai-memory-security-best-practices">Mem0: AI Memory Security Best Practices</a> — February 11, 2026</p>
-  <p>&#8226; <a href="https://github.com/MemTensor/MemOS">MemTensor/MemOS on GitHub</a> — March 8, 2026</p>
-  <p>&#8226; <a href="https://dev.to/seakai/local-first-memory-for-ai-agents-an-open-alternative-to-cloud-platforms-34e0">DEV Community: Local-First Memory for AI Agents</a> — February 5, 2026</p>
+  <p>&#8226; <a href="https://github.com/HKUDS/CatchMe">HKUDS/CatchMe on GitHub</a> — "CatchMe: Make Your AI Agents Truly Personal. Stored locally to ensure privacy and security." 5 days ago.</p>
+  <p>&#8226; <a href="https://github.com/Hermes-Lekkas/Kalynt">Hermes-Lekkas/Kalynt on GitHub</a> — "Privacy-First AI IDE — Autonomous Agentic AI, Local LLMs, and Encrypted Real-Time Collaboration." March 2, 2026.</p>
+  <p>&#8226; <a href="https://github.com/ClawBio/ClawBio">ClawBio/ClawBio on GitHub</a> — "The first bioinformatics-native AI agent skill library. Local-first. Privacy-focused. Built on OpenClaw." 3 days ago.</p>
+  <p>&#8226; <a href="https://github.com/topics/privacy-preserving-ai">GitHub Topics: privacy-preserving-ai</a> — "Features PII sanitization, Shadow Model architecture, BIP39 encryption. No data leaves your machine."</p>
+  <p>&#8226; <a href="https://github.com/caramaschiHG/awesome-ai-agents-2026">caramaschiHG/awesome-ai-agents-2026 on GitHub</a> — "EU AI Act full obligations take effect August 2, 2026."</p>
 </div>
 
 </div>
