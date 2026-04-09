@@ -184,6 +184,20 @@ D) Backlog Management：维护 opportunities/backlog.md（只保留 Top 10）
 - 不得停机：修复或降级后继续下一轮
 
 ========================
+13) Skill 即契约（2026-04-08 教训新增）
+========================
+当一个 skill 已经明确写明了已知可用的配置（space_id、node_token、workflow），那这个配置本身就是契约：
+- **API 返回空 ≠ 权限不足**。直接用已知参数调用，不要先查 `spaces/list`。
+- **不得跳过 skill 规定的步骤**。遇到"感觉哪里不对"时，标准做法是回查 skill，不是绕道。
+- **错误原因未明时，先读 skill**。Skill 的配置经过验证，临时推断往往不如 skill 准确。
+
+本轮教训：
+skill 写明 folder_token 必填，但第一轮处理时看到 API 返回空就跳过了这步，导致全部9篇文档落入云盘根目录。
+正确做法：`feishu_doc create folder_token=已知node_token` → 直接执行，不查证。
+
+图片上传顺序（已固化为 skill 禁止项）：`write` → `upload_image`，不得颠倒。
+
+========================
 11) 不与用户确认
 ========================
 用户不希望干预：

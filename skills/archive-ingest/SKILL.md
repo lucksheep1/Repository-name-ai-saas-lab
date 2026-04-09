@@ -18,13 +18,27 @@
 
 ---
 
+## 已知一级目录（作者节点）
+
+> 使用前必须确认作者归属。用户首次提供某作者内容时，先确认节点；后续同作者直接复用。
+
+| 作者 | node_token | 说明 |
+|------|-----------|------|
+| 顾子明 | XS0Vwu5UZi3vDtkOTTucidV3n9c | 政事堂/子明私享汇 |
+| 鉴茶财经院 | CztUwejITiqe8Xk5rIrc6taxn6b | 南院大王/100课程大法师（同一来源） |
+| 洪灏 | TaS7wKOAriPdRAkeJRVcMxFYnbI | 市场策略师/怡广博晖资本 |
+| 大盘剧本 | LA3OwENPJiXpxukWvsGcdJtanDh | 肥猪仔 |
+| 看懂龙头股 | U0iswE4kXihobWkq1tucHVwunfe | 廖峥 |
+
+---
+
 ## 适用输入
 
 | 类型 | 描述 |
 |------|------|
 | 纯文字 | 消息正文直接作为内容 |
 | 链接 | HTTP/HTTPS URL |
-| PDF | PDF 文件 |
+| PDF | PDF 文件（通常为图片扫描格式） |
 | 截图/图片 | 截图或图片附件（png/jpg/gif/webp） |
 
 ---
@@ -36,7 +50,7 @@
 
 主落点（飞书文档）：
   一级节点：feishu_wiki create（title = 作者/来源，parent = 根节点）
-  二级文档：feishu_doc create → write → feishu_doc read（全链路）
+  二级文档：feishu_doc create（folder_token=node_token）→ write → upload_image → read-back（全链路）
   知识库入口：https://my.feishu.cn/wiki/SI4kw3rLAiZEVkkF4pfcidVOnQg
 
 本地备份（可选，非默认）：
@@ -64,98 +78,72 @@
 | PDF | 收到文件路径或文件上传 |
 | 截图/图片 | 收到媒体附件 |
 
-### Step 2：内容提取
+### Step 2：确认作者归属（重要！）
+
+**不得猜测作者。** 用户首次提供某来源内容时，必须先确认归属哪个已知节点；同作者批量发送时直接复用节点 token。
+
+确认清单：
+1. 此作者是否在已知一级目录表中？→ 直接使用 node_token
+2. 此作者是否未见过？→ **必须向用户确认**作者名和目录归属，再创建新节点
+3. 用户是否指定了目录？→ 按用户指定执行
+
+### Step 3：内容提取
 
 | 类型 | 提取方式 |
 |------|----------|
 | 纯文字 | 直接使用消息正文 |
 | 链接 | web_fetch 抓取页面文本 |
-| PDF | PDF 解析提取文本 |
+| PDF | PDF 解析提取文本（通常为图片扫描，需转 PNG 后用 image 工具识别） |
 | 截图/图片 | image 工具 → 保留原始识别文本输出（不经摘要加工） |
 
-### Step 3：确认/创建一级目录（飞书 wiki 节点）
-
-目标 Space 根节点：`SI4kw3rLAiZEVkkF4pfcidVOnQg`
-
-```
-feishu_wiki create：
-  space_id: 7522776428406849538
-  parent_node_token: SI4kw3rLAiZEVkkF4pfcidVOnQg
-  title: [作者/来源名称]
-  obj_type: docx
-
-返回：node_token（后续写入用）+ obj_token（文档 ID）
-```
-
-- 已存在的一级目录（同一 space 内判断是否重复）：直接使用现有 node_token
-- 不存在的一级目录：**必须先向用户确认**，未经确认不得创建
+**PDF 处理要点（必读）：**
+- 大多数子明私享汇类 PDF 为图片扫描格式，`fitz.open().get_text()` 只能提取水印
+- 标准流程：`fitz` 渲染 page → PNG → `image` 工具识别 → 获取完整文字
+- PDF 有 XRef 错误不影响图片渲染，继续处理
 
 ### Step 4：创建并写入二级文档（飞书 doc）
 
 ```
 feishu_doc create：
   title: [YYYY-MM-DD] [标题/来源]
-  folder_token: [Step 3 返回的 node_token]
+  folder_token: [Step 3 确认的 node_token]   ← 必填！不填则落入云盘根目录
 
 feishu_doc write：
-  doc_token: [Step 3 返回的 obj_token]
-  content: [完整文档内容，含原文层+摘要层+复核标记]
+  doc_token: [feishu_doc create 返回的 doc_token]
+  content: [完整文档内容]
 ```
 
-文档正文模板：
+**图片处理顺序（重要，禁止颠倒）：**
+1. `write`（文字内容）← 先写文字
+2. `upload_image`（图片追加到文档末尾）← 后上传图片
+3. **不得先 upload_image 再 write**，否则图片 block 会被文字内容整体覆盖
 
-```markdown
-# [归档日期] [输入类型] [标题/来源]
+### Step 5：上传附件（PDF/图片）
 
-**来源：** [发布者 / URL / 文件名]
-**归档日期：** YYYY-MM-DD HH:MM
-**输入类型：** 纯文字 / 链接 / PDF / 截图
-**飞书文档路径：** doc_token: [来自 feishu_doc create 的返回值]
-**本地备份：** 已写入 / 未执行（可选）
-
----
-
-## 原文 / 原始识别文本
-
-[全文粘贴，不做删减。不允许以"见摘要"代替。]
-[若无法获取：填写"未获取 / 识别失败 + 原因"]
-
----
-
-## 摘要
-
-[有则填，无则填"无"。禁止留空。]
-
----
-
-## 复核标记
-
-- read-back 通过：✅ / ❌
-- 原文/OCR 首句：[实际读取的前50字，逐字copy]
-- 异常说明：[有则填，无则填"无"]
-
----
-*录入完成时间: YYYY-MM-DD HH:MM*
+```
+feishu_doc upload_file（PDF）或 upload_image（图片）：
+  doc_token: [Step 4 的 doc_token]
+  file_path: [本地文件路径]
 ```
 
-### Step 5：read-back 复核（必须）
+返回 file_token，在文档中记录供参考。
+
+### Step 6：read-back 复核（必须）
 
 ```
 feishu_doc read：
-  doc_token: [Step 3 返回的 obj_token]
+  doc_token: [Step 4 的 doc_token]
 ```
 
 验证：
-1. 内容层非空
+1. 内容层非空（block_count > 0）
 2. 返回内容与预期一致
 
 read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-back 之前报告"完成"。
 
-### Step 6：更新总索引 + 本地备份（可选）
+### Step 7：更新总索引（归档完成后必须）
 
-总索引 `archive/index.md` 追加本次归档的飞书文档链接（doc_token / URL）。
-
-飞书文档归档完成后，可选择写入本地备份：`archive/[作者或来源]/[YYYY-MM-DD].md`。
+`archive/index.md` 追加本次归档记录：doc_token、URL、作者、标题、日期。
 
 ---
 
@@ -163,11 +151,12 @@ read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-
 
 以下情况必须先向用户确认，不得自行推进：
 
-1. 需要新增一级目录（飞书 wiki 节点不存在）时
-2. 内容层为空，无法提取原文/OCR 文本时
-3. 链接 404 或权限限制，无法获取页面内容时
-4. read-back 失败，文档内容与预期不符时
-5. 飞书文档 create/write 失败时——必须报告异常，不得以本地 archive 替代主落点
+1. 需要新增一级目录（飞书 wiki 节点不存在）时 → 先确认作者名
+2. 内容层为空，无法提取原文/OCR 文本时 → 报告异常
+3. 链接 404 或权限限制，无法获取页面内容时 → 报告异常
+4. read-back 失败，文档内容与预期不符时 → 重新 write
+5. 飞书文档 create/write 失败时 → 必须报告异常
+6. 作者归属不确定时 → 先确认，不猜测
 
 ---
 
@@ -177,25 +166,45 @@ read-back 必须提供"原文/OCR 首句"作为可观察证据，不得在 read-
 ✅ 文档录入完成
 
 飞书文档：✅ 已归档（doc_token: xxx）
-飞书文档 URL：https://my.feishu.cn/wiki/[node_token]
-本地备份：✅ 已写入 / 未执行（可选）
-总索引：index.md（✅ 已更新）
+飞书文档 URL：https://feishu.cn/docx/[doc_token]
+一级目录：[作者名]（node_token: xxx）
+本地备份：✅ 已写入 / 未执行
 输入类型：[纯文字/链接/PDF/截图]
-作者/来源：[实际作者名 或 来源名 或 待确认]
 内容层：✅ 已写入（共 N blocks）/ ❌ 缺失
 原文/OCR 首句：[feishu_doc read 返回的前50字，逐字copy]
 复核：✅ read-back 通过 / ❌ 未通过
-摘要：✅ 已写入 / 无
-⚠️ 异常说明：[无]
+⚠️ 异常说明：[有则填，无则填"无"]
 ```
+
+---
+
+## 常见错误与应对
+
+### 错误1：文档落入云盘根目录
+**原因**：`feishu_doc create` 未传 `folder_token`。
+**应对**：必须传 `folder_token=node_token`，node_token 来自 `feishu_wiki create` 或已知节点表。
+
+### 错误2：`feishu_wiki spaces` 返回空
+**原因**：Bot 未加入该 space，但 node_token 本身有效。
+**应对**：直接用已知 node_token 调用 `feishu_doc create folder_token=xxx`，无需先查 spaces。
+
+### 错误3：图片 block 被文字覆盖
+**原因**：`upload_image` 在 `write` 之前执行。
+**应对**：严格按 write → upload_image 顺序执行。
+
+### 错误4：PDF 文字提取为空
+**原因**：PDF 为图片扫描格式，`get_text()` 只能读到水印。
+**应对**：用 `fitz` 渲染页面为 PNG，再用 `image` 工具识别文字。
 
 ---
 
 ## 禁止行为
 
+- 不得在 write 之前 upload_image（会导致图片 block 被覆盖）
 - 不得在 read-back 之前报告"完成"
 - 不得以摘要替代内容层
 - 不得未经确认自行创建新一级目录（飞书 wiki 节点）
 - 不得跳过 image 工具原始输出直接写摘要
 - 不得以本地 archive 替代飞书文档作为主落点
 - 不得以飞书消息通知替代飞书文档归档完成
+- 不得猜测作者归属，必须先确认
