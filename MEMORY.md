@@ -53,6 +53,38 @@
 
 ---
 
+### 2026-04-09 飞书知识库作者文件夹映射（完整版）
+
+**根节点:** SI4kw3rLAiZEVkkF4pfcidVOnQg
+
+| 作者/文件夹 | node_token | 说明 |
+|------------|-----------|------|
+| 鉴茶财经院 | CztUwejITiqe8Xk5rIrc6taxn6b | 南院大王/100课程大法师 |
+| 顾子明 | XS0Vwu5UZi3vDtkOTTucidV3n9c | 政事堂/子明私享汇 |
+| 洪灏 | TaS7wKOAriPdRAkeJRVcMxFYnbI | 洪灏市场策略 |
+| 大盘剧本 | LA3OwENPJiXpxukWvsGcdJtanDh | 肥猪仔 |
+| 看懂龙头股 | U0iswE4kXihobWkq1tucHVwunfe | 廖峥 |
+| 机会寻找 | AS09w5D8xiq136kKJmTc7DDZnNW | 机会研究目录 |
+| **今日新增独立文件夹** | | |
+| 专属群 | PP4GwYhsvim5xnkJShvcArdTn4f | |
+| 拆姐星球 | EALfwSuFKiCU4ykhAjGc54DCnjg | |
+| 丁辰灵 | DsXdwGI4jiNSyHkyhlVcNoyBnLg | |
+| 珍大户 | AeQ0wBozai9GzBk6jU5cW05yncb | |
+| 南半球聊财经 | GaehwGSxdiR10mkgyL8cgtBjnAf | |
+| 智谷趋势 | KrypwGQAIiMvENkjzGqcD4jindD | |
+| 知乎奥特之父 | OUw7wqHNCinqNLkWN8vcUhELnmb | |
+| 思想钢印 | LxiMwEupsioLpkkhfKqcVnkjneb | |
+| 斜杠睿 | PUzUw2s1BiLI7RkKN1Gc7Y5lnir | |
+| 余说 | AtlwwZvTAicNuBkFXrPccvs1nDU | |
+| 师涧道 | VvN9wO3jUiimqokycG6cvQJ7nbf | |
+| 猫哥 | D55FwnGm9iYBjVkKU3NcTFWAn4f | |
+| 沉默的螺旋 | K9ohwFhPci0Tb6kV5eac6xFenuf | |
+| 胡斐 | EWYywqwFfiBHPvkhIG9czbuXndg | |
+| 信息精选 | Hy76wusmli4GAVkt19Mc7SVinmc | |
+| 洪灏星球 | YtAgwlBOkiqmlYksOkqcUikRnYA | |
+| 大佳 | BZKBwpKO3iMOHBknz3Dccwkinbh | |
+| 子明私享汇 | ACO2wTV2HiFaGCkzkB6c1exrnCe | ⚠️ 有2个待删除占位 |
+
 ### 2026-04-07 存档来源：南院大王 = 鉴茶财经院
 
 **触发场景:** 杨欢欢发给我10篇PDF，全部来自同一作者

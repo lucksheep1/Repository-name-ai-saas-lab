@@ -29,6 +29,24 @@
 | 洪灏 | TaS7wKOAriPdRAkeJRVcMxFYnbI | 市场策略师/怡广博晖资本 |
 | 大盘剧本 | LA3OwENPJiXpxukWvsGcdJtanDh | 肥猪仔 |
 | 看懂龙头股 | U0iswE4kXihobWkq1tucHVwunfe | 廖峥 |
+| 专属群 | PP4GwYhsvim5xnkJShvcArdTn4f | |
+| 拆姐星球 | EALfwSuFKiCU4ykhAjGc54DCnjg | |
+| 丁辰灵 | DsXdwGI4jiNSyHkyhlVcNoyBnLg | |
+| 珍大户 | AeQ0wBozai9GzBk6jU5cW05yncb | |
+| 南半球聊财经 | GaehwGSxdiR10mkgyL8cgtBjnAf | |
+| 智谷趋势 | KrypwGQAIiMvENkjzGqcD4jindD | |
+| 知乎奥特之父 | OUw7wqHNCinqNLkWN8vcUhELnmb | |
+| 思想钢印 | LxiMwEupsioLpkkhfKqcVnkjneb | |
+| 斜杠睿 | PUzUw2s1BiLI7RkKN1Gc7Y5lnir | |
+| 余说 | AtlwwZvTAicNuBkFXrPccvs1nDU | |
+| 师涧道 | VvN9wO3jUiimqokycG6cvQJ7nbf | |
+| 猫哥 | D55FwnGm9iYBjVkKU3NcTFWAn4f | |
+| 沉默的螺旋 | K9ohwFhPci0Tb6kV5eac6xFenuf | |
+| 胡斐 | EWYywqwFfiBHPvkhIG9czbuXndg | |
+| 信息精选 | Hy76wusmli4GAVkt19Mc7SVinmc | |
+| 洪灏星球 | YtAgwlBOkiqmlYksOkqcUikRnYA | |
+| 大佳 | BZKBwpKO3iMOHBknz3Dccwkinbh | |
+| 子明私享汇 | ACO2wTV2HiFaGCkzkB6c1exrnCe | 顾子明重名，已合并；仍有2个占位待清理 |
 
 ---
 
