@@ -107,6 +107,7 @@
 - [x] Cycle 113 - ai-agent-mcp-memory.html + mcp-memory-service(5ms)/mcp-agent-server/awesome-agent-memory 5 signals ✅
 - [x] Cycle 114 - ai-agent-context-window-overflow.html + context-mode(98%)/dynamic-pruning/summarization-pydantic-ai 5 signals ✅
 - [x] Cycle 115 - ai-agent-long-term-memory.html + SimpleMem(5d)/SYNAPSE/TiMem/MemRL/MLMF 5 signals ✅
+- [x] Cycle 116 - ai-agent-memory-management.html + openclaw-engram(3w)/openclaw-hybrid(2d)/ReMe(1w)/EverMemOS 5 signals ✅
 - [x] AM 汇报 (04-01 08:30) ✅ - 发送至飞书 (om_x100b53f2469a3d3cc243aba861f2f9a)
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
