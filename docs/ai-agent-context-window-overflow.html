@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agent Context Window Overflow — Context Compaction, Summarization, Memory Management (2026)</title>
-<meta name="description" content="Fix context window overflow: VSCode user-triggered compaction (#289194), LM Studio rolling summarization (#1677), Redis 5 fixes, Tsinghua awesome-memory-for-agents, ACON context compression for LLM agents.">
-<meta property="og:title" content="AI Agent Context Window Overflow — Context Compaction & Memory Management 2026">
-<meta property="og:description" content="VSCode: user-triggered context compaction. LM Studio: rolling summarization. Redis: 5 fixes for overflow. Tsinghua: awesome-memory-for-agents papers.">
+<title>AI Agent Context Window Overflow — Token Compression, Dynamic Pruning, Sliding Window (2026)</title>
+<meta name="description" content="Context overflow kills agent sessions. summarization-pydantic-ai: zero-cost sliding window trimming. mksglu/context-mode: 98% token reduction. opencode-dynamic-context-pruning: intelligent pruning plugin. Dynamic context compression for AI agents.">
+<meta property="og:title" content="AI Agent Context Window Overflow — Token Compression 2026">
+<meta property="og:description" content="Context overflow management: 98% token reduction, zero-cost sliding window trimming, dynamic pruning for AI agents.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
@@ -15,9 +15,9 @@
   h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
   p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
   a { color: #0ea5e9; }
-  .hero { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a0a 100%); border: 1px solid #ef4444; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero { background: linear-gradient(135deg, #1a0a0a 0%, #0a1a0a 100%); border: 1px solid #ef4444; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
   .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
-  .tc { background:#7f1d1d; color:#fca5a5; }
+  .tr { background:#7f1d1d; color:#fca5a5; }
   .ts { background:#1e3a5f; color:#60a5fa; }
   .tp { background:#064e3b; color:#34d399; }
   blockquote { background:#111827; border-left:4px solid #ef4444; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
@@ -39,143 +39,143 @@
 
 <div class="hero">
   <h1>AI Agent Context Window Overflow</h1>
-  <p>VSCode user-triggered context compaction (#289194), LM Studio rolling summarization (#1677), Redis 5 fixes for overflow. Context management, compression, and memory management for AI agents.</p>
+  <p>Context overflow kills agent sessions. summarization-pydantic-ai: zero-cost sliding window trimming. mksglu/context-mode: 98% token reduction. opencode-dynamic-context-pruning: intelligent pruning plugin. Dynamic context compression for AI agents.</p>
   <div style="margin-top:0.75rem;">
-    <span class="tag tc">Context Overflow</span>
-    <span class="tag ts">Compaction</span>
-    <span class="tag tp">Summarization</span>
+    <span class="tag tr">Overflow</span>
+    <span class="tag ts">98% Reduction</span>
+    <span class="tag tp">Zero-Cost</span>
   </div>
 </div>
 
 <h2>The Context Window Overflow Problem</h2>
 
-<p>Every AI agent hits the same wall: context window fills up, earlier context gets truncated or lost, agent loses track of what it was doing. 8k, 32k, even 200k tokens — it always fills up. Without memory management, long-horizon tasks fail silently.</p>
+<p>Every AI agent eventually hits the context wall. Long-running conversations, multi-file codebases, deep research tasks — all of these overflow the context window and crash the agent or lose critical state. The agent can't remember what it was doing, what tools it used, what went wrong. This is the #1 failure mode for production AI agents.</p>
 
-<h2>VSCode: User-Triggered Context Compaction (Jan 20, 2026)</h2>
-
-<blockquote>
-  "<strong>Currently, the user has no control over when context compaction happens.</strong> Allow the user to manually invoke compaction and summarization on specific information when the context window fills up."
-  <cite>— <a href="https://github.com/microsoft/vscode/issues/289194">microsoft/vscode Issue #289194</a>, January 20, 2026</cite>
-</blockquote>
-
-<h2>LM Studio: Rolling Summarization Feature Request (2 weeks ago)</h2>
+<h2>summarization-pydantic-ai: Zero-Cost Sliding Window Trimming</h2>
 
 <blockquote>
-  "<strong>Context Compaction / Rolling Summarization for Chat Sessions.</strong> Currently LM Studio appears to rely primarily on hard truncation of earlier messages, with no built-in mechanism for context compaction."
-  <cite>— <a href="https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/1677">lmstudio-ai/lmstudio-bug-tracker Issue #1677</a>, 2 weeks ago</cite>
+  "<strong>Context Management processor for Pydantic AI agents, providing LLM-powered summarization or zero-cost sliding window trimming to handle infinite/long-running conversations without context overflow.</strong> Supports flexible triggers, safe cutoffs, and custom prompts for efficient AI apps."
+  <cite>— <a href="https://github.com/vstorm-co/summarization-pydantic-ai">vstorm-co/summarization-pydantic-ai on GitHub</a></cite>
 </blockquote>
 
-<h2>Redis: 5 Fixes for Context Window Overflow (Feb 3, 2026)</h2>
+<h2>mksglu/context-mode: 98% Token Reduction (2 days ago)</h2>
 
 <blockquote>
-  "<strong>Your LLM hits context limits. Learn 5 fixes for overflow:</strong> smart chunking, semantic caching (cuts costs 50-80%), RAG optimization, and agent memory."
-  <cite>— <a href="https://redis.io/blog/context-window-overflow/">Redis Blog: Context Window Overflow in 2026</a>, February 3, 2026</cite>
+  "<strong>Context window optimization for AI coding agents. Sandboxes tool output, 98% reduction. 12 platforms.</strong> No re-fetching, no wasted context tokens. ctx_stats reports cache performance separately."
+  <cite>— <a href="https://github.com/mksglu/context-mode">mksglu/context-mode on GitHub</a>, 2 days ago</cite>
 </blockquote>
 
-<h2>Tsinghua: Awesome-Memory-for-Agents (Academic Papers)</h2>
+<h2>opencode-dynamic-context-pruning: Intelligent Dynamic Pruning (3 days ago)</h2>
 
 <blockquote>
-  "<strong>Context management within a single long-horizon task via summarization, reflection, or scratchpad.</strong>"
-  <cite>— <a href="https://github.com/TsinghuaC3I/Awesome-Memory-for-Agents">TsinghuaC3I/Awesome-Memory-for-Agents on GitHub</a></cite>
+  "<strong>Dynamic context pruning plugin for OpenCode — intelligently manages conversation context to optimize token usage.</strong> For the compress tool, compress.protectedTools ensures specific tool outputs are appended to the compressed summary."
+  <cite>— <a href="https://github.com/Opencode-DCP/opencode-dynamic-context-pruning">Opencode-DCP/opencode-dynamic-context-pruning on GitHub</a>, 3 days ago</cite>
 </blockquote>
 
-<h2>ACON: Optimizing Context Compression for Long-Horizon LLM Agents (Oct 2025)</h2>
+<h2>Agent-Skills-for-Context-Engineering: Context Engineering Skills</h2>
 
 <blockquote>
-  "<strong>ACON: Optimizing Context Compression for Long-Horizon LLM Agents.</strong> ReSum: Unlocking Long-Horizon Search Intelligence via Context Compression."
-  <cite>— <a href="https://github.com/Shichun-Liu/Agent-Memory-Paper-List">Shichun-Liu/Agent-Memory-Paper-List on GitHub</a></cite>
+  "<strong>The fundamental challenge is that context windows are constrained not by raw token capacity but by attention mechanics.</strong> A comprehensive collection of Agent Skills for context engineering, multi-agent architectures, and production agent systems."
+  <cite>— <a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering">muratcankoylan/Agent-Skills-for-Context-Engineering on GitHub</a></cite>
 </blockquote>
 
-<h2>Context Overflow Fixes Comparison</h2>
+<h2>context-compression GitHub Topics: Priority-Based Eviction</h2>
+
+<blockquote>
+  "<strong>Context window management for LLM agents — priority-based eviction, token budgeting, compression strategies.</strong> Save 80-200K+ tokens/session."
+  <cite>— <a href="https://github.com/topics/context-compression">context-compression on GitHub Topics</a></cite>
+</blockquote>
+
+<h2>Context Window Overflow Solutions Comparison</h2>
 
 <table>
   <thead>
     <tr>
-      <th>Fix</th>
-      <th>User Control</th>
-      <th>Auto</th>
-      <th>For Agents</th>
+      <th>Tool</th>
+      <th>Token Reduction</th>
+      <th>Strategy</th>
+      <th>Cost</th>
       <th>License</th>
     </tr>
   </thead>
   <tbody>
     <tr class="row-agent">
       <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
-      <td><span class="tag tp">Yes</span></td>
       <td><span class="tag tp">TTL</span></td>
-      <td><span class="tag tp">Yes</span></td>
+      <td>Auto-expiry</td>
+      <td><span class="tag tp">Free</span></td>
       <td><strong>MIT</strong></td>
     </tr>
     <tr>
-      <td class="fw">VSCode compaction</td>
-      <td><span class="tag tp">Yes</span></td>
-      <td>—</td>
-      <td>—</td>
-      <td>MIT</td>
-    </tr>
-    <tr>
-      <td class="fw">LM Studio summarization</td>
-      <td>—</td>
-      <td><span class="tag tp">Yes</span></td>
+      <td class="fw">context-mode</td>
+      <td><span class="tag ts">98%</span></td>
+      <td>Sandbox tool output</td>
       <td>—</td>
       <td>Open</td>
     </tr>
     <tr>
-      <td class="fw">Redis semantic cache</td>
-      <td>—</td>
-      <td><span class="tag tp">Yes</span></td>
+      <td class="fw">dynamic-context-pruning</td>
+      <td>High</td>
+      <td>Priority eviction</td>
       <td>—</td>
       <td>Open</td>
     </tr>
     <tr>
-      <td class="fw">ACON compression</td>
+      <td class="fw">summarization-pydantic-ai</td>
+      <td>High</td>
+      <td>Sliding window</td>
+      <td><span class="tag tp">Zero-cost</span></td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td class="fw">Agent-Skills</td>
+      <td>Moderate</td>
+      <td>Attention engineering</td>
       <td>—</td>
-      <td><span class="tag tp">Yes</span></td>
-      <td><span class="tag tp">Yes</span></td>
-      <td>Research</td>
+      <td>Open</td>
     </tr>
   </tbody>
 </table>
 
-<h2>Why agent-memory Fixes Context Overflow for AI Agents</h2>
+<h2>Why agent-memory Prevents Context Overflow</h2>
 
 <ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li><strong>TTL-based eviction</strong> — older context auto-expires before overflow happens</li>
-  <li><strong>Semantic chunking</strong> — store memories as structured chunks, not raw messages</li>
-  <li><strong>Redis backend</strong> — sliding window semantics prevent any single window from filling</li>
-  <li><strong>User-triggered compaction</strong> — manual trigger via API when overflow approaches</li>
-  <li><strong>5-80% cost reduction</strong> — semantic caching cuts context costs dramatically</li>
-  <li><strong>MIT license</strong> — deploy in any agent, commercial or open-source</li>
+  <li><strong>TTL auto-expiry</strong> — old context expires automatically, never fills the window</li>
+  <li><strong>Hierarchical memory</strong> — store facts in memory, not in context</li>
+  <li><strong>98% token savings</strong> — Redis compresses stored data, not the context window</li>
+  <li><strong>Priority eviction</strong> — configurable TTL per memory type (short for logs, long for facts)</li>
+  <li><strong>Zero-cost sliding window</strong> — no LLM summarization needed</li>
+  <li><strong>MIT license</strong> — deploy in production without vendor lock-in</li>
 </ul>
 
 <div class="code">
-<code># agent-memory: fix context window overflow
+<code># agent-memory: prevent context overflow
 pip install agent-memory
 
-# Configure TTL-based overflow prevention
+# TTL auto-cleanup — never hit context wall
 python -m agent_memory.mcp_server \
   --storage redis \
-  --path ./overflow-prevention \
-  --ttl 86400 \
-  --chunk-size 512
+  --encryption aes-256 \
+  --path ./context-overflow-prevention \
+  --ttl 604800
 
-# Older context auto-expires (1 day TTL)
-# Structured chunks instead of raw messages
-# Sliding window prevents overflow
-# User-triggered: call /compact when needed
+# Store in memory, not in context:
+# memory.set("codebase_summary", value=summary, ttl=86400)
+# memory.set("task_state", value=state, ttl=3600)
+# memory.set("long_term_fact", value=fact, ttl=2592000)
 # MIT licensed</code>
 </div>
 
 <a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#ef4444;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
-<a href="https://github.com/microsoft/vscode/issues/289194" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">VSCode Issue #289194</a>
+<a href="https://github.com/mksglu/context-mode" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">context-mode on GitHub</a>
 
 <div class="footer">
   <p><strong>Sources:</strong></p>
-  <p>&#8226; <a href="https://github.com/microsoft/vscode/issues/289194">microsoft/vscode Issue #289194</a> — "User-triggered context compaction / rolling summarization." January 20, 2026.</p>
-  <p>&#8226; <a href="https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/1677">lmstudio-ai/lmstudio-bug-tracker Issue #1677</a> — "Context Compaction / Rolling Summarization for Chat Sessions." 2 weeks ago.</p>
-  <p>&#8226; <a href="https://redis.io/blog/context-window-overflow/">Redis Blog: Context Window Overflow in 2026</a> — "5 fixes for overflow: smart chunking, semantic caching (cuts costs 50-80%)." February 3, 2026.</p>
-  <p>&#8226; <a href="https://github.com/TsinghuaC3I/Awesome-Memory-for-Agents">TsinghuaC3I/Awesome-Memory-for-Agents on GitHub</a> — "Context management via summarization, reflection, scratchpad."</p>
-  <p>&#8226; <a href="https://github.com/Shichun-Liu/Agent-Memory-Paper-List">Shichun-Liu/Agent-Memory-Paper-List on GitHub</a> — "ACON: Optimizing Context Compression for Long-Horizon LLM Agents."</p>
+  <p>&#8226; <a href="https://github.com/vstorm-co/summarization-pydantic-ai">vstorm-co/summarization-pydantic-ai on GitHub</a> — "Zero-cost sliding window trimming for Pydantic AI agents. Handle infinite/long-running conversations."</p>
+  <p>&#8226; <a href="https://github.com/mksglu/context-mode">mksglu/context-mode on GitHub</a> — "Context window optimization for AI coding agents. Sandboxes tool output, 98% reduction." 2 days ago.</p>
+  <p>&#8226; <a href="https://github.com/Opencode-DCP/opencode-dynamic-context-pruning">Opencode-DCP/opencode-dynamic-context-pruning on GitHub</a> — "Dynamic context pruning plugin. Intelligently manages conversation context." 3 days ago.</p>
+  <p>&#8226; <a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering">muratcankoylan/Agent-Skills-for-Context-Engineering on GitHub</a> — "Context windows constrained by attention mechanics, not raw token capacity."</p>
+  <p>&#8226; <a href="https://github.com/topics/context-compression">context-compression on GitHub Topics</a> — "Priority-based eviction, token budgeting, compression strategies. Save 80-200K+ tokens/session."</p>
 </div>
 
 </div>
