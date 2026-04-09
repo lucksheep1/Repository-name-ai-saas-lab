@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Multi-Agent Memory — Shared Memory, Team Collaboration, Coordination (2026)</title>
+<meta name="description" content="open-multi-agent: shared memory for multi-agent teams. HiClaw: Collaborative Multi-Agent OS via Matrix rooms. Agent-MCP: MCP for multi-agent coordination. VoltAgent: orchestration + memory for multi-agent systems. AgentHub: shared workspace for Claude Code, Cursor, Codex.">
+<meta property="og:title" content="AI Agent Multi-Agent Memory — Shared Memory for AI Teams 2026">
+<meta property="og:description" content="open-multi-agent: message bus + shared memory. HiClaw: Collaborative Multi-Agent OS. Agent-MCP: MCP for multi-agent coordination.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { color: #f8fafc; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+  h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
+  p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+  a { color: #0ea5e9; }
+  .hero { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a0a 100%); border: 1px solid #06b6d4; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
+  .tm { background:#0c4a6e; color:#7dd3fc; }
+  .ts { background:#1e3a5f; color:#60a5fa; }
+  .tp { background:#064e3b; color:#34d399; }
+  blockquote { background:#111827; border-left:4px solid #06b6d4; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
+  th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
+  td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
+  tr:hover td { background:#0d1117; }
+  .fw { font-weight:700; color:#f9fafc; }
+  tr.row-agent td { background:#0f1a2e; }
+  tr.row-agent:hover td { background:#142030; }
+  .code { background:#0f172a; border-radius:8px; padding:1.25rem; margin:1rem 0; overflow-x:auto; font-family:monospace; font-size:0.85rem; color:#e2e8f0; line-height:1.8; }
+  .footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #1f2937; font-size:0.8rem; color:#475569; }
+  @media(max-width:600px){ table { font-size:0.75rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>AI Agent Multi-Agent Memory</h1>
+  <p>open-multi-agent: message bus + shared memory for multi-agent teams. HiClaw: Collaborative Multi-Agent OS via Matrix rooms. Agent-MCP: MCP for multi-agent coordination. VoltAgent: orchestration + memory. AgentHub: shared workspace for Claude Code, Cursor, Codex.</p>
+  <div style="margin-top:0.75rem;">
+    <span class="tag tm">Multi-Agent</span>
+    <span class="tag ts">Shared Memory</span>
+    <span class="tag tp">Team Collaboration</span>
+  </div>
+</div>
+
+<h2>The Multi-Agent Memory Problem</h2>
+
+<p>When multiple AI agents work together on a task — one writes code, one reviews it, one runs tests — they need shared memory. Without it, each agent starts from scratch and duplicates work or loses context. Multi-agent memory lets a team of agents share state, coordinate, and build on each other's work seamlessly.</p>
+
+<h2>open-multi-agent: Shared Memory + Message Bus (3 days ago)</h2>
+
+<blockquote>
+  "<strong>TypeScript multi-agent framework — one runTeam() call from goal to result. Auto task decomposition, parallel execution. 3 dependencies.</strong> Multi-Agent Collaboration: agents with different roles, tools, and models collaborate through a message bus and shared memory."
+  <cite>— <a href="https://github.com/JackChen-me/open-multi-agent">JackChen-me/open-multi-agent on GitHub</a>, 3 days ago</cite>
+</blockquote>
+
+<h2>Agent-MCP: Multi-Agent via Model Context Protocol (1 day ago)</h2>
+
+<blockquote>
+  "<strong>Agent-MCP is a framework for creating multi-agent systems that enables coordinated, efficient AI collaboration through the Model Context Protocol (MCP).</strong> Multiple specialized agents work simultaneously on different parts of your codebase. Backend agents handle APIs while frontend agents update UIs."
+  <cite>— <a href="https://github.com/rinadelph/Agent-MCP">rinadelph/Agent-MCP on GitHub</a></cite>
+</blockquote>
+
+<h2>HiClaw: Collaborative Multi-Agent OS via Matrix Rooms (2 weeks ago)</h2>
+
+<blockquote>
+  "<strong>An open-source Collaborative Multi-Agent OS for transparent, human-in-the-loop task coordination via Matrix rooms.</strong> Kubernetes-style declarative resource management for Worker, Team, and Human resources."
+  <cite>— <a href="https://github.com/agentscope-ai/HiClaw">agentscope-ai/HiClaw on GitHub</a>, 2 weeks ago</cite>
+</blockquote>
+
+<h2>VoltAgent: Multi-Agent with Orchestration + Memory</h2>
+
+<blockquote>
+  "<strong>AI agent platform for building multi-agent systems with orchestration, memory, RAG, workflows, and enterprise observability.</strong> Multi-agent orchestration with shared memory infrastructure."
+  <cite>— <a href="https://github.com/VoltAgent/ai-agent-platform">VoltAgent/ai-agent-platform on GitHub</a></cite>
+</blockquote>
+
+<h2>AgentHub: Shared Workspace for AI Coding Agents</h2>
+
+<blockquote>
+  "<strong>AgentHub is a cloud platform that enables multiple AI coding agents (Claude Code, Cursor, Codex) to join shared workspaces.</strong> Multiple coding agents collaborate in the same project context."
+  <cite>— <a href="https://github.com/RelientS/agenthub">RelientS/agenthub on GitHub</a></cite>
+</blockquote>
+
+<h2>Multi-Agent Memory Systems Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Shared Memory</th>
+      <th>MCP</th>
+      <th>Coordination</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-agent">
+      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
+      <td><span class="tag tp">Redis</span></td>
+      <td><span class="tag tp">Yes</span></td>
+      <td><span class="tag tp">Shared Redis</span></td>
+      <td><strong>MIT</strong></td>
+    </tr>
+    <tr>
+      <td class="fw">open-multi-agent</td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>—</td>
+      <td>Message bus</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td class="fw">Agent-MCP</td>
+      <td><span class="tag tp">MCP shared</span></td>
+      <td><span class="tag tp">Yes</span></td>
+      <td>Parallel exec</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td class="fw">HiClaw</td>
+      <td><span class="tag tp">Matrix rooms</span></td>
+      <td>—</td>
+      <td>Declarative</td>
+      <td>Open</td>
+    </tr>
+    <tr>
+      <td class="fw">AgentHub</td>
+      <td><span class="tag tp">Shared workspace</span></td>
+      <td>—</td>
+      <td>Cloud sync</td>
+      <td>Cloud</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Why agent-memory Is the Shared Memory for Multi-Agent Teams</h2>
+
+<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
+  <li><strong>Shared Redis backend</strong> — all agents read/write the same memory store</li>
+  <li><strong>TTL namespace isolation</strong> — each agent type has its own TTL tier</li>
+  <li><strong>MCP server compatible</strong> — works as shared memory for MCP-based multi-agent systems</li>
+  <li><strong>AES-256 encryption</strong> — shared memory is encrypted for team security</li>
+  <li><strong>Sub-ms Redis latency</strong> — fast enough for real-time multi-agent coordination</li>
+  <li><strong>MIT license</strong> — deploy shared memory infrastructure without vendor lock-in</li>
+</ul>
+
+<div class="code">
+<code># agent-memory: shared memory for multi-agent teams
+pip install agent-memory
+
+# Shared memory server for team of agents
+python -m agent_memory.mcp_server \
+  --storage redis \
+  --encryption aes-256 \
+  --path ./multi-agent-memory \
+  --ttl 604800
+
+# Agent A: memory.set("code_state", value=state)
+# Agent B: memory.get("code_state")
+# Agent C: memory.set("review_state", value=review)
+# All agents share the same Redis backend
+# MIT licensed</code>
+</div>
+
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#06b6d4;color:#0a0a0f;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://github.com/JackChen-me/open-multi-agent" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">open-multi-agent on GitHub</a>
+
+<div class="footer">
+  <p><strong>Sources:</strong></p>
+  <p>&#8226; <a href="https://github.com/JackChen-me/open-multi-agent">JackChen-me/open-multi-agent on GitHub</a> — "TypeScript multi-agent framework. Message bus and shared memory for agents." 3 days ago.</p>
+  <p>&#8226; <a href="https://github.com/rinadelph/Agent-MCP">rinadelph/Agent-MCP on GitHub</a> — "Framework for creating multi-agent systems through MCP. Multiple specialized agents work simultaneously."</p>
+  <p>&#8226; <a href="https://github.com/agentscope-ai/HiClaw">agentscope-ai/HiClaw on GitHub</a> — "Collaborative Multi-Agent OS for task coordination via Matrix rooms." 2 weeks ago.</p>
+  <p>&#8226; <a href="https://github.com/VoltAgent/ai-agent-platform">VoltAgent/ai-agent-platform on GitHub</a> — "Multi-agent systems with orchestration, memory, RAG, workflows, and enterprise observability."</p>
+  <p>&#8226; <a href="https://github.com/RelientS/agenthub">RelientS/agenthub on GitHub</a> — "Cloud platform enables multiple AI coding agents (Claude Code, Cursor, Codex) to join shared workspaces."</p>
+</div>
+
+</div>
+</body>
+</html>
