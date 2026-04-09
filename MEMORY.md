@@ -79,6 +79,11 @@
 **触发场景:** 杨欢欢发来丁辰灵 PDF（260408）
 **核心内容:** 丁辰灵是独立作者，目前存档到政事堂同目录（wiki node: CztUwejITiqe8Xk5rIrc6taxn6b），如需独立文件夹可后续拆分
 
+### 2026-04-09 新增作者：洪灏
+
+**触发场景:** 杨欢欢发来洪灏 PDF（260408）
+**核心内容:** 洪灏（Andy Hall）是独立作者，知名宏观策略分析师，现任职Great Wall Capital，存档到政事堂同目录（wiki node: CztUwejITiqe8Xk5rIrc6taxn6b）
+
 ---
 
 ### 2026-04-02 默认协作模式约定
