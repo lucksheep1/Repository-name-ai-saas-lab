@@ -5705,3 +5705,52 @@ ChatDev 2.0 (Jan 2026) + Copilot agents = multi-agent teams are going mainstream
 
 ---
 *Updated: 2026-04-12 07:44*
+
+---
+
+## Cycle 133 - 2026-04-12
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent RAG & Retrieval Memory**
+
+**Signal 1: infiniflow/ragflow ⭐⭐⭐⭐⭐**
+- URL: https://github.com/infiniflow/ragflow
+- "RAGFlow: leading open-source RAG engine that fuses RAG with Agent capabilities to create a superior context layer for LLMs." 4 days ago.
+
+**Signal 2: topics/retrieval-augmented-generation ⭐⭐⭐⭐⭐**
+- URL: https://github.com/topics/retrieval-augmented-generation
+- "Open-source AI orchestration framework for building context-engineered, production-ready LLM applications."
+
+**Signal 3: Danielskry/Awesome-RAG ⭐⭐⭐⭐⭐**
+- URL: https://github.com/Danielskry/Awesome-RAG
+- "Retrieval-Augmented Fine-Tuning (RAFT). Corrective RAG (CRAG): self-correcting retrieval based on generation quality."
+
+**Signal 4: sinanuozdemir/oreilly-retrieval-augmented-gen-ai ⭐⭐⭐⭐⭐**
+- URL: https://github.com/sinanuozdemir/oreilly-retrieval-augmented-gen-ai
+- "Augment LLMs with real-time data — Rag + Agents + GraphRAG."
+
+**Signal 5: pguso/rag-from-scratch ⭐⭐⭐⭐**
+- URL: https://github.com/pguso/rag-from-scratch
+- "Demystify RAG by building it from scratch. Local LLMs, embeddings, vector search."
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-rag-retrieval-memory.html**
+
+81st SEO page (targeting "AI agent RAG retrieval memory" keyword)
+- RAGFlow (4 days old): RAG engine with Agent capabilities
+- RAFT: Retrieval-Augmented Fine-Tuning
+- Corrective RAG: self-correcting retrieval
+- GraphRAG: knowledge graph RAG
+
+### Decision
+
+**Decision: Scale — RAG + Agent is the knowledge layer, agent-memory is the working memory**
+
+RAGFlow (4 days) = RAG + Agent is a recognized pattern. RAG retrieves documents, but what the agent does with those documents = agent-memory. RAG + agent-memory = complete context: retrieved knowledge + agent's working memory.
+
+**SEO matrix: 81 pages** 🎉
+
+---
+*Updated: 2026-04-12 11:44*
