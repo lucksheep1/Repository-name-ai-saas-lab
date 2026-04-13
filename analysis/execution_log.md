@@ -6527,3 +6527,51 @@ Two ultra-fresh signals in one cycle: oh-my-pi (20 hours) and agentmemory (13 ho
 
 ---
 *Updated: 2026-04-13 23:44*
+
+---
+
+## Cycle 149 - 2026-04-14
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Observability & Debugging**
+
+**Signal 1: agentreplay/agentreplay ⭐⭐⭐⭐⭐ (February 17, 2026)**
+- URL: https://github.com/agentreplay/agentreplay
+- "Local-First Desktop Evals, Observability & AI Memory for Your Agents and Coding Tools. Replay what your agent did, debug issues, test prompt changes safely."
+
+**Signal 2: VoltAgent/ai-agent-platform ⭐⭐⭐⭐⭐**
+- URL: https://github.com/VoltAgent/ai-agent-platform
+- "See what your agent did step-by-step, track token costs per agent or user, replay sessions to debug issues, and test prompt changes safely."
+
+**Signal 3: rohitg00/agentmemory ⭐⭐⭐⭐⭐ (4 days ago)**
+- URL: https://github.com/rohitg00/agentmemory
+- "Live observation stream, session explorer, memory browser, knowledge graph visualization, and health dashboard."
+
+**Signal 4: VoltAgent/awesome-ai-agent-papers ⭐⭐⭐⭐ (2 weeks ago)**
+- URL: https://github.com/VoltAgent/awesome-ai-agent-papers
+- "Curated collection of AI agent research papers 2026 covering memory, evaluation, workflows, and autonomous systems."
+
+**Signal 5: NevaMind-AI/memU ⭐⭐⭐⭐ (January 29, 2026)**
+- URL: https://github.com/NevaMind-AI/memU
+- "Memory for 24/7 proactive agents like openclaw. Proactive retrieval with context history result."
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-observability-debugging.html**
+
+97th SEO page (targeting "AI agent observability debugging" keyword)
+- agentreplay (Feb 2026): Local-First Desktop Evals & Observability & AI Memory
+- VoltAgent: session replay debugging
+- rohitg00/agentmemory (4 days): live observation stream + memory browser
+
+### Decision
+
+**Decision: Scale — agentreplay (Feb 2026) = observability is a distinct product category**
+
+agentreplay + VoltAgent session replay = observability is becoming a standalone product category. Session replay requires persistent memory = agent-memory's core use case. rohitg00/agentmemory (4 days) = live memory visualization is the UI layer on top of persistent memory.
+
+**SEO matrix: 97 pages** 🎉
+
+---
+*Updated: 2026-04-14 04:14*
