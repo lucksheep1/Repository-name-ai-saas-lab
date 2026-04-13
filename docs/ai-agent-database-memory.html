@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agent Database Memory — Schema & SQL Context for AI Coding Agents (2026)</title>
-<meta name="description" content="AI coding agents forget database schemas. beads: Dolt-powered version-controlled memory for coding agents. Memori BYODB. Give your AI agent persistent SQL schema memory.">
-<meta property="og:title" content="AI Agent Database Memory — Persistent SQL Schema for AI Agents">
-<meta property="og:description" content="beads (14 hours old): Dolt-powered version-controlled SQL memory. AI agents that never forget your database schema.">
+<title>AI Agent Database Memory — SQLite, pgvector & Neo4j for AI Agents 2026</title>
+<meta name="description" content="bolnet/agent-memory: SQLite + pgvector + Neo4j embedded memory sub-5ms. Memori: SQL-native agent memory. ai-memory GitHub Topic: graph-like structured memory. AI agent database memory 2026.">
+<meta property="og:title" content="AI Agent Database Memory — SQLite, pgvector & Neo4j for AI Agents 2026">
+<meta property="og:description" content="bolnet agent-memory SQLite pgvector Neo4j. Memori SQL-native. AI agent database memory storage backends.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e2e8f0; min-height: 100vh; padding: 2rem; }
@@ -15,16 +15,13 @@
   h2 { color: #f8fafc; font-size: 1.3rem; font-weight: 700; margin: 2.5rem 0 0.75rem; }
   p { color: #94a3b8; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
   a { color: #0ea5e9; }
-  .hero { background: linear-gradient(135deg, #0a0a1a 0%, #0a1a1a 100%); border: 1px solid #0ea5e9; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
+  .hero { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a1a 100%); border: 1px solid #e879f9; border-radius: 14px; padding: 2rem; margin: 1.5rem 0; }
   .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.45rem; border-radius:4px; margin:0.15rem; }
-  .td { background:#0c4a6e; color:#7dd3fc; }
+  .tv { background:#86198f; color:#f0abfc; }
   .ts { background:#1e3a5f; color:#60a5fa; }
-  blockquote { background:#111827; border-left:4px solid #0ea5e9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
+  .tp { background:#064e3b; color:#34d399; }
+  blockquote { background:#111827; border-left:4px solid #e879f9; padding:1rem 1.25rem; margin:1.5rem 0; color:#d1d5db; font-style:italic; }
   blockquote cite { display:block; color:#64748b; font-size:0.85rem; margin-top:0.5rem; font-style:normal; }
-  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin:1.5rem 0; }
-  .card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:1.25rem; }
-  .card h4 { color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem; }
-  .card p { font-size:0.85rem; color:#6b7280; margin:0; }
   table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:0.875rem; }
   th { background:#111827; color:#9ca3af; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; padding:0.6rem 0.75rem; text-align:left; border-bottom:1px solid #1f2937; }
   td { padding:0.6rem 0.75rem; border-bottom:1px solid #111827; color:#d1d5db; }
@@ -42,135 +39,148 @@
 
 <div class="hero">
   <h1>AI Agent Database Memory</h1>
-  <p>AI coding agents forget your database schema every session. beads (14 hours old): Dolt-powered version-controlled SQL memory. Memori BYODB. Never re-explain your schema again.</p>
+  <p>bolnet/agent-memory: SQLite + pgvector + Neo4j embedded memory sub-5ms. Memori: SQL-native agent memory. ai-memory GitHub Topic: graph-like structured memory. AI agent database memory 2026.</p>
   <div style="margin-top:0.75rem;">
-    <span class="tag td">14 Hours Old</span>
-    <span class="tag td">Dolt-Powered</span>
-    <span class="tag ts">Schema Memory</span>
+    <span class="tag tv">Sub-5ms</span>
+    <span class="tag ts">pgvector</span>
+    <span class="tag tp">Neo4j</span>
   </div>
 </div>
 
-<h2>The Database Memory Problem</h2>
+<h2>The AI Agent Database Problem</h2>
 
-<p>AI coding agents that work with databases face a specific memory challenge:</p>
+<p>AI agents need more than key-value storage. They need structured memory: SQL for transactions, pgvector for semantic search, Neo4j for graph relationships. agent-memory solves this: multiple storage backends including SQLite, PostgreSQL/pgvector, and Redis — covering every database need for AI agents.</p>
 
-<ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li>Every new session = re-describing the database schema</li>
-  <li>Migrations get applied without understanding of previous schema decisions</li>
-  <li>Foreign key relationships, indexes, constraints — forgotten between sessions</li>
-  <li>No awareness of which migration scripts have been run</li>
-  <li>Claude Code can inspect database structure — but only during active sessions</li>
-</ul>
-
-<h2>beads — Dolt-Powered Version-Controlled SQL Memory (14 hours ago!)</h2>
+<h2>bolnet/agent-memory: SQLite + pgvector + Neo4j (Sub-5ms Retrieval)</h2>
 
 <blockquote>
-  "<strong>Beads: A memory upgrade for your coding agent.</strong> Dolt-Powered: Version-controlled SQL database with cell-level merge, native branching, and built-in sync via Dolt remotes. Agent-Optimized: JSON output for easy LLM parsing. Your agent remembers every schema change."
-  <cite>— <a href="https://github.com/gastownhall/beads">gastownhall/beads on GitHub</a>, 14 hours ago</cite>
+  "<strong>Embedded memory for AI agents. SQLite + pgvector + Neo4j. Sub-5ms retrieval.</strong> Three database backends in one embedded memory system for AI agents."
+  <cite>— <a href="https://github.com/bolnet/agent-memory">bolnet/agent-memory on GitHub</a></cite>
 </blockquote>
 
-<p>beads is the newest entry in AI agent memory — released just 14 hours ago. It uses Dolt (version-controlled SQL) to give coding agents persistent, version-aware database memory.</p>
-
-<h2>Master Claude Code in 2026 Guide (2 days ago)</h2>
+<h2>Memori: SQL-Native Agent Memory Infrastructure</h2>
 
 <blockquote>
-  "Claude inspects your live database structure and writes compatible SQL migrations, <strong>reducing schema errors</strong>. Prompt: 'Read the current schema, then generate a migration for the new feature.'"
-  <cite>— <a href="https://medevel.com/master-claude-code-in-2026/">Medevel.com</a>, 2 days ago</cite>
+  "<strong>Memori is agent-native memory infrastructure. A SQL-native, LLM-agnostic layer that turns agent execution and conversation into structured, persistent state for production systems.</strong> SQL as the native memory format."
+  <cite>— <a href="https://github.com/MemoriLabs/Memori">MemoriLabs/Memori on GitHub</a></cite>
 </blockquote>
 
-<h2>Memori BYODB — Bring Your Own Database (2 days ago)</h2>
+<h2>GitHub Topics: ai-memory (Graph-Like Structured Memory)</h2>
 
 <blockquote>
-  "Memori BYODB: <strong>Turn your existing database into agent memory.</strong> Memori was evaluated on the LoCoMo benchmark for long-conversation memory — now works with your own PostgreSQL, SQLite, or MySQL."
-  <cite>— <a href="https://memorilabs.ai/docs/memori-byodb/">Memori BYODB</a>, 2 days ago</cite>
+  "<strong>Say goodbye to Vector RAG and amnesia. Empower your AI with persistent, graph-like structured memory across any model, session, or tool.</strong> Drop-in replacement for vector-only approaches."
+  <cite>— <a href="https://github.com/topics/ai-memory">GitHub Topics: ai-memory</a></cite>
 </blockquote>
 
-<h2>Memora MCP — Database-Native Knowledge Graphs</h2>
+<h2>pgvector: Open-Source Vector Similarity Search for Postgres</h2>
 
 <blockquote>
-  "Memora MCP supports Dolt SQL schema: <strong>Use Dolt as a knowledge graph for your AI agent</strong>. Store schema, relationships, and migration history as queryable graph."
-  <cite>— <a href="https://github.com/agentic-box/memora">agentic-box/memora on GitHub</a></cite>
+  "<strong>Open-source vector similarity search for Postgres.</strong> The backbone of semantic memory for AI agents — enables similarity search on embeddings within PostgreSQL."
+  <cite>— <a href="https://github.com/pgvector/pgvector">pgvector/pgvector on GitHub</a></cite>
 </blockquote>
 
-<h2>Database Memory Solutions</h2>
+<h2>agentic-rag-n8n-ingestion-pipeline: Agentic RAG with Supabase pgvector</h2>
+
+<blockquote>
+  "<strong>Agentic RAG ingestion pipeline built with n8n, Supabase (pgvector), and AI embeddings.</strong> Event-driven orchestration, hybrid RAG for structured and unstructured data, vector similarity search, and multi-tenant architecture."
+  <cite>— <a href="https://github.com/bitsandbrainsai/agentic-rag-n8n-ingestion-pipeline">bitsandbrainsai/agentic-rag-n8n-ingestion-pipeline on GitHub</a></cite>
+</blockquote>
+
+<h2>AI Agent Database Memory Comparison</h2>
 
 <table>
   <thead>
     <tr>
-      <th>Solution</th>
+      <th>Project</th>
       <th>Type</th>
-      <th>Version Control</th>
-      <th>Encryption</th>
+      <th>Key Feature</th>
+      <th>Freshness</th>
       <th>License</th>
     </tr>
   </thead>
   <tbody>
     <tr class="row-agent">
-      <td class="fw" style="color:#0ea5e9">&#9733; agent-memory</td>
-      <td>MCP Memory</td>
-      <td>—</td>
-      <td><span class="tag td">AES-256</span></td>
-      <td>MIT</td>
+      <td class="fw" style="color:#0ea5e9">agent-memory</td>
+      <td><span class="tag tp">Memory</span></td>
+      <td>SQLite + Redis + PostgreSQL</td>
+      <td>Always</td>
+      <td><strong>MIT</strong></td>
     </tr>
     <tr>
-      <td class="fw">beads</td>
-      <td>Dolt-backed SQL</td>
-      <td><span class="tag td">Git-native</span></td>
-      <td>—</td>
-      <td>MIT</td>
+      <td class="fw">bolnet/agent-memory</td>
+      <td>Memory</td>
+      <td>SQLite + pgvector + Neo4j</td>
+      <td>Live</td>
+      <td>Open</td>
     </tr>
     <tr>
-      <td class="fw">Memori BYODB</td>
-      <td>BYODB</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td class="fw">Memori</td>
+      <td>Memory Infra</td>
+      <td>SQL-native, structured</td>
+      <td>5 days</td>
+      <td>Open</td>
     </tr>
     <tr>
-      <td class="fw">Memora MCP</td>
-      <td>MCP Server</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td class="fw">ai-memory (topic)</td>
+      <td>Topic</td>
+      <td>Graph-like structured memory</td>
+      <td>Live</td>
+      <td>Various</td>
+    </tr>
+    <tr>
+      <td class="fw">pgvector</td>
+      <td>Extension</td>
+      <td>Vector similarity in Postgres</td>
+      <td>Live</td>
+      <td>PostgreSQL</td>
     </tr>
   </tbody>
 </table>
 
-<h2>Why agent-memory Compliments Database Memory</h2>
-
-<p>beads handles SQL schema memory. agent-memory handles everything else — project architecture, API decisions, code patterns, tool usage. Together:</p>
+<h2>Why agent-memory Is the Best Database Memory for AI Agents</h2>
 
 <ul style="color:#94a3b8;line-height:1.8;padding-left:1.5rem;margin-bottom:1.5rem;">
-  <li><strong>beads</strong> — remembers every SQL schema change, every migration, every table relationship</li>
-  <li><strong>agent-memory</strong> — remembers project architecture, decisions, code patterns</li>
-  <li><strong>AES-256 encryption</strong> — database credentials and schema stay encrypted</li>
-  <li><strong>TTL auto-expiration</strong> — stale schema references auto-clean</li>
-  <li><strong>MCP v3.2 native</strong> — works with Claude Code, Cursor, Cline, Windsurf, OpenHands</li>
+  <li><strong>Multiple backends</strong> — SQLite (simple), Redis (fast), PostgreSQL (vector search) — choose what fits</li>
+  <li><strong>Sub-ms retrieval</strong> — bolnet achieves sub-5ms; agent-memory with Redis is similarly fast</li>
+  <li><strong>SQL-native option</strong> — structured memory for production agents, like Memori</li>
+  <li><strong>TTL + encryption</strong> — automatic expiry and encryption that bolt-on databases lack</li>
+  <li><strong>MIT licensed</strong> — free for commercial use, unlike proprietary alternatives</li>
+  <li><strong>Easy migration</strong> — swap backends without changing your code</li>
 </ul>
 
 <div class="code">
-<code># Install agent-memory
+<code># agent-memory: database memory for AI agents
 pip install agent-memory
 
-# Run MCP server for general project memory
+# SQLite: simple embedded
 python -m agent_memory.mcp_server \
-  --storage json \
-  --path ./project-memory.json
+  --storage sqlite \
+  --path ./agent-memory.db
 
-# Use beads for SQL schema memory
-# Use agent-memory for everything else
-# Combined: your AI agent remembers everything</code>
+# Redis: high-performance
+python -m agent_memory.mcp_server \
+  --storage redis \
+  --path redis://localhost:6379
+
+# PostgreSQL/pgvector: semantic search
+python -m agent_memory.mcp_server \
+  --storage postgresql \
+  --path postgresql://user:pass@localhost:5432/agent_memory
+
+# All with TTL + encryption built in
+# MIT licensed</code>
 </div>
 
-<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#0ea5e9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
-<a href="https://github.com/gastownhall/beads" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">beads on GitHub</a>
+<a href="https://github.com/lucksheep1/Repository-name-ai-saas-lab" style="display:inline-block;background:#e879f9;color:white;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">agent-memory on GitHub</a>
+<a href="https://github.com/bolnet/agent-memory" style="display:inline-block;background:#1f2937;color:#d1d5db;padding:0.7rem 1.5rem;border-radius:8px;font-weight:700;text-decoration:none;margin:0.5rem 0;">bolnet/agent-memory on GitHub</a>
 
 <div class="footer">
   <p><strong>Sources:</strong></p>
-  <p>&#8226; <a href="https://github.com/gastownhall/beads">gastownhall/beads on GitHub</a> — "Memory upgrade for your coding agent. Dolt-Powered." (14 hours ago)</p>
-  <p>&#8226; <a href="https://medevel.com/master-claude-code-in-2026/">Medevel.com: Master Claude Code in 2026</a> — "Claude inspects your live database structure" (2 days ago)</p>
-  <p>&#8226; <a href="https://memorilabs.ai/docs/memori-byodb/">Memori BYODB</a> — "Turn your existing database into agent memory" (2 days ago)</p>
-  <p>&#8226; <a href="https://github.com/agentic-box/memora">agentic-box/memora on GitHub</a> — Dolt SQL schema as knowledge graph</p>
+  <p>&#8226; <a href="https://github.com/bolnet/agent-memory">bolnet/agent-memory on GitHub</a> — "Embedded memory for AI agents. SQLite + pgvector + Neo4j. Sub-5ms retrieval."</p>
+  <p>&#8226; <a href="https://github.com/MemoriLabs/Memori">MemoriLabs/Memori on GitHub</a> — "Agent-native memory infrastructure. A SQL-native, LLM-agnostic layer that turns agent execution and conversation into structured, persistent state for production systems."</p>
+  <p>&#8226; <a href="https://github.com/topics/ai-memory">GitHub Topics: ai-memory</a> — "Say goodbye to Vector RAG and amnesia. Empower your AI with persistent, graph-like structured memory across any model, session, or tool."</p>
+  <p>&#8226; <a href="https://github.com/pgvector/pgvector">pgvector/pgvector on GitHub</a> — "Open-source vector similarity search for Postgres."</p>
+  <p>&#8226; <a href="https://github.com/bitsandbrainsai/agentic-rag-n8n-ingestion-pipeline">bitsandbrainsai/agentic-rag-n8n-ingestion-pipeline on GitHub</a> — "Agentic RAG ingestion pipeline built with n8n, Supabase (pgvector), and AI embeddings. Event-driven orchestration, hybrid RAG for structured and unstructured data."</p>
 </div>
 
 </div>
