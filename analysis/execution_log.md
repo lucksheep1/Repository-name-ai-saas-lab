@@ -7295,3 +7295,51 @@ ipiton/agent-memory-mcp + scanadi/mcp-ai-memory + doobidoo/mcp-memory-service (3
 
 ---
 *Updated: 2026-04-15 00:14*
+
+---
+
+## Cycle 164 - 2026-04-15
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Coding Agent Codebase Understanding**
+
+**Signal 1: probelabs/probe ⭐⭐⭐⭐⭐ (1 week ago)**
+- URL: https://github.com/probelabs/probe
+- "AI-friendly semantic code search engine for large codebases. Combines ripgrep speed with tree-sitter AST parsing."
+
+**Signal 2: qodo-ai/open-aware ⭐⭐⭐⭐⭐**
+- URL: https://github.com/qodo-ai/open-aware
+- "Aware — Deep Code Research Agent for Complex Codebase & Knowledge. 'Act As Your Agentic Principal Engineer'."
+
+**Signal 3: zilliztech/claude-context ⭐⭐⭐⭐⭐**
+- URL: https://github.com/zilliztech/claude-context
+- "MCP plugin that adds semantic code search to Claude Code and other AI coding agents. Make the entire codebase the context."
+
+**Signal 4: GitHub Copilot ⭐⭐⭐⭐⭐ (1 day ago)**
+- URL: https://github.com/features/copilot
+- "Contextual understanding of the codebase for AI pair programming."
+
+**Signal 5: coderaptorai/awesome-ai-coding ⭐⭐⭐⭐**
+- URL: https://github.com/coderaptorai/awesome-ai-coding
+- "Greptile — AI-powered codebase understanding and search API. CodeQuery — Semantic code search powered by AI embeddings."
+
+### Phase 2: Builder
+
+**产出 A: ai-coding-agent-codebase-understanding.html**
+
+112th SEO page (targeting "AI coding agent codebase understanding" keyword)
+- probe (1 week): ripgrep + tree-sitter AST = semantic code search
+- open-aware: "Agentic Principal Engineer" for codebase
+- claude-context: MCP plugin for semantic code search
+
+### Decision
+
+**Decision: Scale — Codebase Understanding = AI Coding Agent's Deep Context Need**
+
+probe + open-aware + claude-context = AI coding agents need deep codebase understanding beyond individual files. Tree-sitter AST parsing = structural code comprehension. agent-memory stores persistent codebase context between sessions.
+
+**SEO matrix: 112 pages** 🎉
+
+---
+*Updated: 2026-04-15 04:14*
