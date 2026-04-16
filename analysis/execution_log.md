@@ -8375,3 +8375,51 @@ AWS + Meta + 50+ frameworks = testing is how you保证 agent quality. agent-memo
 
 ---
 *Updated: 2026-04-16 11:44*
+
+---
+
+## Cycle 187 - 2026-04-16
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Coding Agent IDE Plugins**
+
+**Signal 1: thedotmack/claude-mem ⭐⭐⭐⭐⭐ (1 day ago)**
+- URL: https://github.com/thedotmack/claude-mem
+- "Claude Code plugin that automatically captures everything Claude does during your coding sessions, compresses it with AI, and injects relevant context back into future sessions."
+
+**Signal 2: affaan-m/everything-claude-code ⭐⭐⭐⭐⭐ (3 days ago)**
+- URL: https://github.com/affaan-m/everything-claude-code
+- "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+
+**Signal 3: quemsah/awesome-claude-plugins ⭐⭐⭐⭐⭐ (4 days ago)**
+- URL: https://github.com/quemsah/awesome-claude-plugins
+- "Automated collection of Claude Code plugin adoption metrics. MCP server that provides structured spec-driven development workflow tools."
+
+**Signal 4: agent-sh/agentsys ⭐⭐⭐⭐⭐ (5 days ago)**
+- URL: https://github.com/agent-sh/agentsys
+- "AI writes code. This automates everything else. 19 plugins, 47 agents, and 40 skills. For Claude Code, OpenCode, Codex, Cursor, Kiro."
+
+**Signal 5: AizenvoltPrime/damocles ⭐⭐⭐⭐⭐ (3 days ago)**
+- URL: https://github.com/AizenvoltPrime/damocles
+- "VS Code extension that integrates Claude AI using the Agent SDK. Visual warnings, auto-triggers /compact at hardThreshold. Persistent Memory: 5-tier memory."
+
+### Phase 2: Builder
+
+**产出 A: ai-coding-agent-ide-plugins.html**
+
+135th SEO page (targeting "AI coding agent IDE plugins" keyword)
+- claude-mem (1 day): session capture + compression = memory for Claude Code
+- everything-claude-code (3 days): harness optimization = multi-agent
+- awesome-claude-plugins (4 days): MCP = plugin ecosystem
+
+### Decision
+
+**Decision: Scale — IDE Plugins = AI Coding Agent Memory Ecosystem**
+
+claude-mem (1 day) + everything-claude-code (3 days) + agentsys (5 days) = IDE plugins are the memory layer for coding agents. agent-memory is the underlying storage.
+
+**SEO matrix: 135 pages** 🎉
+
+---
+*Updated: 2026-04-16 16:14*
