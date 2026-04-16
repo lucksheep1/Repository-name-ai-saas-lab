@@ -8231,3 +8231,51 @@ Alibaba (2 days) + Kubernetes SIGs + agent-infra = sandbox infrastructure is a h
 
 ---
 *Updated: 2026-04-16 08:14*
+
+---
+
+## Cycle 184 - 2026-04-16
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Prompt Templates and System Prompts**
+
+**Signal 1: jwadow/agentic-prompts ⭐⭐⭐⭐⭐**
+- URL: https://github.com/jwadow/agentic-prompts
+- "Curated collection of prompts, modes, and configurations to enhance AI coding assistants. Ready-to-use templates for prompt engineering, custom agent personas. Optimized for Roo Code."
+
+**Signal 2: Piebald-AI/claude-code-system-prompts ⭐⭐⭐⭐⭐ (2 days ago)**
+- URL: https://github.com/Piebald-AI/claude-code-system-prompts
+- "All parts of Claude Code's system prompt, 24 builtin tool descriptions, sub agent prompts (Plan/Explore/Task), utility prompts."
+
+**Signal 3: EliFuzz/awesome-system-prompts ⭐⭐⭐⭐⭐**
+- URL: https://github.com/EliFuzz/awesome-system-prompts
+- "Collection of system prompts and tool definitions from Augment Code, Claude Code, Cluely, Cursor, Devin AI, Kiro, Perplexity, VSCode Agent, Gemini, Codex, OpenAI."
+
+**Signal 4: seojoonkim/prompt-guard ⭐⭐⭐⭐⭐ (February 2026)**
+- URL: https://github.com/seojoonkim/prompt-guard
+- "Advanced prompt injection defense system for AI agents. Multi-language detection, severity scoring, security auditing. 577+ regex patterns."
+
+**Signal 5: github/awesome-copilot SKILL.md ⭐⭐⭐⭐**
+- URL: https://github.com/github/awesome-copilot/blob/main/skills/agent-owasp-compliance/SKILL.md
+- "ASI-01: Prompt Injection Protection. ASI-02: Tool Use Governance. ASI-03: Agency Boundaries."
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-prompt-templates.html**
+
+132nd SEO page (targeting "AI agent prompt templates" keyword)
+- jwadow/agentic-prompts: Roo Code optimized = prompt template ecosystem
+- Piebald-AI/claude-code-system-prompts (2 days): Claude Code = real system prompt examples
+- seojoonkim/prompt-guard (Feb 2026): OWASP = prompt security
+
+### Decision
+
+**Decision: Scale — Prompt Templates = AI Agent Configuration Layer**
+
+claude-code-system-prompts (2 days) + agentic-prompts + awesome-system-prompts = prompt templates are how you configure agents. agent-memory stores prompt history.
+
+**SEO matrix: 132 pages** 🎉
+
+---
+*Updated: 2026-04-16 09:44*
