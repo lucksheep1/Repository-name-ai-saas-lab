@@ -183,6 +183,7 @@
 - [x] Cycle 189 - ai-agent-memory-storage-backend.html + redis/agent-memory-server(6d)/james-tn/agent-memory/memento/anamnesis/ADK-Redis 5 signals ✅
 - [x] Cycle 190 - ai-agent-skill-management.html + awesome-agent-skills(15h!)/vercel-labs/skills(4d)/agent-plugins-skills/agentsys(5d)/VoltAgent 5 signals ✅
 - [x] Cycle 191 - ai-agent-security-scanning.html + medusa(2w)/strix(3d)/AI-Infra-Guard(Feb2026)/LLMSecurityGuide(Feb2026)/qsag-core 5 signals ✅
+- [x] Cycle 192 - ai-agent-reasoning-engine.html + Awesome-Agentic-Reasoning(Jan2026)/Awesome-MCoT/Autonomous-Agents(Jan2026)/Awesome-Long-CoT/LLM-Agents-Papers 5 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
