@@ -1,104 +1,78 @@
 # Skills Registry (技能资产化目录)
 
-**更新日期**: 2026-03-12
-**版本**: v3.0 (Evidence-First + Mainline Focus)
+更新日期: 2026-04-14
+版本: v3.2 (Disable Batch 1)
 
 ---
 
-## 目录索引
+## 正式保留 Skill
 
-### 0. Archive (归档)
+### Archive
+- `skills/archive-ingest/` - 文档统一归档 skill
 
-- `skills/AI/` - 归档技能别名（触发词：用AI归档）
-- `skills/archive-ingest/` - 文档统一归档技能
+### Opportunity Workflow
+- `skills/site-tracker/` - 机会扫描 skill
+- `skills/opportunity-research/` - 机会研究 skill
 
-### 1. Feishu (飞书)
-- `skills/feishu-doc/` - 飞书文档操作
-- `skills/feishu-drive/` - 云空间管理
-- `skills/feishu-wiki/` - 知识库操作
-- `skills/feishu-perm/` - 权限管理
-
-### 2. External Search (外部检索)
-- `skills/tavily-search/` - Tavily AI 搜索
-- `skills/summarize/` - URL/文件摘要
-- `skills/agent-browser/` - 浏览器自动化
-- `skills/find-skills/` - 技能发现
-
-### 3. Project Management (项目管理)
-- `skills/project_management/` - MVP 构建、Scale Gate
-- `skills/feedback/` - 反馈收集 (playbook/snippets/checklist) ⭐
-- `skills/competition/` - 竞品分析 (playbook/snippets/checklist) ⭐
-- `skills/promotion/` - 推广策略 (playbook/snippets/checklist) ⭐
-
-### 4. GitOps
-- `skills/github/` - GitHub CLI 操作
-
-### 5. Research (研究)
-- `skills/research_packs/` - 外部检索记录
-- **当前**: 2026-03-12-round65.md
-
-### 6. Cloud (云服务)
-- `skills/tencentcloud-lighthouse-skill/` - 腾讯云轻量应用服务器
-
-### 7. Obsidian/Notion
-- `skills/obsidian/` - Obsidian 笔记操作
-- `skills/notion/` - Notion API
-
-### 8. Weather
-- `skills/weather/` - 天气查询
+### Notify
+- `skills/feishu-cron-notify/` - cron 完成后飞书通知 skill
 
 ---
 
-## Evidence-First v3 规则
+## 观察保留 Skill
 
-### 合规 Evidence (只允许三类)
-1. **竞品/替代方案主页** (PyPI/NPM/GitHub repo) - 用于"存在性"
-2. **竞品 issue/discussion/PR** (链接或编号) - 用于"痛点/需求"
-3. **官方文档/规范** (链接) - 用于"限制/复杂性"
+### GitHub
+- `skills/github/` - GitHub CLI skill（唯一标识名: `github-cli`）
+- `skills/github-api/` - GitHub API gateway skill（唯一标识名: `github-api`）
 
-### 禁止计入 Evidence
-- 我们自己的仓库链接
-- 投稿入口 (HN submit, Twitter intent)
-- "我推断/README归因" (除非有 issue/discussion 佐证)
+### Knowledge / Docs
+- `skills/notion/` - Notion API skill
+- `skills/tencent-docs/` - 腾讯文档 skill
 
-### 硬门槛
-- 每个关键问题 ≥3 条合规 Evidence
-- 不足则标记 MISSING + 检索计划
-- "本地 examples 可运行" 只能写 Verification
+### Utility / Channel
+- `skills/weather/` - 天气查询 skill
+- `skills/agent-browser/` - 浏览器自动化 skill
+- `extensions/qqbot/skills/qqbot-cron/` - QQ 提醒 skill
+- `extensions/qqbot/skills/qqbot-media/` - QQ 媒体发送 skill
 
 ---
 
-## Mainline 规则
+## 已停用归档 Skill
 
-### 72h 强制锁定
-- 只允许深挖 1 个主线项目
-- 其他项目进入 Maintenance 模式 (只修 bug/文档/测试)
+以下 skill 已移出正式扫描路径，保留原始目录以便回滚：
 
-### Promising 上限
-- 名额上限 = 2 (含主线)
-- 硬条件: README Quick Demo + VERIFICATION.md + ≥3 合规 Evidence
+- `AI` -> `/root/.openclaw/skills_disabled/batch1/AI.20260414-disabled/`
+- `find-skills` -> `/root/.openclaw/skills_disabled/batch1/find-skills.20260414-disabled/`
+- `summarize` -> `/root/.openclaw/skills_disabled/batch1/summarize.20260414-disabled/`
+- `obsidian` -> `/root/.openclaw/skills_disabled/batch1/obsidian.20260414-disabled/`
+- `tencentcloud-lighthouse-skill` -> `/root/.openclaw/skills_disabled/batch1/tencentcloud-lighthouse-skill.20260414-disabled/`
+- `tavily-search` -> `/root/.openclaw/skills_disabled/batch1/tavily-search.20260414-disabled/`
+
+批次说明见：`/root/.openclaw/skills_disabled/batch1/README.md`
+
+---
+
+## 非 Skill 资产（不应视为正式 Skill）
+
+以下目录当前没有 `SKILL.md`，仅作为 playbook、checklist、snippets 或研究记录保留：
+
+- `skills/competition/`
+- `skills/feedback/`
+- `skills/project_management/`
+- `skills/promotion/`
+- `skills/research_packs/`
+
+---
+
+## 已停用 / 兼容说明
+
+- `/root/.openclaw/skills/feishu-cron-notify/`：已移出扫描路径，正式版本保留在 `workspace/skills/feishu-cron-notify/`
 
 ---
 
 ## 使用规则
 
-1. **遇到新问题** → 先查 skills/index.md 是否已有
-2. **无则新增** → 写成 playbook.md + snippets.md + checklist.md
-3. **每轮 Scout/Scanner** → 必须产出 Research Pack (≥3 合规 Evidence)
-4. **任何"已解决"** → 必须对应新增/更新 skills 条目
-
----
-
-## 维护记录
-
-- 2026-03-11: 初始化 skills 目录
-- 2026-03-12: v2.0 升级 - Evidence-First + Skill Registry
-- 2026-03-12: v3.0 升级 - Mainline Focus + 三件套 (feedback/competition/promotion)
-
----
-
-## 当前 Active 项目
-
-| 项目 | 状态 | 证据数 |
-|------|------|--------|
-| agent-memory | Mainline 🔒 | 3/3 (合规) |
+1. 只把带 `SKILL.md` 的目录视为活动 skill。
+2. 位于 `skills_disabled/` 的目录视为停用归档，不参与正式维护口径。
+3. 没有 `SKILL.md` 的目录，只能按资料资产处理。
+4. 引用 skill 时优先使用唯一标识名，避免同名漂移。

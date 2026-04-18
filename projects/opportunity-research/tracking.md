@@ -29,3 +29,20 @@
 
 *(格式：closed日期 | 项目名 | 关闭原因)*
 
+
+### 2026-04-10 | Shadcnblocks.com
+**signal:** single_source_persistent | OpenAlternative x50 | L2
+**报告位置:** https://feishu.cn/docx/SMoBdsytlotsaRxiiZkcZC0knLg
+
+**→ 判断正确应看到的信号：**
+- [ ] Shadcnblocks 付费用户数突破 3000+
+- [ ] shadcn/ui GitHub stars 突破 100k 且保持月增速 >5%
+- [ ] 出现 shadcn/ui 官方推出区块/模板商城的讨论
+- [ ] AI Coding Agent 集成 shadcn/ui 区块的市场声音
+
+**→ 降低优先级应出现的信号：**
+- [ ] Shadcnblocks 停止更新（changelog 无新内容 >2个月）
+- [ ] shadcn/ui 官方推出高质量免费区块库
+- [ ] 多个同类竞品大幅降价竞争
+
+**下次检查日期:** 2026-04-24（+14天）
