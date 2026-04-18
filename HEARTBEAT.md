@@ -192,6 +192,7 @@
 - [x] Cycle 198 - ai-agent-workflow-orchestration-durable-execution.html + kitaru(4d)/airflow-ai-sdk/ruflo(2w)/agent-orchestrator(3d)/awesome-workflow-engines 5 signals ✅
 - [x] Cycle 199 - ai-agent-web-data-extraction.html + crawl4ai(4d)/firecrawl(3d)/scraping-agent-ai/llm-scraper/extractor 5 signals ✅
 - [x] Cycle 200 - ai-agent-video-audio-transcription.html + WhisperLive/ai-video-analyzer/ComfyUI-Whisper/Whisper-AutoCaption/AI-Video-Transcriber 5 signals ✅
+- [x] Cycle 201 - ai-agent-educational-tutoring.html + DeepTutor(3d)/OpenMAIC(4d)/Multi-Agent-Study-Assistant/responsible-ai-tutor-k12/awesome-ai-llm4education 5 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
