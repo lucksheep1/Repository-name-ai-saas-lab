@@ -216,6 +216,7 @@
 - [x] Cycle 222 - ai-agent-marketing-ads.html + marketingskills(1w Claude Code CRO SEO)/ai-marketing-claude(Mar2026 15 skills)/agency-agents(1w complete AI)/awesome-agent-skills(4d ai-seo)/ai-marketing topic(70+ agents) 5 signals ✅
 - [x] Cycle 223 - ai-agent-education-adaptive.html + EduGPT(Langchain adaptive)/PersonalLearningPro(ai-tutor 1w test creation)/awesome-ai-llm4education/DeepTutor(2d agent-native)/Multi-Agent-Study-Assistant(6 agents) 5 signals ✅
 - [x] Cycle 224 - ai-agent-social-media-influencer.html + Social-Media-AI-Agent(Instagram)/langchain-ai/social-media-agent(HITL)/social-media-agents(4 agents)/social-media-bot topic(X Twitter)/Social-Media-Automation-Tools-2026 5 signals ✅
+- [x] Cycle 225 - ai-agent-hr-recruitment.html + agentic-hr(AI interviews ATS)/AI-Recruitment-Agent(AutoGen)/Eazyrecruit(AI recruitment)/ai-recruitment topic(bias-mitigation)/2026-HR-Internship 5 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
