@@ -10753,3 +10753,51 @@ promptfoo (14k stars) + deepteam + autonomous pentesting = complete security pip
 
 ---
 *Updated: 2026-04-21 02:14*
+
+---
+
+## Cycle 237 - 2026-04-21
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Meeting Transcription Summary**
+
+**Signal 1: Zackriya-Solutions/meetily ⭐⭐⭐⭐⭐**
+- URL: https://github.com/Zackriya-Solutions/meeting-minutes
+- "Privacy first, AI meeting assistant with 4x faster Parakeet/Whisper live transcription, speaker diarization, and Ollama summarization built on Rust. 100% local processing."
+
+**Signal 2: peteonrails/hushnote ⭐⭐⭐⭐⭐**
+- URL: https://github.com/peteonrails/hushnote
+- "HushNote is a local-only, offline-capable voice transcription and meeting summarization tool for Linux. 100% local AI processing with faster-whisper and Ollama."
+
+**Signal 3: video-db/call.md ⭐⭐⭐⭐⭐**
+- URL: https://github.com/video-db/call.md
+- "Turn meetings into live agent loops. Record, transcribe, and analyze meetings with real-time AI intelligence — before, during, and after calls."
+
+**Signal 4: AlexisBalayre/AI-Powered-Meeting-Summarizer ⭐⭐⭐⭐**
+- URL: https://github.com/AlexisBalayre/AI-Powered-Meeting-Summarizer
+- "Gradio-powered application that converts audio recordings of meetings into transcripts and provides concise summaries using Whisper."
+
+**Signal 5: VoltAgent/awesome-agent-skills (phuryn/summarize-interview) ⭐⭐⭐⭐ (3 days ago)**
+- URL: https://github.com/VoltAgent/awesome-agent-skills
+- "Summarize interview transcripts with JTBD and action items."
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-meeting-transcription-summary.html**
+
+185th SEO page (targeting "AI agent meeting transcription summary" keyword)
+- meetily = Rust + 100% local + Parakeet/Whisper + Ollama
+- hushnote = faster-whisper + Ollama offline Linux
+- call.md = live agent loops real-time AI intelligence
+
+### Decision
+
+**Decision: Scale — Meetings = AI Agent Transcription + Summary**
+
+100% local privacy + live agent loops + Whisper = complete meeting pipeline. agent-memory stores meeting context.
+
+**SEO matrix: 185 pages** 🎉🎉🎉🎉🎉🎉🎉
+
+---
+*Updated: 2026-04-21 02:44*
