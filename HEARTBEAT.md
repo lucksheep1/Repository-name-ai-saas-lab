@@ -241,6 +241,7 @@
 - [x] Cycle 247 - ai-agent-data-visualization-bi.html + ai-data-dashboard(Next.js GPT3)/ai-data-science-team(pipeline studio)/data-formulator(Microsoft)/WrenAI(3w 12+ sources)/AI-DATA-VISUALIZATION-ASSISTANT(GPT-4) 5 signals ✅
 - [x] Cycle 248 - ai-agent-instant-messaging-chat.html + nanobot(17h WhatsApp QQ Feishu)/cc-connect(2d Claude Code to Slack Discord)/agent-messenger(Slack Discord Teams)/hermes-agent(2d any LLM) 4 signals ✅
 - [x] Cycle 249 - ai-agent-news-aggregator-content-curation.html + Multimodal-AI-Agent-News(sentiment)/curator-ai(OpenAI)/Personalized-News-Aggregator(Django NLP)/ai-news-agent(CrewAI)/ai-news-aggregator(1w RSS) 5 signals ✅
+- [x] Cycle 250 - ai-agent-mental-health-therapy-wellness.html + Mental-Health-AI-Companion(GPT-4o 24/7)/MindHaven(mood journal)/Mental-health-Chatbot(multilingual)/mindaid(accessible)/mental-health-chatbot(emotional) 5 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
