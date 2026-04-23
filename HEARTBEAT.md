@@ -261,6 +261,7 @@
 - [x] Cycle 267 - ai-agent-environmental-sustainability-carbon-footprint.html + awesome-green-ai(assess reduce impacts)/SustainableAI(ACT carbon model)/Eco-AI.ly(GAIA Imperial)/climate-tech(predictive)/carbon-footprint(green computing) 5 signals ✅
 - [x] Cycle 268 - ai-agent-crm-customer-relationship-management.html + ai-crm-agents(6 autonomous)/CRM-AI-Analysis(Text-To-SQL)/ai-crm(predictive)/agentic-ai-workflow(churn risk) 4 signals ✅
 - [x] Cycle 269 - ai-agent-image-generation-creative-design.html + logocreator(Flux logo)/agent-team-logo-creator(Nova Pixel Bolt Scout)/QuickUI-Agent(HTML Tailwind Groq)/Generative-Media-Skills(multi-modal Claude Code Cursor)/ai-logo-generator(Genkit Google AI) 5 signals ✅
+- [x] Cycle 270 - ai-agent-restaurant-food-delivery-dining.html + restaurant-discovery(Redis LangGraph)/OrderWorder(QR menu chatbot)/restaurant-recommender(personalized)/ai-restaurant-bot(WhatsApp)/RestaurantBot(Rasa NLP) 5 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
