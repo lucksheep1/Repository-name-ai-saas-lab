@@ -284,6 +284,7 @@
 - [x] Cycle 290 - ai-agent-image-editing-retouching-enhancement.html + JarvisArt(NeurIPS 2025)/AffinityPhoto-Retouch-Lab(raw)/TopazPhotoAI-Upscaling 3 signals ✅
 - [x] Cycle 291 - ai-agent-urban-mobility-traffic-parking.html + Awesome-Urban-LLM-Agents(EMNLP)/Traffic-Management-Using-AI/MnMS(multimodal) 3 signals ✅
 - [x] Cycle 292 - ai-agent-knowledge-graph-ontology-construction.html + trustgraph(graph-native)/ontocast(ontology triples)/semantica(NER relation 4d) 3 signals ✅
+- [x] Cycle 293 - ai-agent-experimentation-ab-testing-conversion-optimization.html + growthbook(feature flags MCP)/agent-evaluation(AWS)/promptfoo(red teaming) 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
