@@ -289,6 +289,7 @@
 - [x] Cycle 295 - ai-agent-sre-incident-response-runbook.html + awesome-ai-sre(100+ tools)/opensre(60+ integrations 1d)/awesome-ai-sre-2(MTTR 10x) 3 signals ✅
 - [x] Cycle 297 - ai-agent-energy-management-power-optimization.html + SmartGrid-Optimizer/AI-for-energy-sector/EMS 3 signals ✅
 - [x] Cycle 298 - ai-agent-career-development-learning-path.html + Career-Recommendation-System/career-guidance/My_Career_Coach_agent 3 signals ✅
+- [x] Cycle 299 - ai-agent-augmented-reality-mixed-reality-spatial-computing.html + MetaSpatial/AR-VR-Guide/augmented-reality 3 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
