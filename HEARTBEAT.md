@@ -300,6 +300,7 @@
 - [x] Cycle 307 - ai-agent-procedural-3d-world-terrain-generation.html + territory/ai-game-devtools/3DWorld 3 signals ✅
 - [x] Cycle 308 - ai-agent-edge-computing-tinyml-iot.html + awesome-tinyml/Awesome-EdgeAI/awesome-edge-ai-agents/edgeai-for-beginners 4 signals ✅
 - [x] Cycle 309 - ai-agent-coding-ide-integration-pair-programming.html + GitHub Copilot(19h)/Tabnine(4d)/JetBrains AI/CodiumAI/gpt-engineer 5 signals ✅
+- [x] Cycle 310 - ai-agent-multi-agent-simulation-emergent-behavior.html + LLM-Agent-Based(tsinghua)/Mesa/LLM-Agents-Simulation/Autonomous-Agents 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
