@@ -293,6 +293,7 @@
 - [x] Cycle 300 - ai-agent-geospatial-gis-mapping-satellite-imagery.html + Earth-Copilot/geoai/Arion 3 signals ✅
 - [x] Cycle 301 - ai-agent-video-understanding-temporal-reasoning.html + VideoAgent/NVIDIA/VideoMind/VideoAnalyzer 4 signals ✅
 - [x] Cycle 302 - ai-agent-startup-intelligence-market-signal-detection.html + Awesome-AI-Market-Maps/Market-Intelligence-Agent/trend-researcher 3 signals 🎉 250 PAGES! ✅
+- [x] Cycle 303 - ai-agent-github-repository-management-issue-triage.html + agentics/gh-aw/mCP 3 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
