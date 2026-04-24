@@ -317,6 +317,7 @@
 - [x] Cycle 324 - ai-agent-code-review-automated-pr-review.html + ai-pr-review/ai-pr-reviewer/pr-agent/CodeReviewAgent 4 signals ✅
 - [x] Cycle 325 - ai-agent-personal-knowledge-second-brain.html + khoj/Second-Brain/ai-knowledge/Memory-Paper-List 4 signals ✅
 - [x] Cycle 326 - ai-agent-multimodal-vision-language-model.html + Awesome-MLLM/LLM-in-Vision/DeepSeek-VL/Ovis 4 signals ✅
+- [x] Cycle 327 - ai-agent-agentic-rag-hallucination-detection.html + AgenticRAG-Survey/agentic-rag-dummies(5d)/NVIDIA/arag 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
