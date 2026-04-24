@@ -313,6 +313,7 @@
 - [x] Cycle 320 - ai-agent-marketing-attribution-conversion-funnel.html + Marketing-Prompts/lifetime_value/Marketing-Campaign/churn-prediction 4 signals ✅
 - [x] Cycle 321 - ai-agent-security-vulnerability-scanning-cve-sbom.html + agent-bom/skillfortify/Vuln-Impact/agentic-ide-security 4 signals ✅
 - [x] Cycle 322 - ai-agent-browser-automation.html updated + crawl4ai(2w)/firecrawl(2d)/scraping-agent-ai/crawlee 4 signals ✅
+- [x] Cycle 323 - ai-agent-autonomous-framework-self-improving.html + hermes-agent(1d)/Open-Sable(1w)/DeepAgent/cognithor 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
