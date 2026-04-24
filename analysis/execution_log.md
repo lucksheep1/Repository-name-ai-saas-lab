@@ -14812,3 +14812,47 @@ ERP is a genuinely new vertical. agent-memory stores ERP context.
 
 ---
 *Updated: 2026-04-24 23:17 UTC*
+
+---
+
+## Cycle 329 - 2026-04-24
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent IoT Predictive Maintenance Fault Detection RUL**
+
+**Signal 1: LGDiMaggio/predictive-maintenance-mcp ⭐⭐⭐⭐⭐**
+- URL: https://github.com/LGDiMaggio/predictive-maintenance-mcp
+- "AI-Powered Predictive Maintenance Fault Diagnosis through Model Context Protocol turns LLMs into condition monitoring assistants" (3 weeks old)
+
+**Signal 2: HROlive/Applications-of-AI-for-Predictive-Maintenance ⭐⭐⭐⭐⭐**
+- URL: https://github.com/HROlive/Applications-of-AI-for-Predictive-Maintenance
+- "Nvidia DLI workshop AI-based predictive maintenance identify anomalies failures time-series estimate remaining useful life RUL"
+
+**Signal 3: rohanmatt/Predictive-Maintenance-for-Industrial-Equipment ⭐⭐⭐⭐⭐**
+- URL: https://github.com/rohanmatt/Predictive-Maintenance-for-Industrial-Equipment
+- "Interactive web application predictive maintenance industrial machinery visualize sensor data predict RUL anomaly detection"
+
+**Signal 4: HarshGupta-DS/Predictive-Maintainence-using-Data-Analysis ⭐⭐⭐⭐**
+- URL: https://github.com/HarshGupta-DS/Predictive-Maintainence-using-Data-Analysis-and-Time-Series-Forecasting
+- "Predictive Maintenance avoids under utilization reactive maintenance predict future point of failure based on equipment health"
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-iot-predictive-maintenance-fault-detection.html**
+
+276th SEO page (targeting "AI agent IoT predictive maintenance fault detection RUL" keyword)
+- predictive-maintenance-mcp = 3 weeks old, MCP for predictive maintenance
+- AI-for-Predictive-Maintenance = Nvidia DLI time-series RUL
+- Industrial-Equipment = interactive dashboard
+
+### Decision
+
+**Decision: Scale — IoT Predictive Maintenance = MCP + RUL + Interactive Dashboard**
+
+IoT predictive maintenance is a genuinely new vertical. agent-memory stores IoT sensor context.
+
+**SEO matrix: 276 pages** 🎉🎉🎉🎉🎉
+
+---
+*Updated: 2026-04-24 23:47 UTC*
