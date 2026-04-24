@@ -309,6 +309,7 @@
 - [x] Cycle 316 - ai-agent-document-understanding-chart-vqa-multimodal.html + awesome-document-understanding/Autonomous-Agents/CHARGE/DeepTutor(2d) 4 signals ✅
 - [x] Cycle 317 - ai-agent-network-automation-topology-discovery.html + AI-Agents-For-Networking/awesome-network-automation/openwisp/unlocking-ai-agents 4 signals ✅
 - [x] Cycle 318 - ai-agent-semantic-code-search-codebase-exploration.html + serena(2w)/claude-context/lsp-skill/open-aware 4 signals ✅
+- [x] Cycle 319 - ai-agent-text-to-3d-gaussian-splatting-nerf.html + Awesome-Text-to-3D/awesome-3DGS/awesome-nerf-editing/NeRF-3DGS-SLAM 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
