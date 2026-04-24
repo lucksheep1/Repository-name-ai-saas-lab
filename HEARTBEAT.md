@@ -304,6 +304,7 @@
 - [x] Cycle 311 - ai-agent-software-architecture-design-ddd-cqrs.html + awesome-ddd/awesome-software-design/EventualShop/ai-development-patterns 4 signals ✅
 - [x] Cycle 312 - ai-agent-ai-safety-alignment-scalable-oversight.html + ai-safety(cjackett)/promptfoo/ai-safety-topic/awesome-agentic-patterns 4 signals ✅
 - [x] Cycle 313 - ai-agent-voice-cloning-speech-synthesis.html + voicebox(2d)/TTS/VibeVoice/Real-Time-Voice-Cloning 4 signals ✅
+- [x] Cycle 314 - ai-agent-website-testing-e2e-visual-regression.html + playwright(2w)/playwright-skill/e2e-testing/frontend-testing 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
