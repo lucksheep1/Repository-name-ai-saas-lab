@@ -298,6 +298,7 @@
 - [x] Cycle 305 - ai-agent-content-moderation-trust-safety.html + Content-Moderation-Toxicity/content-checker/ai-agent-mcp 3 signals ✅
 - [x] Cycle 306 - ai-agent-quantum-computing-quantum-ml.html + qiskit-machine-learning/QIP-X/quantum-agentics 4 signals ✅
 - [x] Cycle 307 - ai-agent-procedural-3d-world-terrain-generation.html + territory/ai-game-devtools/3DWorld 3 signals ✅
+- [x] Cycle 308 - ai-agent-edge-computing-tinyml-iot.html + awesome-tinyml/Awesome-EdgeAI/awesome-edge-ai-agents/edgeai-for-beginners 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
