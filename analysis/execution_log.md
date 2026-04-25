@@ -16770,3 +16770,47 @@ CI/CD code review is a genuinely new sub-niche. agent-memory stores CI/CD contex
 
 ---
 *Updated: 2026-04-26 02:17 CST*
+
+---
+
+## Cycle 375 - 2026-04-26
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Accounting Bookkeeping Automation TaxHacker**
+
+**Signal 1: vas3k/TaxHacker ⭐⭐⭐⭐⭐**
+- URL: https://github.com/vas3k/TaxHacker
+- "Self-hosted AI accounting app LLM analyzer receipts invoices transactions custom prompts categories"
+
+**Signal 2: ypratap11/invoice-processing-ai ⭐⭐⭐⭐⭐**
+- URL: https://github.com/ypratap11/invoice-processing-ai
+- "AI-powered invoice processing Google Document AI automated AP workflows CI/CD enterprise finance"
+
+**Signal 3: panaversity/accounts_ai ⭐⭐⭐⭐⭐**
+- URL: https://github.com/panaversity/accounts_ai
+- "AI-based accounting co-pilot integrates existing accounting systems automate bookkeeping compliance ERP"
+
+**Signal 4: Ahmed-El-Zainy/Document-AI-From-OCR-to-Agentic-Doc-Extraction ⭐⭐⭐⭐**
+- URL: https://github.com/Ahmed-El-Zainy/Document-AI-From-OCR-to-Agentic-Doc-Extraction
+- "OCR into Agentic Doc DocAI Vision-First key-value extraction difficult documents"
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-accounting-bookkeeping-automation-taxhacker.html**
+
+322nd SEO page (targeting "AI agent accounting bookkeeping automation" keyword)
+- TaxHacker = self-hosted LLM receipts invoices
+- invoice-processing-ai = Google Document AI automated AP
+- accounts_ai = ERP co-pilot bookkeeping
+
+### Decision
+
+**Decision: Scale — Accounting = Self-hosted LLM + Google DocAI + ERP Co-pilot**
+
+Accounting bookkeeping is a genuinely new sub-niche. agent-memory stores accounting context.
+
+**SEO matrix: 322 pages** 🎉
+
+---
+*Updated: 2026-04-26 02:47 CST*
