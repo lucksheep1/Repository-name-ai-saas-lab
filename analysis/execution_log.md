@@ -15169,3 +15169,47 @@ Autonomous coding benchmark is a genuinely new niche. agent-memory stores benchm
 
 ---
 *Updated: 2026-04-25 02:17 UTC*
+
+---
+
+## Cycle 337 - 2026-04-25
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Coding Assistant Rules Cursor Rules**
+
+**Signal 1: yzhao062/agent-style ⭐⭐⭐⭐⭐**
+- URL: https://github.com/yzhao062/agent-style
+- "21 writing rules for AI coding and writing agents drop-in Claude Code Codex Copilot Cursor Aider" (2 days ago)
+
+**Signal 2: 0xdevalias/gist ⭐⭐⭐⭐⭐**
+- URL: https://gist.github.com/0xdevalias/f40bc5a6f84c4c5ad862e314894b2fa6
+- "Project Rules stored in .cursor/rules version-controlled scoped to codebase User Rules global cursor"
+
+**Signal 3: murataslan1/cursor-ai-tips ⭐⭐⭐⭐⭐**
+- URL: https://github.com/murataslan1/cursor-ai-tips
+- "Agent Boundaries NEVER commit without review NEVER delete config files without explicit confirmation" (March 12, 2026)
+
+**Signal 4: rohitg00/pro-workflow ⭐⭐⭐⭐⭐**
+- URL: https://github.com/rohitg00/pro-workflow
+- "Claude Code self-correcting memory compounds over 50+ sessions 24 skills 8 agents" (1 week ago)
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-coding-assistant-rules-cursor-rules.html**
+
+284th SEO page (targeting "AI agent coding assistant rules cursor rules" keyword)
+- agent-style = 2 days ago, 21 writing rules
+- cursor-rules = project rules version-controlled
+- pro-workflow = 1 week ago, 50+ sessions self-correcting memory
+
+### Decision
+
+**Decision: Scale — Coding Rules = 21 Writing Rules + .cursor/rules + 50+ Sessions Memory**
+
+Coding rules is a genuinely new niche. agent-memory stores rules context.
+
+**SEO matrix: 284 pages** 🎉
+
+---
+*Updated: 2026-04-25 02:47 UTC*
