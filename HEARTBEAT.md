@@ -327,6 +327,7 @@
 - [x] Cycle 333 - ai-agent-image-segmentation-object-detection.html + panoptic-SAM/rf-detr(ICLR 1w)/SAM 2/awesome-vision-models 4 signals ✅
 - [x] Cycle 334 - ai-agent-context-management-memory-coding.html + OpenViking(1d)/agentmemory(1d)/Context-Engineering/EverMemOS 4 signals ✅
 - [x] Cycle 335 - ai-agent-observability-tracing-langfuse-agentops.html + agentops/langfuse(1mo)/agent-observability/voltagent 4 signals ✅
+- [x] Cycle 336 - ai-agent-autonomous-coding-benchmark-swe-bench.html + devika/ai-agent-benchmark(Jan 2026 80+)/awesome-devins/AI-Scientist-v2 4 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
