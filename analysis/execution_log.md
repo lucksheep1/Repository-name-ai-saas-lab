@@ -17034,3 +17034,47 @@ Local-first offline-first CRDT is a genuinely new sub-niche. agent-memory stores
 
 ---
 *Updated: 2026-04-26 05:17 CST*
+
+---
+
+## Cycle 381 - 2026-04-26
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent VC Due Diligence Cap Table Management**
+
+**Signal 1: baran-cicek/vc-diligence-ai ⭐⭐⭐⭐⭐**
+- URL: https://github.com/baran-cicek/vc-diligence-ai
+- "Automated financial KPI extraction for venture capital due diligence"
+
+**Signal 2: rk-vashista/pitch ⭐⭐⭐⭐⭐**
+- URL: https://github.com/rk-vashista/pitch
+- "Multi-agent AI pitch deck analyzer crewAI FastAPI"
+
+**Signal 3: Azure-Samples/Agentic-AI-Investment-Analysis-Sample ⭐⭐⭐⭐⭐**
+- URL: https://github.com/Azure-Samples/Agentic-AI-Investment-Analysis-Sample
+- "Agent Framework for analysis of investment opportunities document intelligence"
+
+**Signal 4: tecmie/vc.ai ⭐⭐⭐⭐**
+- URL: https://github.com/tecmie/vc.ai
+- "RAG architecture on an Investor database to give you a VC fund raising assistant"
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-vc-due-diligence-cap-table.html**
+
+328th SEO page (targeting "AI agent VC due diligence cap table management" keyword)
+- vc-diligence-ai = automated financial KPI extraction
+- pitch = multi-agent pitch deck analyzer
+- Agentic-AI-Investment = document intelligence
+
+### Decision
+
+**Decision: Scale — VC Due Diligence = KPI Extraction + Pitch Deck + Document Intelligence**
+
+VC due diligence is a genuinely new sub-niche. agent-memory stores VC context.
+
+**SEO matrix: 328 pages** 🎉
+
+---
+*Updated: 2026-04-26 05:47 CST*
