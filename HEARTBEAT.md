@@ -323,6 +323,7 @@
 - [x] Cycle 330 - ai-agent-ai-companion-character-roleplay.html + ai-girlfriend/llm-role-playing-with-persona(2w)/virtual-companion-for-gamers/ai-companion topic 4 signals ✅
 - [x] Cycle 296 - ai-agent-software-license-compliance-spdx.html + oss-review-toolkit/ort/FOSSology/package-analysis 3 signals ✅
 - [x] Cycle 331 - ai-agent-telephony-voice-agent-twilio.html + pipecat(1mo)/livekit-agents(Mar 2026)/Vision-Agents/Custom-Telephony-Voice-Agent 4 signals ✅
+- [x] Cycle 332 - ai-agent-quantum-computing-qml-vqe-qaoa.html + torchquantum/qml-library/VQE-dataset/VQE-topic 4 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
