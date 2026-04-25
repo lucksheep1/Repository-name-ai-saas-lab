@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lucksheep1.github.io/Repository-name-ai-saas-lab/sitemap.xml
