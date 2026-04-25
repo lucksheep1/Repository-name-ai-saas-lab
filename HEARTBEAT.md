@@ -340,6 +340,7 @@
 - [x] Cycle 346 - ai-agent-book-writing-storytelling-autonomous.html + ai-book-writer(AutoGen)/GOAT-Storytelling-Agent(long fiction)/storycraftr(CLI)/Book-Writing-AI-Agent(CrewAI Groq) 4 signals ✅
 - [x] Cycle 347 - ai-agent-government-civic-services-public-sector.html + compliance-assistant(AWS multi-agent)/Citizen-AI(IBM Granite)/EU AI Act Aug 2026/agency-agents(2w) 4 signals ✅
 - [x] Cycle 348 - ai-agent-insurance-underwriting-claims-postgresql-milvus-java.html + Insurance-Agentic-AI(PostgreSQL Milvus)/insuranceagenticmesh(100% Java)/ai-claims-processor(OCR fraud)/MSUS Azure 4 signals ✅
+- [x] Cycle 349 - ai-agent-mental-health-cbt-wysa-woebot-replika.html + MindEase(CBT NLP Wysa Woebot)/Mental-Health-AI-Companion(GPT-4o 24/7)/Rogendo/Mental-health-Chatbot 4 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
