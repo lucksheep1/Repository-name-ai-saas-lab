@@ -16550,3 +16550,47 @@ E-commerce conversational commerce is a genuinely new sub-niche. agent-memory st
 
 ---
 *Updated: 2026-04-25 15:17 UTC*
+
+---
+
+## Cycle 370 - 2026-04-25
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Large-Scale Social Simulation AgentSociety OASIS**
+
+**Signal 1: tsinghua-fib-lab/AgentSociety ⭐⭐⭐⭐⭐**
+- URL: https://github.com/tsinghua-fib-lab/AgentSociety
+- "AgentSociety Large-scale Social Simulation Understand Human Behaviors Society LLM-driven Agents Tsinghua framework"
+
+**Signal 2: camel-ai/oasis ⭐⭐⭐⭐⭐**
+- URL: https://github.com/camel-ai/oasis
+- "OASIS Open Agent Social Interaction Simulations One Million Agents social media dynamics scale"
+
+**Signal 3: giammy677dev/LLM-Agents-for-Simulation ⭐⭐⭐⭐**
+- URL: https://github.com/giammy677dev/LLM-Agents-for-Simulation
+- "Collection resources intersection simulation LLM agents emergence social norms agent societies"
+
+**Signal 4: ValueByte-AI/Awesome-LLM-in-Social-Science ⭐⭐⭐⭐**
+- URL: https://github.com/ValueByte-AI/Awesome-LLM-in-Social-Science
+- "Awesome papers LLMs Social Science emergence social norms LLM populations"
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-social-simulation-agentssociety-oasis.html**
+
+317th SEO page (targeting "AI agent large-scale social simulation" keyword)
+- AgentSociety = Tsinghua, large-scale social simulation LLM-driven
+- OASIS = 1 million agents social media dynamics
+- LLM-Agents-for-Simulation = social norms emergence
+
+### Decision
+
+**Decision: Scale — Large-Scale Social Simulation = Tsinghua + Million Agents + Social Norms**
+
+Large-scale social simulation is a genuinely new vertical. agent-memory stores simulation context.
+
+**SEO matrix: 317 pages** 🎉
+
+---
+*Updated: 2026-04-25 15:47 UTC*

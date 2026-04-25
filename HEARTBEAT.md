@@ -396,3 +396,4 @@
 - [x] Cycle 367 - ai-agent-fitness-workout-personal-trainer-langgraph.html + AI-Fitness-Agent(LangGraph Gen AI)/ai-workout-assistant(pose tracking)/Smart-Gym-Trainer(real-time feedback) 4 signals ✅
 - [x] Cycle 368 - ai-agent-restaurant-food-ordering-menu-rag.html + restaurant-ai-agent(multi-agent)/restaurant-drive-thru-AI(RAG)/llm-food-delivery(voice autonomous)/food-ordering-chatbot(NLP) 5 signals ✅
 - [x] Cycle 369 - ai-agent-ecommerce-shopping-conversational-commerce.html + meilisearch(2w AI hybrid search)/ShoppingGPT(RAG LLMs)/ai-shopping-agent(eBay Walmart)/AI-chatbot(NLP) 4 signals ✅
+- [x] Cycle 370 - ai-agent-social-simulation-agentssociety-oasis.html + AgentSociety(Tsinghua LLM-driven)/OASIS(1M agents)/LLM-Agents-for-Simulation(social norms) 4 signals ✅
