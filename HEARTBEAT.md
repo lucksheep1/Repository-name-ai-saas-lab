@@ -354,8 +354,25 @@
 - **Founder Mode:** ⚡ 已激活 (2026-03-17 22:58)
 - **主线项目:** agent-memory v3.1 (Promising 48/50)
 - **24h 目标:** GitHub Pages 访问信号 📊
-- **押注方向:** Agent Memory v3.1 (TTL + Encryption + Redis)
+- **押注方向:** SEO 矩阵 → 现实目标（无自定义域名，GitHub 流量 + stars）
 - **砍掉方向:** Python 示例生态 (已超 1600，转向功能开发)
+
+### SEO 现实目标（2026-04-25 设定）
+
+**北极星指标：** 90 天内 GitHub Stars ≥ 10，获得 20+ 条有效反馈
+
+| 时间节点 | 目标 | 状态 |
+|---------|------|------|
+| Week 1 | sitemap.xml ✅ + robots.txt ✅ | 完成 |
+| Week 1 | 导航首页优化 | 进行中 |
+| Week 2-4 | 向 10 个 GitHub repo 提交有用反馈 | 待做 |
+| Week 2-4 | 找出最容易获得 stars 的 10 个 niche 页面 | 待做 |
+| Month 2 | GitHub Stars ≥ 5（初步信号） | 待验证 |
+| Month 3 | GitHub Stars ≥ 10 + 20+ 反馈 | 待验证 |
+
+**已知限制：** 无自定义域名，无法使用 Google Search Console
+**GitHub Pages:** https://lucksheep1.github.io/Repository-name-ai-saas-lab/
+**仓库名（占位符）:** Repository-name-ai-saas-lab（待优化）
 
 ---
 
