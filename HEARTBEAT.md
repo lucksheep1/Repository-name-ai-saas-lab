@@ -395,3 +395,4 @@
 - [x] Cycle 366 - ai-agent-interior-design-home-decoration-intellidecor.html + IntelliDecor(Stable Diffusion AR)/Gen-AI-Home-Interior(Gemini)/AI-HomeStyler 4 signals ✅
 - [x] Cycle 367 - ai-agent-fitness-workout-personal-trainer-langgraph.html + AI-Fitness-Agent(LangGraph Gen AI)/ai-workout-assistant(pose tracking)/Smart-Gym-Trainer(real-time feedback) 4 signals ✅
 - [x] Cycle 368 - ai-agent-restaurant-food-ordering-menu-rag.html + restaurant-ai-agent(multi-agent)/restaurant-drive-thru-AI(RAG)/llm-food-delivery(voice autonomous)/food-ordering-chatbot(NLP) 5 signals ✅
+- [x] Cycle 369 - ai-agent-ecommerce-shopping-conversational-commerce.html + meilisearch(2w AI hybrid search)/ShoppingGPT(RAG LLMs)/ai-shopping-agent(eBay Walmart)/AI-chatbot(NLP) 4 signals ✅
