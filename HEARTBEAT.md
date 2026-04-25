@@ -334,6 +334,7 @@
 - [x] Cycle 340 - ai-agent-code-review-token-reduction-semantic-chunking.html + ai-code-review(95% token reduction 7 types)/pr-agent(30s /review)/ai-code-review topic/GitHub Action 4 signals ✅
 - [x] Cycle 341 - ai-agent-multi-agent-collaboration-team-coordination.html + swarms(Mar 2026 enterprise)/awesome-multi-agent-papers/DyLAN/P2P-federation(3d) 4 signals ✅
 - [x] Cycle 342 - ai-agent-spreadsheet-excel-ai-formula-generation.html + excel-mamba(Google Sheets)/excel-ai-assistant(local)/AI-Prompts(excel formulas)/Excel-Labs(=LABS.GENERATIVEAI) 4 signals ✅
+- [x] Cycle 343 - ai-agent-red-team-security-penetration-testing.html + deepteam(1mo 40 vulns)/AI-Red-Teaming-Guide(10+ attacks)/Agentic-AI-Top10(OWASP CSA)/promptfoo 4 signals ✅
 - [x] PM 汇报 (03-31 20:51) ✅ - 发送至飞书 (om_x100b538877d208a4c4da0bc6646aa3d)
 - [x] AM 汇报 (03-29 08:30) ✅ - 发送至飞书
 - [x] AM 汇报 (03-30 08:30) ✅ - 发送至飞书
