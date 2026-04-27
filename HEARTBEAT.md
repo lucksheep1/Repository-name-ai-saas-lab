@@ -486,3 +486,4 @@
 - [x] Cycle 471 - ai-agent-osint-open-source-intelligence-reconnaissance.html + OSINT_AI_Agent/taranis-ai/spiderfoot/osint-ai-guide 4 signals
 - [x] Cycle 472 - ai-agent-data-streaming-kafka-flink-real-time-analytics.html + streaming-agents/risingwave/stream-processing/anomaly-detection 4 signals
 - [x] Cycle 473 - ai-agent-devops-platform-autonomous-ci-cd.html + agenticsorg/devops/Agent-Field/agentfield/gh-aw 3 signals
+- [x] Cycle 474 - ai-agent-training-rlhf-dpo-preference-optimization.html + awesome-RLHF/DPO-PyTorch/OpenRLHF 3 signals
