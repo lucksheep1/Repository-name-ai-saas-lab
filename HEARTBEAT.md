@@ -525,3 +525,4 @@
 - [x] Cycle 510 - ai-agent-llm-api-proxy-unified.html + kaiban-llm-proxy/litellm/agentops 3 signals
 - [x] Cycle 511 - ai-agent-data-pipeline-etl-dagster-airflow.html + dagster/etl-pipeline-airflow-bigquery-dbt/airbyte-dbt-dagster 3 signals
 - [x] Cycle 512 - ai-agent-privacy-preserving-fhe.html + PPFL/APPFL/concrete-ml 3 signals
+- [x] Cycle 513 - ai-agent-open-source-llm-fine-tuning-llamafactory.html + LlamaFactory/unsloth 2 signals
