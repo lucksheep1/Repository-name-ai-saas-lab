@@ -484,3 +484,4 @@
 - [x] Cycle 469 - ai-agent-time-series-forecasting-anomaly-detection-iot.html + awesome-AI-for-time-series/Predictive-Maintenance/tensor-house 3 signals
 - [x] Cycle 470 - ai-agent-cloud-infrastructure-finops-cost-optimization.html + optscale/AzureOptimizationEngine/finops-for-ai/opencost 4 signals
 - [x] Cycle 471 - ai-agent-osint-open-source-intelligence-reconnaissance.html + OSINT_AI_Agent/taranis-ai/spiderfoot/osint-ai-guide 4 signals
+- [x] Cycle 472 - ai-agent-data-streaming-kafka-flink-real-time-analytics.html + streaming-agents/risingwave/stream-processing/anomaly-detection 4 signals
