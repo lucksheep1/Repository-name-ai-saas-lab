@@ -500,3 +500,4 @@
 - [x] Cycle 485 - ai-agent-multimodal-llm-training-rlhf-alignment.html + LLaVA-RLHF/MM-RLHF 2 signals
 - [x] Cycle 486 - ai-agent-agriculture-farming-precision-agritech.html + AgriTech/AgriVision/FarmVibes-ai/Agri-Drone 4 signals
 - [x] Cycle 487 - ai-agent-video-streaming-abr-optimization-cdn.html + Awesome-Video-Streaming/Video-Compression/adaptive-bitrate 3 signals
+- [x] Cycle 488 - ai-agent-weather-forecasting-climate-prediction.html + weather-ai-agent/ecmwf-lab/ai-models/Awesome-LWMs/Climate-Disasters 4 signals
