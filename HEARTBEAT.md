@@ -508,3 +508,4 @@
 - [x] Cycle 493 - ai-agent-document-understanding-ocr-mineru-docling.html + MinerU/docling/agentic-doc 3 signals
 - [x] Cycle 494 - ai-agent-llm-inference-engine-vllm-sglang.html + vLLM/SGLang/Awesome-LLM-Inference 3 signals
 - [x] Cycle 495 - ai-agent-multimodal-rag-vision-language.html + Multimodal-RAG-Survey/Awesome-RAG-Vision/multimodal-agentic-RAG 3 signals
+- [x] Cycle 496 - ai-agent-chip-design-eda-semiconductor.html + awesome-ai4eda/Awesome-LLM4EDA/generative-ai-for-semiconductor-design 3 signals
