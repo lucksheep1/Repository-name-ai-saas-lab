@@ -475,3 +475,4 @@
 - [x] Cycle 460 - ai-agent-ai-safety-alignment-interpretability.html + Agentic-Transparency/ Mechanistic-Interpretability/ awesome-llm-interpretability/ awesome-mechanistic 4 signals
 - [x] Cycle 461 - ai-agent-browser-automation-headless-rust-v8.html + obscura(Rust V8)/lightpanda(AI browser)/browser-use/agent-browser 4 signals
 - [x] Cycle 462 - ai-agent-meeting-minutes-summarization-transcription.html + meetily(Rust 100% local)/meeting-minutes-agent(OpenAI SDK)/MeetMate(Calendar)/silverstein/minutes 4 signals
+- [x] Cycle 463 - ai-agent-social-media-management-multi-agent.html + social-media-agents(multi-agent)/Social-Media-AI-Agent(Instagram)/AISocialAgent-OTO 3 signals
