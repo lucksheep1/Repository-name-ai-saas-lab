@@ -480,3 +480,4 @@
 - [x] Cycle 465 - ai-agent-human-pose-estimation-action-recognition-fall-detection.html + Awesome-HAR/mmpose/Edunet/Awesome-IMU-Sensing 4 signals
 - [x] Cycle 466 - ai-agent-elearning-lms-mooc-online-course.html + ai-lms/LMS_NextGen/awesome-ai-llm4education 3 signals
 - [x] Cycle 467 - ai-agent-warehouse-logistics-amr-robot.html + robotic-warehouse(multi-agent RL)/warehouse-robot(swarm Unity CoppeliaSim) 3 signals
+- [x] Cycle 468 - ai-agent-network-5g-6g-telecom-sd-wan.html + AI-Powered-5G-OpenRAN-Optimizer/GNN-Communication-Networks 2 signals
