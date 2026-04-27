@@ -511,3 +511,4 @@
 - [x] Cycle 496 - ai-agent-chip-design-eda-semiconductor.html + awesome-ai4eda/Awesome-LLM4EDA/generative-ai-for-semiconductor-design 3 signals
 - [x] Cycle 497 - ai-agent-synthetic-data-generation-ydata-mostlyai.html + ydata-synthetic/mostly-ai/LLM-Synthetic-Data 3 signals
 - [x] Cycle 498 - ai-agent-llm-quantization-compression-nvidia-model-optimizer.html + NVIDIA-Model-Optimizer/llm-compressor/Awesome-Model-Quantization 3 signals
+- [x] Cycle 499 - ai-agent-event-streaming-flink-kafka-orchestrator.html + flink-orchestrator/streaming-agents/Kafka-AI-Agents 3 signals
