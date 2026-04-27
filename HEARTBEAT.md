@@ -503,3 +503,4 @@
 - [x] Cycle 488 - ai-agent-weather-forecasting-climate-prediction.html + weather-ai-agent/ecmwf-lab/ai-models/Awesome-LWMs/Climate-Disasters 4 signals
 - [x] Cycle 489 - ai-agent-accounting-bookkeeping-automation-ai-finance-office.html + accounting-ai-agent/AI_Finance_Office/B2B-FINTECH 3 signals
 - [x] Cycle 490 - ai-agent-apache-flink-streaming-agents.html + flink-agents/streaming-agents/anomaly-detection-flink-kafka 3 signals
+- [x] Cycle 491 - ai-agent-industrial-iot-predictive-maintenance-agentiot.html + AgentIoT/Applications-of-AI/Nvidia-DLI 3 signals
