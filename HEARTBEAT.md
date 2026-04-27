@@ -472,3 +472,4 @@
 - [x] Cycle 457 - ai-agent-academic-research-paper-writing-scientific-literature.html + academic-research-skills(12-agent LaTeX)/PaperOrchestra(Claude Code no API)/AI-research-SKILLs(NeurIPS ICLR) 3 signals ✅
 - [x] Cycle 458 - ai-agent-data-labeling-annotation-active-learning.html + X-AnyLabeling(Segment Anything)/snorkel(weak supervision)/zenml-io(multimodal 3D)/cvat(10x) 4 signals
 - [x] Cycle 459 - ai-agent-autonomous-robotics-ros-manipulation-grasping.html + drl_grasping(DRL)/agentic-mobile-manipulator(ROS2)/Awesome-LLM-Robotics/autonomous-mobile-robots 4 signals
+- [x] Cycle 460 - ai-agent-ai-safety-alignment-interpretability.html + Agentic-Transparency/ Mechanistic-Interpretability/ awesome-llm-interpretability/ awesome-mechanistic 4 signals
