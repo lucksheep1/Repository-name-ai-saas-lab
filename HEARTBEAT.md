@@ -506,3 +506,4 @@
 - [x] Cycle 491 - ai-agent-industrial-iot-predictive-maintenance-agentiot.html + AgentIoT/Applications-of-AI/Nvidia-DLI 3 signals
 - [x] Cycle 492 - ai-agent-sonarqube-code-quality-agent-plugins.html + sonarqube-agent-plugins/agentic-analysis/ai-code-review 3 signals
 - [x] Cycle 493 - ai-agent-document-understanding-ocr-mineru-docling.html + MinerU/docling/agentic-doc 3 signals
+- [x] Cycle 494 - ai-agent-llm-inference-engine-vllm-sglang.html + vLLM/SGLang/Awesome-LLM-Inference 3 signals
