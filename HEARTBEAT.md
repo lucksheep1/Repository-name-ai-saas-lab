@@ -517,3 +517,4 @@
 - [x] Cycle 502 - ai-agent-devops-agent-kubernetes-jenkins.html + ai-devops-agent/agentics-devops 2 signals
 - [x] Cycle 503 - ai-agent-zero-shot-generalization-ood-robustness.html + Agent0/Multimodal-Adaptation/Autonomous-Agents 3 signals
 - [x] Cycle 504 - ai-agent-autonomous-driving-carla-rl-simulation.html + Autonomous-Driving-Carla-DRL/carla/Keshav0205 3 signals
+- [x] Cycle 505 - ai-agent-reasoning-chain-of-thought-tree-of-thoughts.html + Awesome-Agentic-Reasoning/Awesome-LLM-Reasoning/tree-of-thoughts 3 signals
