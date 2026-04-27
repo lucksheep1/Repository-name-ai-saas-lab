@@ -482,3 +482,4 @@
 - [x] Cycle 467 - ai-agent-warehouse-logistics-amr-robot.html + robotic-warehouse(multi-agent RL)/warehouse-robot(swarm Unity CoppeliaSim) 3 signals
 - [x] Cycle 468 - ai-agent-network-5g-6g-telecom-sd-wan.html + AI-Powered-5G-OpenRAN-Optimizer/GNN-Communication-Networks 2 signals
 - [x] Cycle 469 - ai-agent-time-series-forecasting-anomaly-detection-iot.html + awesome-AI-for-time-series/Predictive-Maintenance/tensor-house 3 signals
+- [x] Cycle 470 - ai-agent-cloud-infrastructure-finops-cost-optimization.html + optscale/AzureOptimizationEngine/finops-for-ai/opencost 4 signals
