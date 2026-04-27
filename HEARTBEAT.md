@@ -519,3 +519,4 @@
 - [x] Cycle 504 - ai-agent-autonomous-driving-carla-rl-simulation.html + Autonomous-Driving-Carla-DRL/carla/Keshav0205 3 signals
 - [x] Cycle 505 - ai-agent-reasoning-chain-of-thought-tree-of-thoughts.html + Awesome-Agentic-Reasoning/Awesome-LLM-Reasoning/tree-of-thoughts 3 signals
 - [x] Cycle 506 - ai-agent-text-to-sql-nlq-genbi.html + vanna/WrenAI/ai_sql_agent 3 signals
+- [x] Cycle 507 - ai-agent-vision-language-model-training-multimodal-alignment.html + Multimodal-AND-LLM/Awesome-MLLM/VLM-Overview 3 signals
