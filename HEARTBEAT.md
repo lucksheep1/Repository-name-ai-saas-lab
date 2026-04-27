@@ -532,9 +532,11 @@
 - [x] Cycle 517 - ai-agent-llm-evaluation-benchmark-deepeval.html + deepeval/AgentBench/benchmark-compendium 3 signals
 - [x] Cycle 518 - ai-agent-multimodal-emotion-recognition-sentiment.html + Emotion-LLaMA/MELD/Multimodal-Emotion 3 signals
 - [x] Cycle 519 - ai-agent-llm-guardrails-safety-prompt-injection.html + NeMo-Guardrails/ZenGuard/fast-llm-security 3 signals
+- [x] Cycle 520 - ai-agent-pair-programming-mentor-aider.html + the-pair/aider/chatgpt-assistant 3 signals
 - [x] Cycle 514 - ai-agent-llm-serving-inference-flashinfer.html + FlashInfer/vLLM/OME 3 signals
 - [x] Cycle 515 - ai-agent-aiops-intelligent-operations-monitoring.html + awesome-LLM-AIOps/sherlock/aiops-log 3 signals
 - [x] Cycle 516 - ai-agent-world-model-predictive-planning.html + Awesome-World-Model/Autonomous-Agents 2 signals
 - [x] Cycle 517 - ai-agent-llm-evaluation-benchmark-deepeval.html + deepeval/AgentBench/benchmark-compendium 3 signals
 - [x] Cycle 518 - ai-agent-multimodal-emotion-recognition-sentiment.html + Emotion-LLaMA/MELD/Multimodal-Emotion 3 signals
 - [x] Cycle 519 - ai-agent-llm-guardrails-safety-prompt-injection.html + NeMo-Guardrails/ZenGuard/fast-llm-security 3 signals
+- [x] Cycle 520 - ai-agent-pair-programming-mentor-aider.html + the-pair/aider/chatgpt-assistant 3 signals
