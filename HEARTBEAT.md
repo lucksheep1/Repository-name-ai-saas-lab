@@ -527,4 +527,6 @@
 - [x] Cycle 512 - ai-agent-privacy-preserving-fhe.html + PPFL/APPFL/concrete-ml 3 signals
 - [x] Cycle 513 - ai-agent-open-source-llm-fine-tuning-llamafactory.html + LlamaFactory/unsloth 2 signals
 - [x] Cycle 514 - ai-agent-llm-serving-inference-flashinfer.html + FlashInfer/vLLM/OME 3 signals
+- [x] Cycle 515 - ai-agent-aiops-intelligent-operations-monitoring.html + awesome-LLM-AIOps/sherlock/aiops-log 3 signals
 - [x] Cycle 514 - ai-agent-llm-serving-inference-flashinfer.html + FlashInfer/vLLM/OME 3 signals
+- [x] Cycle 515 - ai-agent-aiops-intelligent-operations-monitoring.html + awesome-LLM-AIOps/sherlock/aiops-log 3 signals
