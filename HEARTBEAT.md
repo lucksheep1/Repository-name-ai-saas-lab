@@ -476,3 +476,4 @@
 - [x] Cycle 461 - ai-agent-browser-automation-headless-rust-v8.html + obscura(Rust V8)/lightpanda(AI browser)/browser-use/agent-browser 4 signals
 - [x] Cycle 462 - ai-agent-meeting-minutes-summarization-transcription.html + meetily(Rust 100% local)/meeting-minutes-agent(OpenAI SDK)/MeetMate(Calendar)/silverstein/minutes 4 signals
 - [x] Cycle 463 - ai-agent-social-media-management-multi-agent.html + social-media-agents(multi-agent)/Social-Media-AI-Agent(Instagram)/AISocialAgent-OTO 3 signals
+- [x] Cycle 464 - ai-agent-cybersecurity-threat-intelligence-soc-ioc.html + AI_SOC(99.28%)/ThreatIntelligence(IOC MISP)/awesome-threat-intelligence/mitre-cti 4 signals
