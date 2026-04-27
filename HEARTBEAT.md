@@ -489,3 +489,4 @@
 - [x] Cycle 474 - ai-agent-training-rlhf-dpo-preference-optimization.html + awesome-RLHF/DPO-PyTorch/OpenRLHF 3 signals
 - [x] Cycle 475 - ai-agent-personalization-recommendation-llm.html + RecAI/RSPapers/personalized-recommender 3 signals
 - [x] Cycle 476 - ai-agent-software-testing-unit-test-fuzzing.html + unittest-ai-agent/qodo-cover/TestSpark/LLM4SoftwareTesting 4 signals
+- [x] Cycle 477 - ai-agent-healthcare-biomedical-drug-discovery.html + scientific-agent-skills/Awesome-AI-Agents-Healthcare/LLM-Agents-Scientific-Discovery 3 signals
