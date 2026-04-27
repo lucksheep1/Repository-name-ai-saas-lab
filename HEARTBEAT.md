@@ -478,3 +478,4 @@
 - [x] Cycle 463 - ai-agent-social-media-management-multi-agent.html + social-media-agents(multi-agent)/Social-Media-AI-Agent(Instagram)/AISocialAgent-OTO 3 signals
 - [x] Cycle 464 - ai-agent-cybersecurity-threat-intelligence-soc-ioc.html + AI_SOC(99.28%)/ThreatIntelligence(IOC MISP)/awesome-threat-intelligence/mitre-cti 4 signals
 - [x] Cycle 465 - ai-agent-human-pose-estimation-action-recognition-fall-detection.html + Awesome-HAR/mmpose/Edunet/Awesome-IMU-Sensing 4 signals
+- [x] Cycle 466 - ai-agent-elearning-lms-mooc-online-course.html + ai-lms/LMS_NextGen/awesome-ai-llm4education 3 signals
