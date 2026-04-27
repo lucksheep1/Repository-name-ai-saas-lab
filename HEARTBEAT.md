@@ -497,3 +497,4 @@
 - [x] Cycle 482 - ai-agent-personal-productivity-task-management-flow.html + claude-task-manager/productivity-assistant/ai-daily-planning-tools 3 signals
 - [x] Cycle 483 - ai-agent-investment-portfolio-hedge-fund-ai-hedge-fund.html + ai-hedge-fund/Investment-Portfolio-AI-Agent/FinRobot 3 signals
 - [x] Cycle 484 - ai-agent-memory-management-long-term-hindsight.html + hindsight/Agent-Memory-Paper-List/ReMe 3 signals
+- [x] Cycle 485 - ai-agent-multimodal-llm-training-rlhf-alignment.html + LLaVA-RLHF/MM-RLHF 2 signals
