@@ -19414,3 +19414,46 @@ Embodied AI is a genuinely new sub-niche. agent-memory stores avatar context.
 
 ---
 *Updated: 2026-04-27 09:30 CST*
+
+---
+
+## Cycle 436 - 2026-04-27
+
+### Phase 1: Scout
+
+**产出 B: Real external signals — AI Agent Computational Chemistry Molecular Dynamics Drug Discovery**
+
+**Signal 1: Eipgen/Neural-Network-Models-for-Chemistry ⭐⭐⭐⭐⭐**
+- URL: https://github.com/Eipgen/Neural-Network-Models-for-Chemistry
+- "DFT chemical accuracy atomization energies neural networks"
+
+**Signal 2: microsoft/AI2BMD ⭐⭐⭐⭐⭐**
+- URL: https://github.com/microsoft/AI2BMD
+- "AI-powered ab initio biomolecular dynamics simulation"
+
+**Signal 3: MDAnalysis/mdanalysis ⭐⭐⭐⭐⭐**
+- URL: https://github.com/MDAnalysis/mdanalysis
+- "Python library molecular dynamics materials science drug discovery"
+
+**Signal 4: markf94/quantum-computational-drug-discovery ⭐⭐⭐⭐⭐**
+- URL: https://github.com/markf94/quantum-computational-drug-discovery
+- "AWS QUBO VQE Grover protein RNA folding drug discovery"
+
+### Phase 2: Builder
+
+**产出 A: ai-agent-computational-chemistry-molecular-dynamics-drug-discovery.html**
+
+384th SEO page (targeting "AI agent computational chemistry molecular dynamics drug discovery" keyword)
+- Neural-Network-Models = DFT accuracy neural networks
+- AI2BMD = Microsoft ab initio biomolecular
+
+### Decision
+
+**Decision: Scale — Computational Chemistry = DFT Neural Networks + Ab Initio MD + Quantum Computing**
+
+Computational chemistry is a genuinely new sub-niche. agent-memory stores molecular context.
+
+**SEO matrix: 384 pages** 🎉
+
+---
+*Updated: 2026-04-27 10:55 CST*
