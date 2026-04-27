@@ -492,3 +492,4 @@
 - [x] Cycle 477 - ai-agent-healthcare-biomedical-drug-discovery.html + scientific-agent-skills/Awesome-AI-Agents-Healthcare/LLM-Agents-Scientific-Discovery 3 signals
 - [x] Cycle 478 - ai-agent-marketing-automation-seo-sem-campaign.html + marketingskills/ai-marketing-claude/ai-marketing-skills 3 signals
 - [x] Cycle 479 - ai-agent-legal-contract-analysis-automation.html + ai-legal-claude/lawbotics/Legal-AI_Project 3 signals
+- [x] Cycle 480 - ai-agent-manufacturing-quality-control-defect-detection.html + iac/Smart_Inspect/detect-detection-system/McDefect 4 signals
