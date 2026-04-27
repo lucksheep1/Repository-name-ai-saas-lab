@@ -459,3 +459,4 @@
 - [x] Cycle 429 - ai-agent-satellite-imagery-remote-sensing-change-detection.html + satellite-image-deep-learning(xView damage)/Change-Detection-Review(IKONOS VHR)/Awesome-Remote-Sensing(SAM Mar 2026)/wangle53(hurricane CNN) 4 signals ✅
 - [x] Cycle 430 - ai-agent-physical-therapy-rehabilitation.html + physio(conversational AI)/A-Deep-Learning-Framework(skeletal UI-PRMD motion capture)/Smart-Rehab-AI(ITU AI for Good exercise) 3 signals ✅
 - [x] Cycle 431 - ai-agent-autonomous-robot-ros2-slam-navigation.html + Autonomous-Robot-Obstacle-Avoidance(LiDAR SLAM NAV2)/ros_motion_planning(A* RRT RRT* D* MPC)/AI.R-Autonomous_Robot(ROS2 Navigation 2) 3 signals ✅
+- [x] Cycle 432 - ai-agent-observability-debugging-apm-distributed-tracing.html + DeepFlow(eBPF zero-code)/agent-monitor(real-time tracing)/AgentOps(LLM cost tracking Mar 2026)/openlit(OpenTelemetry 50+ providers) 4 signals ✅
